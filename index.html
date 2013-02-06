@@ -1,13 +1,18 @@
 <html>
 	<head>
-		<title>Unvollst&auml;ndige Adressen in OSM</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>Straßenlaternen in OpenStreetMap</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
+		<link rel="stylesheet" href="style.css" />
 		<script src="leaflet/leaflet.js"></script>
 		<script src="js/jquery.js"></script>
 		<script src="js/jquery-ui-1.10.0.custom.min.js"></script>
 		<script src="js/geo.js" type="text/javascript"></script>
+		<script src="leaflet/plugins/leaflet-hash/leaflet-hash.js"></script>
 		<script src="js/gears_init.js" type="text/javascript"></script>
+		<script src="js/icons.js" type="text/javascript"></script>
+		<script src="js/parse_scripts.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			
 			
@@ -17,9 +22,6 @@
 			
 			function Moveaufruf()
 			{
-				
-				
-
 				coords = map.getBounds();
 				lefttop = coords.getNorthWest();
 				rightbottom = coords.getSouthEast();
@@ -28,14 +30,19 @@
 			
 			function XMLLaden(lat1,lon1,lat2,lon2)
 			{
-				//Maximalen Zoom um karten ausschnitt nciht zu gross zu haben
-				if (map.getZoom()>13)
+				//Maximalen Zoom um karten ausschnitt nicht zu gross zu haben
+				minzoom = 15;
+				
+				if (map.getZoom()>=minzoom)
 				{
 					$('#zoomwarnung').hide(0.4);
 					$('#loading').show().effect("highlight", {}, 700);
 					loadingcounter++;
 					//CrossoverAPI XML request
-					XMLRequestText = '<osm-script><union into="_"><query into="_" type="node"><has-kv k="addr:housenumber" modv="" v=""/><has-kv k="addr:street" modv="not" regv="."/>       <bbox-query into="_" s="'+lat2+'" n="'+lat1+'" w="'+lon1+'" e="'+lon2+'"/>     </query>   </union>   <union into="_">     <query into="_" type="node">       <has-kv k="addr:housenumber" modv="" v=""/>       <has-kv k="addr:city" modv="not" regv="."/>       <bbox-query  into="_" s="'+lat2+'" n="'+lat1+'" w="'+lon1+'" e="'+lon2+'"/>     </query>   </union>   <union into="_">     <query into="_" type="node">       <has-kv k="addr:housenumber" modv="" v=""/>       <has-kv k="addr:postcode" modv="not" regv="."/>       <bbox-query into="_" s="'+lat2+'" n="'+lat1+'" w="'+lon1+'" e="'+lon2+'"/>     </query>   </union> 	 <print from="_" limit="" mode="body" order="id"/>      <union ><query  type="way"><has-kv k="addr:housenumber" modv="" v=""/><has-kv k="addr:postcode" modv="not" regv="."/><bbox-query s="'+lat2+'" n="'+lat1+'" w="'+lon1+'" e="'+lon2+'"/></query> <recurse type="down"/><query  type="way"><has-kv k="addr:housenumber" modv="" v=""/><has-kv k="addr:street" modv="not" regv="."/><bbox-query s="'+lat2+'" n="'+lat1+'" w="'+lon1+'" e="'+lon2+'"/></query><recurse type="down"/>   <query  type="way"><has-kv k="addr:housenumber" modv="" v=""/><has-kv k="addr:city" modv="not" regv="."/><bbox-query s="'+lat2+'" n="'+lat1+'" w="'+lon1+'" e="'+lon2+'"/></query>   <recurse type="down"/> </union> 	<print /> </osm-script>';
+
+					XMLRequestText = '( node ["highway"="street_lamp"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );node ["light_source"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' ); >; ); out;';
+					
+					
 					//URL Codieren
 					XMLRequestText = encodeURIComponent(XMLRequestText);
 					
@@ -49,8 +56,7 @@
 					crossDomain: true,
 					success: function(data){parseOSM(data);}
 					//beforeSend: setHeader
-					});
-						
+					});			
 						
 				}
 				
@@ -58,6 +64,8 @@
 				{
 					//Zoom zu klein um anzuzeigen
 					$('#zoomwarnung').show(1);
+					parseOSM(false);
+					loadingcounter = 0;
 				}
 			}
 			
@@ -113,85 +121,131 @@
 
 
 
-
-
-
-					/*EleLat = $(this).attr("lat");
-					EleLon = $(this).attr("lon");*/
 					
-					EleText = "";
-					var hausnummer = "";
-					var stadt = "";
-					var plz = "";
-					var strasse = "";
-					var land = "";
-					var costommarker = "";
+					var EleText = "";
+					var highway = "";
+					var operator = "";
+					var ref = "";
+					var lamp_manufacturer = "";
+					var lamp_model = "";
+					var lamp_model_text = "";
+					var light_count = "";
+					var light_direction = "";
+					var light_lit = "";
+					var light_lit_text = "";
+					var light_method = "";
+					var light_method_text = "";
+					var light_mount = "";
+					var light_mount_text = "";
+					var light_source = "";
+					var light_type = "";
 					
 					$(this).find('tag').each(function(){
 						EleKey = $(this).attr("k");
 						EleValue = $(this).attr("v");
 						//EleText = EleText + "<b>" + EleKey + ": </b>" + EleValue + "<br/>";
-						if ((EleKey=="addr:housenumber"))
+						if ((EleKey=="highway"))
 						{
-							hausnummer = EleValue;
+							highway = EleValue;
 						}
-						if ((EleKey=="addr:street"))
+						if ((EleKey=="operator" || EleKey=="lamp_operator"))
 						{
-							strasse = EleValue;
+							operator = EleValue;
 						}
-						if ((EleKey=="addr:country"))
+						if ((EleKey=="ref" || EleKey=="lamp_ref"))
 						{
-							land = EleValue;
+							ref = EleValue;
 						}
-						if ((EleKey=="addr:city"))
+						if ((EleKey=="manufacturer"))
 						{
-							stadt = EleValue;
+							lamp_manufacturer = EleValue;
 						}
-						if ((EleKey=="addr:postcode"))
+						if ((EleKey=="lamp_model:de" || EleKey=="model"))
 						{
-							plz = EleValue;
+							lamp_model = EleValue;
+						}
+						if ((EleKey=="light:count"))
+						{
+							light_count = EleValue;
+						}
+						if ((EleKey=="light:direction"))
+						{
+							light_direction = EleValue;
+						}
+						if ((EleKey=="light:method" || EleKey=="lamp_type"))
+						{
+							light_method = EleValue;
+						}
+						if ((EleKey=="light:mount" || EleKey=="lamp_mount" || EleKey=="support"))
+						{
+							light_mount = EleValue;
+						}
+						if ((EleKey=="light:lit"))
+						{
+							light_lit = EleValue;
+						}
+						if ((EleKey=="light_source"))
+						{
+							light_source = EleValue;
 						}
 						
 					});
 
 
-					/*coords = map.getBounds();
-					lefttop = coords.getNorthWest();
-					rightbottom = coords.getSouthEast();
-					XMLLaden(lefttop.lat,lefttop.lng,rightbottom.lat,rightbottom.lng);*/
+					
+					if (highway != "" || light_source != ""){
 
-					if (hausnummer!=""){
-					//if (hausnummer=="") hausnummer = "<i><b>fehlt</i></b>";
-						if (stadt=="") stadt = "<i><b>fehlt</i></b>";
-						if (strasse==""){
-							strasse = "<i><b>fehlt</i></b>";
-							costommarker = "red"; 
-						} 
-						if (plz=="") plz = "<i><b>fehlt</i></b>";
-						if (land=="") land = "<i><b>fehlt</i></b>";
-						EleText = "Hausnummer: " + hausnummer + "<br>Strasse: " + strasse + "<br> Postleitzahl: " + plz + "<br> Stadt: " + stadt + "<br>Land: " + land + "<br><br><a href='#' onclick='openinJOSM(\""+EleType+"\",\""+EleID+"\")'>edit in JOSM</a>";
+						if(highway == "street_lamp" || light_source == "lantern")
+						{
+							light_type = "Straßenlaterne"	
+						}
+						else if(light_source == "floodlight")
+						{
+							light_type = "Flutlicht"	
+						}
+						else
+						{
+							light_type = "Unbekannte Lichtquelle"	
+						}
+						
+						if (operator=="") operator = "<i>unbekannt</i>";
+
+						//Dinge die nur angezeigt werden, wenn sie getaggt sind:
+
+						if (lamp_manufacturer!="") lamp_manufacturer = "<tr><td><b>Hersteller: </b></td><td>" + lamp_manufacturer + "</td></tr>";
+						if (lamp_model!="") lamp_model_text = "<tr><td><b>Modell: </b></td><td>" + lamp_model + "</td></tr>";
+						if (light_method!="") light_method_text = "<tr><td><b>Lichtquelle: </b></td><td>" + get_light_method(light_method) + "</td></tr>";
+						if (light_mount!="") light_mount_text = "<tr><td><b>Befestigung: </b></td><td>" + get_light_mount(light_mount) + "</td></tr>";
+						if (light_lit!="") light_lit_text = "<tr><td><b>Betriebszeiten: </b></td><td>" + get_light_lit(light_lit) + "</td></tr>";
+
+						
+						EleText = 
+							"<b>" + light_type + " " + ref + "</b><br>" + 
+							"<div class='infoblock'><table>" + 
+							"<tr><td><b>Betreiber: </b></td><td>" + operator + "</td></tr>" + 
+							light_method_text +
+							light_mount_text +
+							lamp_manufacturer +
+							lamp_model_text +
+							light_lit_text +
+							"</table></div>" + 
+							"<br><a href='#' onclick='openinJOSM(\""+EleType+"\",\""+EleID+"\")'>edit in JOSM</a> | <a href='https://www.openstreetmap.org/"+EleType+"/"+EleID+"'>show in OSM</a>" 
+							;
 
 						
 						if($.inArray(EleID, MarkerArray)==-1)
 						{
 							var markerLocation = new L.LatLng(EleLat,EleLon);
-							var Icon = new L.icon({
-								iconUrl: "./leaflet/images/marker-icon"+costommarker+".png",
-								iconSize: [25, 41],
-								iconAnchor:   [12, 41],
-								popupAnchor:  [0, -42]
-							});
+							
+							var Icon = getMarkerIcon(L,light_source, light_method, light_direction, light_count, ref);
 							var marker = new L.Marker(markerLocation,{icon : Icon});
-							//var marker = new L.Marker(markerLocation);
 							
 							if(EleText!="")
 							{
 								marker.bindPopup(EleText);
 							}
-							
 							Layergroup.addLayer(marker);
 
-							//map.addLayer(marker);
 							MarkerArray.push(EleID);
 
 						}
@@ -216,41 +270,51 @@
 		
 	</head>
 	<body style="margin:0px">
-		<div id="map" style="height: 100%;"></div> <!-- width equals available horizontal space by default -->
+		<div id="map" style="height: 100%;"></div>
 		<script>
 			var map = new L.Map('map');
-			var cloudmadeUrl = 'http://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    			cloudmadeAttrib = 'Map data &copy; 2013 OpenStreetMap contributors, Data via <a href="http://www.overpass-api.de/">Overpass API</a>',
-    			cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttrib});
-    			
+			var cloudmadeUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    			cloudmadeAttrib = 'Map data &copy; OpenStreetMap contributors, Data via <a href="http://www.overpass-api.de/">Overpass API</a>',
+    			cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 19, attribution: cloudmadeAttrib});
     		
+    		loadingcounter = 0;
+
+    		//Testen ob location abgefragt werden muss
+    		if (document.URL.search(/#/)==-1){
+	    		function success_callback(p)
+				{
+					//alert('lat='+p.coords.latitude.toFixed(2)+';lon='+p.coords.longitude.toFixed(2));
+					mapInit( p.coords.latitude.toFixed(5) , p.coords.longitude.toFixed(5) );
+				}
+				
+				function error_callback(p)
+				{
+					mapInit(-10000,-10000);
+				}
+
+	    		if(geo_position_js.init()){
+					geo_position_js.getCurrentPosition(success_callback,error_callback,{enableHighAccuracy:true,options:5000});
+				}
+				else{
+					mapInit(-10000,-10000);
+				}		    		
+	    	}
+
+
+
+
+    		var ort = new L.LatLng(51.07, 13.73);
     		
+	    	map.setView(ort, 14).addLayer(cloudmade);	
     		
-    		
-    		if(geo_position_js.init()){
-				geo_position_js.getCurrentPosition(success_callback,error_callback,{enableHighAccuracy:true,options:5000});
-			}
-			else{
-				mapInit(-10000,-10000);
-			}
-	
-			function success_callback(p)
-			{
-				//alert('lat='+p.coords.latitude.toFixed(2)+';lon='+p.coords.longitude.toFixed(2));
-				mapInit( p.coords.latitude.toFixed(5) , p.coords.longitude.toFixed(5) );
-			}
+    		//Permalink
+			var hash = new L.Hash(map);
+			map.on('moveend',function(){Moveaufruf();});
 			
-			function error_callback(p)
-			{
-				mapInit(-10000,-10000);
-			}
-    		
-    		
-    		
-    		
     		
     		function mapInit(lat,lon)
     		{
+	    		
 	    		if (lat > -10000)
 	    		{
 	    			var ort = new L.LatLng(lat, lon); // geographical point (longitude and latitude)
@@ -259,19 +323,13 @@
 	    		{
 	    			var ort = new L.LatLng(51.07, 13.73); // geographical point (longitude and latitude)
 	    		}
-				map.setView(ort, 16).addLayer(cloudmade);
+				map.setView(ort, 14).addLayer(cloudmade);
+
 				map.on('moveend',function(){Moveaufruf();});
-				loadingcounter = 0;
 				Moveaufruf();
 			}
-			
-			/*var markerLocation = new L.LatLng(51.6, -0.09);
-			var marker = new L.Marker(markerLocation);
-			map.addLayer(marker);
 
-			var markerLocation = new L.LatLng(51.5, -0.18);
-			var marker = new L.Marker(markerLocation);
-			map.addLayer(marker);*/
+
 
 
 			function openinJOSM(type, ID){
@@ -289,11 +347,16 @@
 			#zoomwarnung {width: 200px; margin-left: -100px; background-color: yellow; position: absolute; top: 16px; margin-top: 0px; height: 47px; left: 50%; text-align: center; font-size: 16; font-family: sans-serif; opacity: 0.8; border-radius: 5px;}
 
 			#loading { background-color: white; position: absolute; top: 16px; margin-top: 0px; left: 50px; text-align: center; font-size: 16; font-family: sans-serif; border-radius: 5px; padding: 10px}
+			#options { background-color: white; position: absolute; bottom: 16px; margin-top: 0px; left: 16px; text-align: center; font-family: sans-serif; border-radius: 5px; padding: 10px}
 		</style>	
 		<div id="zoomwarnung">
 			<p>Zoom in to load Data</p>
 		</div>
 		<div id="loading"><img src="./img/ajax-loader.gif"></div>
+
+		<div id="options">
+			<small><a target="_new" href="./about.html">über diese Karte</a> | <a href="https://flattr.com/submit/auto?fid=4zqqyl&url=http%3A%2F%2Fosmstreetlight.bplaced.net%2F" target="_new">Flattr</a></small>
+		</div>
 
 	</body>
 </html>

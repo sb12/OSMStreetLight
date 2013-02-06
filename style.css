@@ -1,0 +1,53 @@
+.infoblock td {
+font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: top; margin-bottom: 4;}
+
+.infoblock {
+	background-color: #EEEEEE;
+	border: 1px solid silver;
+	margin-left: -5px;
+	margin-right: -5px;
+	margin-top: 6px;
+	min-width: 200px;
+	border-radius: 3px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 5px;
+}
+
+.streetlight1 div, .streetlight2 div, .streetlight3 div, .streetlight4 div{
+	width:48px;
+	height:48px;
+	color: #DDDDDD;
+	text-align: center;
+	text-shadow: 0 0 5px #000000;
+	font-weight: bold;
+	white-space:nowrap;
+}
+
+.streetlight1 div{
+	background: url('./img/electric_1.svg') no-repeat 50% 50%;
+	background-size: 48px 48px;
+}
+.streetlight2 div{
+	background: url('./img/electric_2.svg') no-repeat 50% 50%;
+	background-size: 48px 48px;
+}
+.streetlight3 div{
+	background: url('./img/electric_3.svg') no-repeat 50% 50%;
+	background-size: 48px 48px;
+}
+.streetlight4 div{
+	background: url('./img/electric_4.svg') no-repeat 50% 50%;
+	background-size: 48px 48px;
+}
+
+.floodlight div{
+background: url('./img/floodlight.svg') no-repeat 50% 50%;
+background-size: 48px 48px;
+width:48px;
+height:48px;
+}
+
+.leaflet-tile-pane{
+filter: brightness(0.15);
+}
