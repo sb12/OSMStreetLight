@@ -1,0 +1,100 @@
+   {
+       "data_format": 1,
+       "data_url": "https://raw.githubusercontent.com/sb12/OSMStreetLight/master/taginfo.json",
+       "project": {
+           "name": "Street Lights in OpenStreetMap",
+           "description": "Show street lights and their attributes",
+           "project_url": "http://osmstreetlight.bplaced.net/",
+           "doc_url": "http://osmstreetlight.bplaced.net/about.html",
+           "contact_name": "mapper999",
+           "contact_email": "osm.mapper999@gmail.com"
+       },
+       "tags": [
+		  {
+		       "key": "highway",
+		       "value": "street_lamp",
+		       "object_types": ["node"],
+		       "description": "Shows position of street lamps."
+		   },
+		  {
+		       "key": "light_source",
+		       "object_types": ["node"],
+		       "description": "Shows position of light sources."
+		   },
+		  {
+		       "key": "ref",
+		       "object_types": ["node"],
+		       "description": "Shows ref of light sources."
+		   },
+		  {
+		       "key": "lamp_ref",
+		       "object_types": ["node"],
+		       "description": "Shows ref of light sources."
+		   },
+		  {
+		       "key": "operator",
+		       "object_types": ["node"],
+		       "description": "Shows operator of light sources."
+		   },
+		  {
+		       "key": "lamp_operator",
+		       "object_types": ["node"],
+		       "description": "Shows operator of light sources."
+		   },
+		  {
+		       "key": "light_method",
+		       "object_types": ["node"],
+		       "description": "Used to define the color of light sources"
+		   },
+		  {
+		       "key": "lamp_type",
+		       "object_types": ["node"],
+		       "description": "Used to define the color of light sources."
+		   },
+		  {
+		       "key": "light:mount",
+		       "object_types": ["node"],
+		       "description": "Shows how light sources are mounted."
+		   },
+		  {
+		       "key": "lamp_mount",
+		       "object_types": ["node"],
+		       "description": "Shows how light sources are mounted."
+		   },
+		  {
+		       "key": "support",
+		       "object_types": ["node"],
+		       "description": "Shows how light sources are mounted."
+		   },
+		  {
+		       "key": "light:count",
+		       "object_types": ["node"],
+		       "description": "Shows number of light sources on the same pole."
+		   },
+		  {
+		       "key": "light:direction",
+		       "object_types": ["node"],
+		       "description": "Used to define the direction of flood lights."
+		   },
+		  {
+		       "key": "light:lit",
+		       "object_types": ["node"],
+		       "description": "Shows the time when lights are lit."
+		   },
+		  {
+		       "key": "manufacturer",
+		       "object_types": ["node"],
+		       "description": "Shows the manufacturer of light sources."
+		   },
+		  {
+		       "key": "model",
+		       "object_types": ["node"],
+		       "description": "Shows the model of light sources."
+		   },
+		  {
+		       "key": "lamp_model:de",
+		       "object_types": ["node"],
+		       "description": "Shows the model of light sources."
+		   }
+   		]
+   }
