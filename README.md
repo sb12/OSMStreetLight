@@ -14,6 +14,8 @@ Es werden zur Zeit die folgenden Tags unterstützt:
 
 * `operator|lamp_operator=*`
 
+* `start_date=*`
+
 * `light:method|lamp_type=high_pressure_sodium|high-pressure_sodium|low_pressure_sodium|low-pressure_sodium|LED|metal-halide|metal_halide|fluorescent|mercury|electric|gas|gaslight`
 
 * `light:mount|lamp_mount|support=straight mast|straight_mast|bent mast|bent_mast|cast steel mast|cast_steel_mast|mast|pole|wall_mounted|wall|suspended|ceiling`
@@ -27,6 +29,9 @@ Es werden zur Zeit die folgenden Tags unterstützt:
 * `manufacturer=*`
 
 * `model|lamp_model:de=*`
+
+* `height=*`
+* `width=*`
 
 Es dürfen gerne weitere Keys oder Values über Pull Requests vorgeschlagen werden.
 
