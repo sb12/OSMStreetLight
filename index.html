@@ -126,9 +126,15 @@
 					var highway = "";
 					var operator = "";
 					var ref = "";
+					var lamp_start_date = "";
+					var lamp_start_date_text = "";
 					var lamp_manufacturer = "";
 					var lamp_model = "";
 					var lamp_model_text = "";
+					var lamp_height = "";
+					var lamp_height_text = "";
+					var lamp_width = "";
+					var lamp_width_text = "";
 					var light_count = "";
 					var light_direction = "";
 					var light_lit = "";
@@ -156,6 +162,10 @@
 						{
 							ref = EleValue;
 						}
+						if ((EleKey=="start_date"))
+						{
+							lamp_start_date = EleValue;
+						}
 						if ((EleKey=="manufacturer"))
 						{
 							lamp_manufacturer = EleValue;
@@ -164,6 +174,14 @@
 						{
 							lamp_model = EleValue;
 						}
+						if ((EleKey=="lamp_height:de" || EleKey=="height"))
+						{
+							lamp_height = EleValue;
+						}		
+						if ((EleKey=="lamp_width:de" || EleKey=="width"))
+						{
+							lamp_width = EleValue;
+						}									
 						if ((EleKey=="light:count"))
 						{
 							light_count = EleValue;
@@ -212,8 +230,11 @@
 
 						//Dinge die nur angezeigt werden, wenn sie getaggt sind:
 
+						if (lamp_start_date!="") lamp_start_date = "<tr><td><b>Aufstelldatum: </b></td><td>" + lamp_start_date + "</td></tr>";
 						if (lamp_manufacturer!="") lamp_manufacturer = "<tr><td><b>Hersteller: </b></td><td>" + lamp_manufacturer + "</td></tr>";
 						if (lamp_model!="") lamp_model_text = "<tr><td><b>Modell: </b></td><td>" + lamp_model + "</td></tr>";
+						if (lamp_height!="") lamp_height_text = "<tr><td><b>Höhe: </b></td><td>" + lamp_height + "</td></tr>";
+						if (lamp_width!="") lamp_width_text = "<tr><td><b>Breite: </b></td><td>" + lamp_width + "</td></tr>";
 						if (light_method!="") light_method_text = "<tr><td><b>Lichtquelle: </b></td><td>" + get_light_method(light_method) + "</td></tr>";
 						if (light_mount!="") light_mount_text = "<tr><td><b>Befestigung: </b></td><td>" + get_light_mount(light_mount) + "</td></tr>";
 						if (light_lit!="") light_lit_text = "<tr><td><b>Betriebszeiten: </b></td><td>" + get_light_lit(light_lit) + "</td></tr>";
@@ -225,8 +246,11 @@
 							"<tr><td><b>Betreiber: </b></td><td>" + operator + "</td></tr>" + 
 							light_method_text +
 							light_mount_text +
+							lamp_start_date +
 							lamp_manufacturer +
 							lamp_model_text +
+							lamp_height_text +
+							lamp_width_text +
 							light_lit_text +
 							"</table></div>" + 
 							"<br><a href='#' onclick='openinJOSM(\""+EleType+"\",\""+EleID+"\")'>edit in JOSM</a> | <a href='https://www.openstreetmap.org/"+EleType+"/"+EleID+"'>show in OSM</a>" 
