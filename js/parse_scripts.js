@@ -146,16 +146,43 @@ function getMarkerIcon(L,light_source,light_method,light_direction,light_count,r
 	}
 	var direction = "";
 	var rotate = "";
+	var usedDir =""
 	if(light_direction)
 	{
-		if(light_direction >= 135 && light_direction <=360)
-		{
-			rotate = light_direction - 135;
-		}
-		if(light_direction >= 0 && light_direction < 135)
-		{
-			rotate = light_direction - 135 + 360;
-		}
+		var cardinal = new Object(); 
+		cardinal['N'] = 0;
+		cardinal['NNE'] = 22.5;
+		cardinal['NE'] = 45;
+		cardinal['ENE'] = 67.5;
+		cardinal['E'] = 90;
+		cardinal['ESE'] = 112.5;
+		cardinal['SE'] = 135;
+		cardinal['SSE'] = 157.5;
+		cardinal['S'] = 180;
+		cardinal['SSW'] = 202.5;
+		cardinal['SW'] = 225;
+		cardinal['WSW'] = 247.5;
+		cardinal['W'] = 270;
+		cardinal['WNW'] = 292.5;
+		cardinal['NW'] = 315;
+		cardinal['NNW'] = 337.5;
+		
+		if (cardinal.hasOwnProperty(light_direction)) {
+			usedDir = cardinal[light_direction];
+	    }
+	    else
+        {
+            usedDir = light_direction; /* let's hope it's numeric */
+                                        /* ignore to_street  to_crossing */
+        }
+    }
+    if(usedDir >= 135 && usedDir <=360)
+    {
+    	rotate = usedDir - 135;
+	}
+	if(usedDir >= 0 && usedDir < 135)
+	{
+		rotate = usedDir - 135 + 360;
 	}
 	if (rotate && light_source == "floodlight")
 	{
