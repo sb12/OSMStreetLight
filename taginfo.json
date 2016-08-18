@@ -95,6 +95,21 @@
 		       "key": "lamp_model:de",
 		       "object_types": ["node"],
 		       "description": "Shows the model of light sources."
+		   },
+		  {
+		       "key": "start_date",
+		       "object_types": ["node"],
+		       "description": "Shows the start date of light sources."
+		   },
+		  {
+		       "key": "height",
+		       "object_types": ["node"],
+		       "description": "Shows the height of light sources."
+		   },
+		  {
+		       "key": "width",
+		       "object_types": ["node"],
+		       "description": "Shows the width of light sources."
 		   }
    		]
    }
