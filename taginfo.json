@@ -42,7 +42,7 @@
 		       "description": "Shows operator of light sources."
 		   },
 		  {
-		       "key": "light_method",
+		       "key": "light:method",
 		       "object_types": ["node"],
 		       "description": "Used to define the color of light sources"
 		   },
