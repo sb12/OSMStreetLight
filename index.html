@@ -57,13 +57,15 @@
 					success: function(data){parseOSM(data);}
 					//beforeSend: setHeader
 					});			
-						
+
+					document.getElementById("map").className = "bright";
 				}
 				
 				else
 				{
 					//Zoom zu klein um anzuzeigen
 					$('#zoomwarnung').show(1);
+					document.getElementById("map").className = "";
 					parseOSM(false);
 					loadingcounter = 0;
 				}
@@ -291,6 +293,13 @@
 		</script>
 		
 		
+		<style type="text/css">
+			#zoomwarnung {width: 200px; margin-left: -100px; background-color: yellow; position: absolute; top: 16px; margin-top: 0px; height: 47px; left: 50%; text-align: center; font-size: 16; font-family: sans-serif; opacity: 0.8; border-radius: 5px;}
+
+			#loading { background-color: white; position: absolute; top: 16px; margin-top: 0px; left: 50px; text-align: center; font-size: 16; font-family: sans-serif; border-radius: 5px; padding: 10px}
+			#options { background-color: white; position: absolute; bottom: 16px; margin-top: 0px; left: 16px; text-align: center; font-family: sans-serif; border-radius: 5px; padding: 10px}
+		</style>
+		
 		
 	</head>
 	<body style="margin:0px">
@@ -334,7 +343,6 @@
     		//Permalink
 			var hash = new L.Hash(map);
 			map.on('moveend',function(){Moveaufruf();});
-			
     		
     		function mapInit(lat,lon)
     		{
@@ -362,17 +370,7 @@
 				});
 			}
 			
-			
-			
-			
-			
-		</script>
-		<style type="text/css">
-			#zoomwarnung {width: 200px; margin-left: -100px; background-color: yellow; position: absolute; top: 16px; margin-top: 0px; height: 47px; left: 50%; text-align: center; font-size: 16; font-family: sans-serif; opacity: 0.8; border-radius: 5px;}
-
-			#loading { background-color: white; position: absolute; top: 16px; margin-top: 0px; left: 50px; text-align: center; font-size: 16; font-family: sans-serif; border-radius: 5px; padding: 10px}
-			#options { background-color: white; position: absolute; bottom: 16px; margin-top: 0px; left: 16px; text-align: center; font-family: sans-serif; border-radius: 5px; padding: 10px}
-		</style>	
+		</script>	
 		<div id="zoomwarnung">
 			<p>Zoom in to load Data</p>
 		</div>

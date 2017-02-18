@@ -42,12 +42,12 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 }
 
 .floodlight div{
-background: url('./img/floodlight.svg') no-repeat 50% 50%;
-background-size: 48px 48px;
-width:48px;
-height:48px;
+	background: url('./img/floodlight.svg') no-repeat 50% 50%;
+	background-size: 48px 48px;
+	width:48px;
+	height:48px;
 }
 
-.leaflet-tile-pane{
-filter: brightness(0.15);
+.bright .leaflet-tile-pane{
+	filter: brightness(0.15);
 }
