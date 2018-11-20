@@ -1,12 +1,17 @@
-# Straßenlaternen in OSM
+# Straßenlaternen in OSM / Street lamps in OSM
 
 [Testinstallation](http://osmstreetlight.bplaced.net/) | [Quellcode](https://github.com/ubahnverleih/OSMfahrkartenautomaten) | [flattr](https://flattr.com/submit/auto?fid=4zqqyl&url=http%3A%2F%2Fosmstreetlight.bplaced.net%2F)
 
 Diese Karte zeigt Straßenlaternen und ihre Eigenschaften in den Daten der [OpenStreetMap](http://osm.org). Es werden Betreiber, Referenznummern und Details zu den verwendeten Leuchtmitteln angezeigt.
 
-## Unterstützte Tags
+This map shows street lamps and their settings in the data of [OpenStreetMap](http://osm.org). It shows e.g. operators, reference numbers and details about the used lights.</p>
+
+
+## Unterstützte Tags / Supported Tags
 
 Es werden zur Zeit die folgenden Tags unterstützt:
+
+Currently the following tags are supported:
 
 * `highway = street_lamp` | `light_source=lantern|floodlight|*`
 
@@ -16,9 +21,11 @@ Es werden zur Zeit die folgenden Tags unterstützt:
 
 * `start_date=*`
 
-* `light:method|lamp_type=high_pressure_sodium|high-pressure_sodium|low_pressure_sodium|low-pressure_sodium|LED|metal-halide|metal_halide|fluorescent|mercury|electric|gas|gaslight`
+* `light:colour=white|orange`
 
-* `light:mount|lamp_mount|support=straight mast|straight_mast|bent mast|bent_mast|cast steel mast|cast_steel_mast|mast|pole|wall_mounted|wall|suspended|ceiling`
+* `light:method|lamp_type=high_pressure_sodium|high-pressure_sodium|low_pressure_sodium|low-pressure_sodium|sodium|LED|led|metal-halide|metal_halide|fluorescent|mercury|electric|gas|gaslight`
+
+* `light:mount|lamp_mount|support=straight mast|straight_mast|bent mast|bent_mast|cast steel mast|cast_steel_mast|mast|pole|wall_mounted|wall|suspended|wire|ceiling`
 
 * `light:count=1|2|3|4`
 
@@ -34,6 +41,8 @@ Es werden zur Zeit die folgenden Tags unterstützt:
 * `width=*`
 
 Es dürfen gerne weitere Keys oder Values über Pull Requests vorgeschlagen werden.
+
+Feel free to propose more key or values by a Pull Request.
 
 ## License
 
