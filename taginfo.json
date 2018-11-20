@@ -72,6 +72,11 @@
 		       "description": "Shows number of light sources on the same pole."
 		   },
 		  {
+		       "key": "light:colour",
+		       "object_types": ["node"],
+		       "description": "Used to show colour of light sources."
+		   },
+		  {
 		       "key": "light:direction",
 		       "object_types": ["node"],
 		       "description": "Used to define the direction of flood lights."

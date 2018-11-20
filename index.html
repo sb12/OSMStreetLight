@@ -139,6 +139,7 @@
 					var lamp_height_text = "";
 					var lamp_width = "";
 					var lamp_width_text = "";
+					var light_colour = "";
 					var light_count = "";
 					var light_direction = "";
 					var light_lit = "";
@@ -189,6 +190,10 @@
 						if ((EleKey=="light:count"))
 						{
 							light_count = EleValue;
+						}									
+						if ((EleKey=="light:colour"))
+						{
+							light_colour = EleValue;
 						}
 						if ((EleKey=="light:direction"))
 						{
@@ -265,7 +270,7 @@
 						{
 							var markerLocation = new L.LatLng(EleLat,EleLon);
 							
-							var Icon = getMarkerIcon(L,light_source, light_method, light_direction, light_count, ref);
+							var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction, light_count, ref);
 							var marker = new L.Marker(markerLocation,{icon : Icon});
 							
 							if(EleText!="")

@@ -24,7 +24,10 @@ function get_light_method(value){
 	else if (value == "low_pressure_sodium" || value == "low-pressure_sodium"){
 		result = "Natriumdampf-Niederdrucklampe"
 	}
-	else if (value == "LED"){
+	else if (value == "sodium" || value == "sodium"){
+		result = "Natriumdampflampe"
+	}
+	else if (value == "LED" || value == "led"){
 		result = "LED"
 	}
 	else if (value == "metal_halide" || value == "metal-halide"){
@@ -65,7 +68,7 @@ function get_light_mount(value){
 	else if (value == "wall_mounted" || value == "wall"){
 		result = "Wand"
 	}
-	else if (value == "suspended"){
+	else if (value == "suspended" || value == "wire"){
 		result = "hängend"
 	}
 	else if (value == "ceiling"){
@@ -78,7 +81,7 @@ function get_light_mount(value){
 }
 
 
-function getMarkerIcon(L,light_source,light_method,light_direction,light_count,ref){
+function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_count,ref){
 
 	if(light_source == "floodlight")
 	{
@@ -107,7 +110,19 @@ function getMarkerIcon(L,light_source,light_method,light_direction,light_count,r
 	colour_hue = "10";
 	colour_brightness = "100";
 	colour_saturate = "1";
-	
+
+	if(light_colour == "white")
+	{
+		colour_hue = 210;
+		colour_brightness = "100";
+		colour_saturate = "0.0";
+	}
+	if(light_colour == "orange")
+	{
+		colour_hue = "4";
+		colour_brightness = "200";
+		colour_saturate = "0.8";
+	}
 	if(light_method == "LED")
 	{
 		colour_hue = 210;
@@ -132,7 +147,7 @@ function getMarkerIcon(L,light_source,light_method,light_direction,light_count,r
 		colour_brightness = "100";
 		colour_saturate = "0.1";
 	}
-	if(light_method == "high_pressure_sodium" || light_method == "high-pressure_sodium" || light_method == "sodium_vapor")
+	if(light_method == "high_pressure_sodium" || light_method == "high-pressure_sodium" || light_method == "sodium_vapor" || light_method == "sodium")
 	{
 		colour_hue = "4";
 		colour_brightness = "200";
