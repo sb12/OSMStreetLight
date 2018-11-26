@@ -144,6 +144,7 @@
 					var light_direction = "";
 					var light_lit = "";
 					var light_lit_text = "";
+					var light_shape = "";
 					var light_method = "";
 					var light_method_text = "";
 					var light_mount = "";
@@ -211,6 +212,10 @@
 						{
 							light_lit = EleValue;
 						}
+						if ((EleKey=="light:shape"))
+						{
+							light_shape = EleValue;
+						}
 						if ((EleKey=="light_source"))
 						{
 							light_source = EleValue;
@@ -270,11 +275,11 @@
 						{
 							var markerLocation = new L.LatLng(EleLat,EleLon);
 							
-							var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction, light_count, ref);
+							var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction, light_shape, light_count, ref);
 							var marker = new L.Marker(markerLocation,{icon : Icon});
 							
 							if(EleText!="")
-							{
+							{https://wiki.openstreetmap.org
 								marker.bindPopup(EleText);
 							}
 							Layergroup.addLayer(marker);

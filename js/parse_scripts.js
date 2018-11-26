@@ -74,6 +74,9 @@ function get_light_mount(value){
 	else if (value == "ceiling"){
 		result = "an der Decke"
 	}
+	else if (value == "ground"){
+		result = "am Boden"
+	}
 	else {
 		result = value;
 	}
@@ -81,7 +84,7 @@ function get_light_mount(value){
 }
 
 
-function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_count,ref){
+function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_shape,light_count,ref){
 
 	if(light_source == "floodlight")
 	{
@@ -104,6 +107,10 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 		else
 		{
 			var iconclass="streetlight1";
+		}
+		if(light_source == "lantern" && light_shape == "directed" && light_direction)
+		{
+			iconclass="streetlight_directed";
 		}
 	}
 	
@@ -162,6 +169,45 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	var direction = "";
 	var rotate = "";
 	var usedDir =""
+	var iconOffset = 0;
+	var iconSize = 0;
+
+	if ( map.getZoom() == 19)
+	{
+		iconclass = "light_19 " + iconclass;
+		iconOffset = 40;
+		iconSize = 80;		
+		refclass = "lamp_ref_19";
+	}
+	else if ( map.getZoom() == 18)
+	{
+		iconclass = "light_18 " + iconclass;
+		iconOffset = 34;	
+		iconSize = 68;	
+		refclass = "lamp_ref_18";
+	}
+	else if ( map.getZoom() == 17)
+	{
+		iconclass = "light_17 " + iconclass;
+		iconOffset = 28;	
+		iconSize = 56;	
+		refclass = "lamp_ref_17";
+	}
+	else if ( map.getZoom() == 16)
+	{
+		iconclass = "light_16 " + iconclass;
+		iconOffset = 22;	
+		iconSize = 44;	
+		refclass = "lamp_ref_none";
+	}
+	else if ( map.getZoom() == 15)
+	{
+		iconclass = "light_15 " + iconclass;
+		iconOffset = 16;
+		iconSize = 32;
+		refclass = "lamp_ref_none";
+	}
+		
 	if(light_direction)
 	{
 		var cardinal = new Object(); 
@@ -191,29 +237,43 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
                                         /* ignore to_street  to_crossing */
         }
     }
-    if(usedDir >= 135 && usedDir <=360)
-    {
-    	rotate = usedDir - 135;
-	}
-	if(usedDir >= 0 && usedDir < 135)
+	if (usedDir && light_source == "floodlight")
 	{
-		rotate = usedDir - 135 + 360;
-	}
-	if (rotate && light_source == "floodlight")
-	{
-		var translatex = Math.cos( ( 45 + rotate ) * 2 * Math.PI / 360 ) * Math.sqrt( 2 * 24 * 24 );
-		var translatey = Math.sin( ( 45 + rotate ) * 2 * Math.PI / 360 ) * Math.sqrt( 2 * 24 * 24 );
+	    if(usedDir >= 135 && usedDir <=360)
+	    {
+	    	rotate = usedDir - 135;
+		}
+		if(usedDir >= 0 && usedDir < 135)
+		{
+			rotate = usedDir - 135 + 360;
+		}
+		var translatex = Math.cos( ( 45 + rotate ) * 2 * Math.PI / 360 ) * Math.sqrt( 2 * iconOffset * iconOffset );
+		var translatey = Math.sin( ( 45 + rotate ) * 2 * Math.PI / 360 ) * Math.sqrt( 2 * iconOffset * iconOffset );
 		direction = '-ms-transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); -webkit-transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); ';
 	}
-	if ( map.getZoom() < 18)
+	if (usedDir && light_source == "lantern")
+	{
+	    if(usedDir >= 0 && usedDir <=360)
+	    {
+	    	rotate = usedDir - 0;
+		}
+		if(usedDir >= 0 && usedDir < 0)
+		{
+			rotate = usedDir - 0 + 360;
+		}
+		var translatex = 0;//Math.cos( ( 45 + rotate ) * 2 * Math.PI / 360 ) * Math.sqrt( 2 * 24 * 24 );
+		var translatey = 0;//Math.sin( ( 45 + rotate ) * 2 * Math.PI / 360 ) * Math.sqrt( 2 * 24 * 24 );
+		direction = '-ms-transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); -webkit-transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); ';
+	}
+	if ( map.getZoom() < 17)
 	{
 		ref ="";
 	}
 	var Icon = L.divIcon({
 		className: iconclass,
-		html: '<div style="-webkit-filter: hue-rotate(' + colour_hue + 'deg) brightness(' + colour_brightness + ') saturate(' + colour_saturate + ');filter: hue-rotate(' + colour_hue + 'deg) brightness(' + colour_brightness + ') saturate(' + colour_saturate + ');' + direction + '">' + ref + '</div>',
-		iconSize: [48, 48],
-		iconAnchor:   [24, 24],
+		html: '<div style="-webkit-filter: hue-rotate(' + colour_hue + 'deg) brightness(' + colour_brightness + ') saturate(' + colour_saturate + ');filter: hue-rotate(' + colour_hue + 'deg) brightness(' + colour_brightness + ') saturate(' + colour_saturate + ');' + direction + '"> </div><span class="' + refclass + '">' + ref + '</span>',
+		iconSize: [iconSize, iconSize],
+		iconAnchor:   [iconOffset, iconOffset],
 		popupAnchor:  [0, -5]
 		});
 	return Icon;

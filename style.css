@@ -15,8 +15,6 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 }
 
 .streetlight1 div, .streetlight2 div, .streetlight3 div, .streetlight4 div{
-	width:48px;
-	height:48px;
 	color: #DDDDDD;
 	text-align: center;
 	text-shadow: 0 0 5px #000000;
@@ -26,28 +24,78 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 
 .streetlight1 div{
 	background: url('./img/electric_1.svg') no-repeat 50% 50%;
-	background-size: 48px 48px;
 }
 .streetlight2 div{
 	background: url('./img/electric_2.svg') no-repeat 50% 50%;
-	background-size: 48px 48px;
 }
 .streetlight3 div{
 	background: url('./img/electric_3.svg') no-repeat 50% 50%;
-	background-size: 48px 48px;
 }
 .streetlight4 div{
 	background: url('./img/electric_4.svg') no-repeat 50% 50%;
-	background-size: 48px 48px;
+}
+
+.streetlight_directed div{
+	background: url('./img/electric_directed.svg') no-repeat 50% 50%
 }
 
 .floodlight div{
 	background: url('./img/floodlight.svg') no-repeat 50% 50%;
-	background-size: 48px 48px;
-	width:48px;
-	height:48px;
+}
+
+.light_19 div{
+	background-size: 80px 80px;
+	width:80px;
+	height:80px;
+}
+.light_18 div{
+	background-size: 68px 68px;
+	width:68px;
+	height:68px;
+}
+
+.light_17 div{
+	background-size: 56px 56px;
+	width:56px;
+	height:56px;
+}
+
+.light_16 div{
+	background-size: 44px 44px;
+	width:44px;
+	height:44px;
+}
+
+.light_15 div{
+	background-size: 32px 32px;
+	width:32px;
+	height:32px;
 }
 
 .bright .leaflet-tile-pane{
 	filter: brightness(0.15);
+}
+
+.lamp_ref_19, .lamp_ref_18, .lamp_ref_17{
+	display: inline-block;
+	color: #DDDDDD;
+	text-align: center;
+	text-shadow: 0 0 5px #000000;
+	font-weight: bold;
+	white-space:nowrap;
+}
+.lamp_ref_19{
+	width: 80px;
+	margin-top: -80px;
+	font-size: 14px;
+}
+.lamp_ref_18{
+	width: 68px;
+	margin-top: -68px;
+	font-size: 12px;
+}
+.lamp_ref_17{
+	width: 56px;
+	margin-top: -56px;
+	font-size: 10px;
 }
