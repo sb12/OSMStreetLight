@@ -25,15 +25,6 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 .streetlight1 div{
 	background: url('./img/electric_1.svg') no-repeat 50% 50%;
 }
-.streetlight2 div{
-	background: url('./img/electric_2.svg') no-repeat 50% 50%;
-}
-.streetlight3 div{
-	background: url('./img/electric_3.svg') no-repeat 50% 50%;
-}
-.streetlight4 div{
-	background: url('./img/electric_4.svg') no-repeat 50% 50%;
-}
 
 .streetlight_directed div{
 	background: url('./img/electric_directed.svg') no-repeat 50% 50%
@@ -41,6 +32,10 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 
 .floodlight div{
 	background: url('./img/floodlight.svg') no-repeat 50% 50%;
+}
+
+.xmas div{
+	background: url('./img/xmastree.svg') no-repeat 50% 50%;
 }
 
 .light_19 div{

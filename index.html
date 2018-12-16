@@ -40,8 +40,15 @@
 					loadingcounter++;
 					//CrossoverAPI XML request
 
-					XMLRequestText = '( node ["highway"="street_lamp"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );node ["light_source"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' ); >; ); out;';
+					XMLRequestText = '( node ["highway"="street_lamp"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );node ["light_source"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
 					
+					today = new Date();
+					if (today.getMonth() == 11) // show christmas trees only in December
+					{
+						XMLRequestText += 'node ["xmas:feature"="tree"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
+					}
+					XMLRequestText += '>; ); out;';
+					console.log ( XMLRequestText );
 					
 					//URL Codieren
 					XMLRequestText = encodeURIComponent(XMLRequestText);
@@ -140,7 +147,7 @@
 					var lamp_width = "";
 					var lamp_width_text = "";
 					var light_colour = "";
-					var light_count = "";
+					var light_count = 1;
 					var light_direction = "";
 					var light_lit = "";
 					var light_lit_text = "";
@@ -151,6 +158,7 @@
 					var light_mount_text = "";
 					var light_source = "";
 					var light_type = "";
+					var xmas = "";
 					
 					$(this).find('tag').each(function(){
 						EleKey = $(this).attr("k");
@@ -220,6 +228,10 @@
 						{
 							light_source = EleValue;
 						}
+						if ((EleKey=="xmas:feature"))
+						{
+							light_source = "xmas";
+						}
 						
 					});
 
@@ -273,18 +285,75 @@
 						
 						if($.inArray(EleID, MarkerArray)==-1)
 						{
-							var markerLocation = new L.LatLng(EleLat,EleLon);
-							
-							var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction, light_shape, light_count, ref);
-							var marker = new L.Marker(markerLocation,{icon : Icon});
-							
-							if(EleText!="")
-							{https://wiki.openstreetmap.org
-								marker.bindPopup(EleText);
-							}
-							Layergroup.addLayer(marker);
+							i = light_count;
 
-							MarkerArray.push(EleID);
+							light_direction_array = light_direction.split(";")
+							ref_array = ref.split(";")
+							pos_direction = new Array();
+
+							if (light_count > 1)
+							{
+								if (light_direction_array[0] >= 0 && light_direction_array[0] <= 360)
+								{
+									pos_direction[0] = light_direction_array[0];
+								}
+								else
+								{
+									pos_direction[0] = 0;
+								}
+							}
+
+							j = 0;
+							while (i > 0)
+							{
+
+								if (light_count > 1)
+								{
+									if (light_direction_array[j] >= 0 && light_direction_array[j] <= 360)
+									{
+										pos_direction[j] = light_direction_array[j];
+									}
+									else if (j > 0)
+									{
+										pos_direction[j] = pos_direction[j-1]*1 + 360 / light_count;
+										if ( pos_direction[j] > 360 )
+										{
+											pos_direction[j] = pos_direction[j] - 360;	
+										}
+									}
+									[EleLatNew,EleLonNew] = addLatLngDistanceM(EleLat,EleLon,pos_direction[j],1.5)
+								}
+								else
+								{
+									[EleLatNew,EleLonNew] = [EleLat,EleLon]
+								}
+
+								if (!light_direction_array[j])
+								{
+									light_direction_array[j] = light_direction_array[j-1];
+								}
+								if (!ref_array[j])
+								{
+									ref_array[j] = "";
+								}
+								
+								var markerLocation = new L.LatLng(EleLatNew,EleLonNew);
+								
+								//light_count = 1; // FIXME: should be removed later
+								var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction_array[j], light_shape, ref_array[j]);
+								var marker = new L.Marker(markerLocation,{icon : Icon});
+								
+								if(EleText!="")
+								{
+									marker.bindPopup(EleText);
+								}
+								Layergroup.addLayer(marker);
+	
+								MarkerArray.push(EleID);
+								
+								i = i - 1;
+								j = j + 1;
+							}
 
 						}
 
@@ -300,6 +369,41 @@
 				if (loadingcounter==0) {
 					$("#loading").hide(0.4);
 				};
+			}
+			
+			function addLatLngDistanceM(EleLat,EleLon,angle,distance)
+			{
+				LatRad = EleLat * Math.PI / 180;
+				deg_lat_per_m  = 1 / ( 111132.92 - 559.82 * Math.cos( 2 * LatRad ) + 1.175 * Math.cos( 4 * LatRad ) - 0.0023 * Math.cos( 6 * LatRad ) );
+				deg_lon_per_m = 1 / ( 111412.84 * Math.cos ( LatRad ) - 93.5 * Math.cos ( 3 * LatRad ) + 0.118 * Math.cos ( 5 * LatRad ) );
+				
+				angle = angle * Math.PI / 180;
+				// for now only on Northern hemisphere
+				if ( angle >= 0 && angle < 90 )
+				{
+					Lat_dist_m = Math.cos ( angle ) * distance;
+					Lon_dist_m = Math.sin ( angle ) * distance;
+				}
+				else if ( angle >= 90 && angle < 180 )
+				{
+					Lat_dist_m = -Math.sin ( Math.PI - angle ) * distance;
+					Lon_dist_m = Math.cos ( Math.PI - angle ) * distance;
+				}
+				else if ( angle >= 180 && angle < 270 )
+				{
+					Lat_dist_m = -Math.cos ( Math.PI * 3 / 2 - angle ) * distance;
+					Lon_dist_m = -Math.sin ( Math.PI * 3 / 2 - angle ) * distance;
+				}
+				else if ( angle >= 270 && angle <= 360 )
+				{
+					Lat_dist_m = Math.sin ( Math.PI * 2 - angle ) * distance;
+					Lon_dist_m = -Math.cos ( Math.PI * 2 - angle ) * distance;
+				}
+
+				EleLat = EleLat*1 + Lat_dist_m * deg_lat_per_m;
+				EleLon = EleLon*1 + Lon_dist_m * deg_lon_per_m;
+				
+				return [EleLat , EleLon];
 			}
 		
 		</script>

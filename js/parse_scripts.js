@@ -84,30 +84,20 @@ function get_light_mount(value){
 }
 
 
-function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_shape,light_count,ref){
+function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_shape,ref){
 
-	if(light_source == "floodlight")
+	if(light_source == "xmas")
+	{
+		var iconclass="xmas";
+	}
+	else if(light_source == "floodlight")
 	{
 		var iconclass="floodlight";
 	}
 	else
 	{
-		if(light_count == 2)
-		{
-			var iconclass="streetlight2";
-		}
-		else if(light_count == 3)
-		{
-			var iconclass="streetlight3";
-		}
-		else if(light_count == 4)
-		{
-			var iconclass="streetlight4";
-		}
-		else
-		{
-			var iconclass="streetlight1";
-		}
+		var iconclass="streetlight1";
+
 		if(light_source == "lantern" && light_shape == "directed" && light_direction)
 		{
 			iconclass="streetlight_directed";
@@ -118,6 +108,12 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	colour_brightness = "100";
 	colour_saturate = "1";
 
+	if(light_source == "xmas")
+	{
+		colour_hue = "0";
+		colour_brightness = "1.0";
+		colour_saturate = "1.0";
+	}
 	if(light_colour == "white")
 	{
 		colour_hue = 210;
