@@ -5,7 +5,7 @@ i18next
   .use(i18nextBrowserLanguageDetector)
   .init({
     fallbackLng: 'en',
-    debug: true,
+    debug: false,
     whitelist: ['de','en'],
     backend: {
       loadPath: 'locales/{{lng}}.json',
