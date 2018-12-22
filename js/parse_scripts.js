@@ -404,13 +404,13 @@ function get_light_lit(value){
 
 function get_light_method(value){
 	var result;
-	if (value == "high_pressure_sodium" || value == "high-pressure_sodium"){
+	if (value == "high_pressure_sodium" || value == "high-pressure_sodium" || value == "HPSV" || value == "SON"){
 		result =  i18next.t("lamp_method_high_presssure_sodium");
 	}
-	else if (value == "low_pressure_sodium" || value == "low-pressure_sodium"){
+	else if (value == "low_pressure_sodium" || value == "low-pressure_sodium" || value == "SOX"){
 		result =  i18next.t("lamp_method_low_presssure_sodium");
 	}
-	else if (value == "sodium" || value == "sodium"){
+	else if (value == "sodium" || value == "sodium_vapor"){
 		result =  i18next.t("lamp_method_sodium");
 	}
 	else if (value == "LED" || value == "led"){
@@ -422,10 +422,13 @@ function get_light_method(value){
 	else if (value == "fluorescent"){
 		result =  i18next.t("lamp_method_fluorescent");
 	}
+	else if (value == "incandescent"){
+		result =  i18next.t("lamp_method_incandescent");
+	}
 	else if (value == "mercury"){
 		result =  i18next.t("lamp_method_mercury");
 	}
-	else if (value == "electric"){
+	else if (value == "electric" || value == "electrical"){
 		result =  i18next.t("lamp_method_electric");
 	}
 	else if (value == "gas" || value == "gaslight"){
@@ -450,6 +453,9 @@ function get_light_mount(value){
 	}
 	else if (value == "mast" || value == "pole"){
 		result =  i18next.t("lamp_mount_mast");
+	}
+	else if (value == "power_pole"){
+		result =  i18next.t("lamp_mount_power_pole");
 	}
 	else if (value == "wall_mounted" || value == "wall"){
 		result =  i18next.t("lamp_mount_wall");
@@ -532,6 +538,10 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 		colour_url = "_gas";
 	}
 	if(light_method == "metal_halide" || light_method == "metal-halide")
+	{
+		colour_url = "_white";
+	}
+	if(light_method == "incandescent")
 	{
 		colour_url = "_white";
 	}
