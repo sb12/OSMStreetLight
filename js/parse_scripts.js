@@ -5,10 +5,10 @@ function isNumeric(n) {
 function get_light_lit(value){
 	var result;
 	if (value == "dusk-dawn"){
-		result = "nachts und in der Dämmerung"
+		result = i18next.t("lamp_time_duskdawn");
 	}
 	else if (value == "demand"){
-		result = "auf Anforderung"
+		result = i18next.t("lamp_time_demand");
 	}
 	else {
 		result = value;
@@ -19,31 +19,31 @@ function get_light_lit(value){
 function get_light_method(value){
 	var result;
 	if (value == "high_pressure_sodium" || value == "high-pressure_sodium"){
-		result = "Natriumdampf-Hochdrucklampe"
+		result =  i18next.t("lamp_method_high_presssure_sodium");
 	}
 	else if (value == "low_pressure_sodium" || value == "low-pressure_sodium"){
-		result = "Natriumdampf-Niederdrucklampe"
+		result =  i18next.t("lamp_method_low_presssure_sodium");
 	}
 	else if (value == "sodium" || value == "sodium"){
-		result = "Natriumdampflampe"
+		result =  i18next.t("lamp_method_sodium");
 	}
 	else if (value == "LED" || value == "led"){
-		result = "LED"
+		result =  i18next.t("lamp_method_led");
 	}
 	else if (value == "metal_halide" || value == "metal-halide"){
-		result = "Halogen-Metalldampflampe"
+		result =  i18next.t("lamp_method_metal_halide");
 	}
 	else if (value == "fluorescent"){
-		result = "Leuchtstofflampe"
+		result =  i18next.t("lamp_method_fluorescent");
 	}
 	else if (value == "mercury"){
-		result = "Quecksilberdampflampe"
+		result =  i18next.t("lamp_method_mercury");
 	}
 	else if (value == "electric"){
-		result = "elektrisch"
+		result =  i18next.t("lamp_method_electric");
 	}
 	else if (value == "gas" || value == "gaslight"){
-		result = "Gaslaterne"
+		result =  i18next.t("lamp_method_gas");
 	}
 	else {
 		result = value;
@@ -54,28 +54,28 @@ function get_light_method(value){
 function get_light_mount(value){
 	var result;
 	if (value == "straight mast" || value == "straight_mast"){
-		result = "Gerader Mast"
+		result =  i18next.t("lamp_mount_straight_mast");
 	}
 	else if (value == "bent mast" || value == "bent_mast"){
-		result = "Gebogener Mast"
+		result =  i18next.t("lamp_mount_bent_mast");
 	}
 	else if (value == "cast steel mast" || value == "cast_steel_mast"){
-		result = "Stahlgussmast"
+		result =  i18next.t("lamp_mount_cast_steel_mast");
 	}
 	else if (value == "mast" || value == "pole"){
-		result = "Mast"
+		result =  i18next.t("lamp_mount_mast");
 	}
 	else if (value == "wall_mounted" || value == "wall"){
-		result = "Wand"
+		result =  i18next.t("lamp_mount_wall");
 	}
 	else if (value == "suspended" || value == "wire"){
-		result = "hängend"
+		result =  i18next.t("lamp_mount_wire");
 	}
 	else if (value == "ceiling"){
-		result = "an der Decke"
+		result =  i18next.t("lamp_mount_ceiling");
 	}
 	else if (value == "ground"){
-		result = "am Boden"
+		result =  i18next.t("lamp_mount_ground");
 	}
 	else {
 		result = value;

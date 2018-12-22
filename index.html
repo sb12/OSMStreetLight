@@ -11,7 +11,14 @@
 		<script src="js/geo.js" type="text/javascript"></script>
 		<script src="leaflet/plugins/leaflet-hash/leaflet-hash.js"></script>
 		<script src="js/gears_init.js" type="text/javascript"></script>
-		<!-- <script src="js/icons.js" type="text/javascript"></script> -->
+		
+		<!-- Load i18next -->
+		<script src="js/i18next/i18next.min.js"></script>
+		<script src="js/i18next/i18nextXHRBackend.js"></script>
+		<script src="js/i18next/i18nextBrowserLanguageDetector.min.js"></script>
+		<script src="js/i18nextInit.js"></script>
+
+		
 		<script src="js/parse_scripts.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			
@@ -241,35 +248,35 @@
 
 						if(highway == "street_lamp" || light_source == "lantern")
 						{
-							light_type = "Straßenlaterne"	
+							light_type = i18next.t("lamp_lantern");	
 						}
 						else if(light_source == "floodlight")
 						{
-							light_type = "Flutlicht"	
+							light_type = i18next.t("lamp_floodlight");	
 						}
 						else
 						{
-							light_type = "Unbekannte Lichtquelle"	
+							light_type = i18next.t("lamp_unknown");
 						}
 						
-						if (operator=="") operator = "<i>unbekannt</i>";
+						if (operator=="") operator = "<i>"+i18next.t("unknown")+"</i>";
 
 						//Dinge die nur angezeigt werden, wenn sie getaggt sind:
 
-						if (lamp_start_date!="") lamp_start_date = "<tr><td><b>Aufstelldatum: </b></td><td>" + lamp_start_date + "</td></tr>";
-						if (lamp_manufacturer!="") lamp_manufacturer = "<tr><td><b>Hersteller: </b></td><td>" + lamp_manufacturer + "</td></tr>";
-						if (lamp_model!="") lamp_model_text = "<tr><td><b>Modell: </b></td><td>" + lamp_model + "</td></tr>";
-						if (lamp_height!="") lamp_height_text = "<tr><td><b>Höhe: </b></td><td>" + lamp_height + "</td></tr>";
-						if (lamp_width!="") lamp_width_text = "<tr><td><b>Breite: </b></td><td>" + lamp_width + "</td></tr>";
-						if (light_method!="") light_method_text = "<tr><td><b>Lichtquelle: </b></td><td>" + get_light_method(light_method) + "</td></tr>";
-						if (light_mount!="") light_mount_text = "<tr><td><b>Befestigung: </b></td><td>" + get_light_mount(light_mount) + "</td></tr>";
-						if (light_lit!="") light_lit_text = "<tr><td><b>Betriebszeiten: </b></td><td>" + get_light_lit(light_lit) + "</td></tr>";
+						if (lamp_start_date!="") lamp_start_date = "<tr><td><b>" + i18next.t("lamp_start_date") + ": </b></td><td>" + lamp_start_date + "</td></tr>";
+						if (lamp_manufacturer!="") lamp_manufacturer = "<tr><td><b>" + i18next.t("lamp_manufacturer") + ": </b></td><td>" + lamp_manufacturer + "</td></tr>";
+						if (lamp_model!="") lamp_model_text = "<tr><td><b>" + i18next.t("lamp_model") + ": </b></td><td>" + lamp_model + "</td></tr>";
+						if (lamp_height!="") lamp_height_text = "<tr><td><b>" + i18next.t("lamp_height") + ": </b></td><td>" + lamp_height + "</td></tr>";
+						if (lamp_width!="") lamp_width_text = "<tr><td><b>" + i18next.t("lamp_width") + ": </b></td><td>" + lamp_width + "</td></tr>";
+						if (light_method!="") light_method_text = "<tr><td><b>" + i18next.t("lamp_method") + ": </b></td><td>" + get_light_method(light_method) + "</td></tr>";
+						if (light_mount!="") light_mount_text = "<tr><td><b>" + i18next.t("lamp_mount") + ": </b></td><td>" + get_light_mount(light_mount) + "</td></tr>";
+						if (light_lit!="") light_lit_text = "<tr><td><b>" + i18next.t("lamp_time") + ": </b></td><td>" + get_light_lit(light_lit) + "</td></tr>";
 
 						
 						EleText = 
 							"<b>" + light_type + " " + ref + "</b><br>" + 
 							"<div class='infoblock'><table>" + 
-							"<tr><td><b>Betreiber: </b></td><td>" + operator + "</td></tr>" + 
+							"<tr><td><b>" + i18next.t("lamp_operator") + ": </b></td><td>" + operator + "</td></tr>" + 
 							light_method_text +
 							light_mount_text +
 							lamp_start_date +
@@ -410,7 +417,7 @@
 		
 		
 		<style type="text/css">
-			#zoomwarnung {width: 200px; margin-left: -100px; background-color: yellow; position: absolute; top: 16px; margin-top: 0px; height: 47px; left: 50%; text-align: center; font-size: 16; font-family: sans-serif; opacity: 0.8; border-radius: 5px; z-index: 1000}
+			#zoomwarnung {width: 20em; margin: -10em; padding: 5px; background-color: yellow; position: absolute; top: 16px; margin-top: 0px; height: 47px; left: 50%; text-align: center; font-size: 16; font-family: sans-serif; opacity: 0.8; border-radius: 5px; z-index: 1000}
 
 			#loading { background-color: white; position: absolute; top: 16px; margin-top: 0px; left: 50px; text-align: center; font-size: 16; font-family: sans-serif; border-radius: 5px; padding: 10px; z-index: 1000}
 			#options { background-color: white; position: absolute; bottom: 16px; margin-top: 0px; left: 16px; text-align: center; font-family: sans-serif; border-radius: 5px; padding: 10px; z-index: 1000}
@@ -489,12 +496,18 @@
 			
 		</script>	
 		<div id="zoomwarnung">
-			<p>Zoom in to load Data</p>
+			<p id="zoomin"></p>
 		</div>
 		<div id="loading"><img src="./img/ajax-loader.gif"></div>
 
 		<div id="options">
-			<small><a target="_new" href="./about.html">über diese Karte</a> | <a href="https://flattr.com/submit/auto?fid=4zqqyl&url=http%3A%2F%2Fosmstreetlight.bplaced.net%2F" target="_new">Flattr</a></small>
+			<small><a target="_new" href="./about.html" id="aboutmap"></a> | <a href="https://flattr.com/submit/auto?fid=4zqqyl&url=http%3A%2F%2Fosmstreetlight.bplaced.net%2F" target="_new">Flattr</a></small>
+		</div>
+		<div id="lang">
+			<select>
+				<option onclick="i18next.changeLanguage('en')">en </option>
+				<option onclick="i18next.changeLanguage('de')">de </option>
+			</select>
 		</div>
 
 	</body>

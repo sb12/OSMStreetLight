@@ -14,35 +14,34 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 	padding: 5px;
 }
 
-/*.streetlight1 div, .streetlight2 div, .streetlight3 div, .streetlight4 div{
-	color: #DDDDDD;
-	text-align: center;
-	text-shadow: 0 0 5px #000000;
-	font-weight: bold;
-	white-space:nowrap;
+#lang { 
+	background-color: white; 
+	position: absolute; 
+	top: 0px; 
+	margin-top: 0px; 
+	right: 0px; 
+	text-align: center; 
+	font-family: sans-serif; 
+	border-radius: 0px 0px 0px 5px; 
+	padding: 0px; 
+	z-index: 1000;
+	width:4em;
 }
 
-.streetlight1 div{
-	background: url('./img/electric_1.svg') no-repeat 50% 50%;
+#lang select {
+	background-color: white;
+	padding: 5px;
+	border: none;
+	width: 100%;
+	border-radius: 0px 0px 0px 5px;
 }
 
-.streetlight_directed div{
-	background: url('./img/electric_directed.svg') no-repeat 50% 50%
-}
-
-.floodlight div{
-	background: url('./img/floodlight.svg') no-repeat 50% 50%;
-}
-
-.xmas div{
-	background: url('./img/xmastree.svg') no-repeat 50% 50%;
-}
-*/
 .light_19 div{
 	background-size: 80px 80px;
 	width:80px;
 	height:80px;
 }
+
 .light_18 div{
 	background-size: 68px 68px;
 	width:68px;
@@ -79,16 +78,19 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 	font-weight: bold;
 	white-space:nowrap;
 }
+
 .lamp_ref_19{
 	width: 80px;
 	margin-top: -80px;
 	font-size: 14px;
 }
+
 .lamp_ref_18{
 	width: 68px;
 	margin-top: -68px;
 	font-size: 12px;
 }
+
 .lamp_ref_17{
 	width: 56px;
 	margin-top: -56px;
