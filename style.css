@@ -14,7 +14,7 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 	padding: 5px;
 }
 
-.streetlight1 div, .streetlight2 div, .streetlight3 div, .streetlight4 div{
+/*.streetlight1 div, .streetlight2 div, .streetlight3 div, .streetlight4 div{
 	color: #DDDDDD;
 	text-align: center;
 	text-shadow: 0 0 5px #000000;
@@ -37,7 +37,7 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 .xmas div{
 	background: url('./img/xmastree.svg') no-repeat 50% 50%;
 }
-
+*/
 .light_19 div{
 	background-size: 80px 80px;
 	width:80px;

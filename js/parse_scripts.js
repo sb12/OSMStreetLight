@@ -86,27 +86,26 @@ function get_light_mount(value){
 
 function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_shape,ref){
 
+	var symbol_url = "electric";
+	
 	if(light_source == "xmas")
 	{
-		var iconclass="xmas";
+		symbol_url = "xmastree";
 	}
 	else if(light_source == "floodlight")
 	{
-		var iconclass="floodlight";
+		symbol_url = "floodlight";
 	}
 	else
 	{
-		var iconclass="streetlight1";
 
 		if(light_source == "lantern" && light_shape == "directed" && light_direction)
 		{
-			iconclass="streetlight_directed";
+			symbol_url = "electric_directed";
 		}
 	}
 	
-	colour_hue = "10";
-	colour_brightness = "100";
-	colour_saturate = "1";
+	colour_url = "";
 
 	if(light_source == "xmas")
 	{
@@ -116,89 +115,86 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	}
 	if(light_colour == "white")
 	{
-		colour_hue = 210;
-		colour_brightness = "100";
-		colour_saturate = "0.0";
+		colour_url = "_white";
 	}
 	if(light_colour == "orange")
 	{
-		colour_hue = "4";
-		colour_brightness = "200";
-		colour_saturate = "0.8";
+		colour_url = "_orange";
+	}
+	if(light_colour == "blue")
+	{
+		colour_url = "_blue";
+	}
+	if(light_colour == "red")
+	{
+		colour_url = "_red";
+	}
+	if(light_colour == "green")
+	{
+		colour_url = "_green";
 	}
 	if(light_method == "LED")
 	{
-		colour_hue = 210;
-		colour_brightness = "100";
-		colour_saturate = "0.2";
+		colour_url = "_led";
 	}
 	if(light_method == "fluorescent")
 	{
-		colour_hue = "60";
-		colour_brightness = "100";
-		colour_saturate = "0.3";
+		colour_url = "_fluorescent";
 	}
 	if(light_method == "gas" || light_method == "gaslight")
 	{
-		colour_hue = "3";
-		colour_brightness = "60";
-		colour_saturate = "0.9";
+		colour_url = "_gas";
 	}
 	if(light_method == "metal_halide" || light_method == "metal-halide")
 	{
-		colour_hue = "195";
-		colour_brightness = "100";
-		colour_saturate = "0.1";
+		colour_url = "_white";
 	}
 	if(light_method == "high_pressure_sodium" || light_method == "high-pressure_sodium" || light_method == "sodium_vapor" || light_method == "sodium")
 	{
-		colour_hue = "4";
-		colour_brightness = "200";
-		colour_saturate = "0.8";
+		colour_url = "_orange";
 	}
 	if(light_method == "mercury")
 	{
-		colour_hue = "200";
-		colour_brightness = "100";
-		colour_saturate = "0.4";
+		colour_url = "_mercury";
 	}
 	var direction = "";
 	var rotate = "";
-	var usedDir =""
+	var usedDir = ""
 	var iconOffset = 0;
 	var iconSize = 0;
+	var iconClass = "";
 
 	if ( map.getZoom() == 19)
 	{
-		iconclass = "light_19 " + iconclass;
+		iconClass = "light_19 " + iconClass;
 		iconOffset = 40;
 		iconSize = 80;		
 		refclass = "lamp_ref_19";
 	}
 	else if ( map.getZoom() == 18)
 	{
-		iconclass = "light_18 " + iconclass;
+		iconClass = "light_18 " + iconClass;
 		iconOffset = 34;	
 		iconSize = 68;	
 		refclass = "lamp_ref_18";
 	}
 	else if ( map.getZoom() == 17)
 	{
-		iconclass = "light_17 " + iconclass;
+		iconClass = "light_17 " + iconClass;
 		iconOffset = 28;	
 		iconSize = 56;	
 		refclass = "lamp_ref_17";
 	}
 	else if ( map.getZoom() == 16)
 	{
-		iconclass = "light_16 " + iconclass;
+		iconClass = "light_16 " + iconClass;
 		iconOffset = 22;	
 		iconSize = 44;	
 		refclass = "lamp_ref_none";
 	}
 	else if ( map.getZoom() == 15)
 	{
-		iconclass = "light_15 " + iconclass;
+		iconClass = "light_15 " + iconClass;
 		iconOffset = 16;
 		iconSize = 32;
 		refclass = "lamp_ref_none";
@@ -266,8 +262,8 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 		ref ="";
 	}
 	var Icon = L.divIcon({
-		className: iconclass,
-		html: '<div style="-webkit-filter: hue-rotate(' + colour_hue + 'deg) brightness(' + colour_brightness + ') saturate(' + colour_saturate + ');filter: hue-rotate(' + colour_hue + 'deg) brightness(' + colour_brightness + ') saturate(' + colour_saturate + ');' + direction + '"> </div><span class="' + refclass + '">' + ref + '</span>',
+		className: iconClass,
+		html: '<div style="background-image: url(\'./img/' + symbol_url + colour_url + '.svg\');background-repeat: no-repeat;' + direction + '"> </div><span class="' + refclass + '">' + ref + '</span>',
 		iconSize: [iconSize, iconSize],
 		iconAnchor:   [iconOffset, iconOffset],
 		popupAnchor:  [0, -5]

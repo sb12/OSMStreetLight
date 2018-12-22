@@ -14,14 +14,14 @@
        fx="10.733127"
        fy="7.4535599"
        r="3.3541019" >
-    <stop offset="0%" stop-opacity="2" stop-color="#FFFF55" id="stop2" />
-    <stop offset="100%" stop-opacity="0" stop-color="#FFFF55" id="stop4" />
+    <stop offset="0%" stop-opacity="2" stop-color="#55FF55" id="stop2" />
+    <stop offset="100%" stop-opacity="0" stop-color="#55FF55" id="stop4" />
   </radialGradient>
   <circle
      cx="8"
      cy="8"
      r="0.5"
-     fill="#FFFF55"
+     fill="#55FF55"
      id="circle7" />
   <path
      style="opacity:0.4;vector-effect:none;fill:url(#radialGradient882);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
