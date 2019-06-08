@@ -21,7 +21,7 @@ Currently the following tags are supported:
 
 * `start_date=*`
 
-* `light:colour=white|orange`
+* `light:colour=white|orange|yellow|blue|red|green`
 
 * `light:method|lamp_type=high_pressure_sodium|high-pressure_sodium|SON|HPSV|low_pressure_sodium|low-pressure_sodium|SOX|sodium|sodium_vapor|LED|led|metal-halide|metal_halide|fluorescent|incandescent|mercury|electric|electrical|gas|gaslight`
 
