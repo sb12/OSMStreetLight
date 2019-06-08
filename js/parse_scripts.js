@@ -134,7 +134,7 @@ function parseOSM(daten)
 		var light_method_text = "";
 		var light_mount = "";
 		var light_mount_text = "";
-		var light_source = "";
+		var light_source = "lantern";
 		var light_type = "";
 		var xmas = "";
 		
@@ -217,7 +217,7 @@ function parseOSM(daten)
 		
 		if (highway != "" || light_source != ""){
 
-			if(highway == "street_lamp" || light_source == "lantern")
+			if(light_source == "lantern")
 			{
 				light_type = i18next.t("lamp_lantern");	
 			}
@@ -499,12 +499,6 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	
 	colour_url = "";
 
-	if(light_source == "xmas")
-	{
-		colour_hue = "0";
-		colour_brightness = "1.0";
-		colour_saturate = "1.0";
-	}
 	if(light_colour == "white")
 	{
 		colour_url = "_white";
@@ -525,33 +519,58 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	{
 		colour_url = "_green";
 	}
-	if(light_method == "LED")
+	if(light_colour == "yellow")
 	{
-		colour_url = "_led";
+		colour_url = "_yellow";
+	}
+	if(light_method == "LED" || light_method == "led")
+	{
+		if (!colour_url || colour_url=="_white")
+		{
+			colour_url = "_led";
+		}
 	}
 	if(light_method == "fluorescent")
 	{
-		colour_url = "_fluorescent";
+		if (!colour_url || colour_url=="_white")
+		{
+			colour_url = "_fluorescent"
+		}
 	}
 	if(light_method == "gas" || light_method == "gaslight")
 	{
-		colour_url = "_gas";
+		if (!colour_url || colour_url=="_orange" || colour_url == "_red")
+		{
+			colour_url = "_gas";
+		}
 	}
 	if(light_method == "metal_halide" || light_method == "metal-halide")
 	{
-		colour_url = "_white";
+		if (!colour_url)
+		{
+			colour_url = "_white";
+		}
 	}
 	if(light_method == "incandescent")
 	{
-		colour_url = "_white";
+		if (!colour_url)
+		{
+			colour_url = "_white";
+		}
 	}
 	if(light_method == "high_pressure_sodium" || light_method == "high-pressure_sodium" || light_method == "sodium_vapor" || light_method == "sodium")
 	{
-		colour_url = "_orange";
+		if (!colour_url)
+		{
+			colour_url = "_orange";
+		}
 	}
 	if(light_method == "mercury")
 	{
-		colour_url = "_mercury";
+		if (!colour_url && colour_url!="white")
+		{
+			colour_url = "_mercury";
+		}
 	}
 	var direction = "";
 	var rotate = "";
