@@ -10,16 +10,18 @@ function XMLLaden(lat1,lon1,lat2,lon2)
 {
 	//Maximalen Zoom um karten ausschnitt nicht zu gross zu haben
 	minzoom = 15;
-	
+
 	if (map.getZoom()>=minzoom)
 	{
 		$('#zoomwarnung').hide(0.4);
-		$('#loading').show().effect("highlight", {}, 700);
+		$( "#loading" ).animate({
+color: "black",
+backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
 		loadingcounter++;
 		//CrossoverAPI XML request
 
 		XMLRequestText = '( node ["highway"="street_lamp"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );node ["light_source"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
-		
+
 		today = new Date();
 		if (today.getMonth() == 11) // show christmas trees only in December
 		{
@@ -27,26 +29,36 @@ function XMLLaden(lat1,lon1,lat2,lon2)
 		}
 		XMLRequestText += '>; ); out;';
 		console.log ( XMLRequestText );
-		
+
 		//URL Codieren
 		XMLRequestText = encodeURIComponent(XMLRequestText);
-		
+
 		RequestURL = "http://overpass-api.de/api/interpreter?data=" + XMLRequestText;
 		//AJAX REQUEST
-		
-		
+
+
 		$.ajax({
 		url: RequestURL,
 		type: 'GET',
 		crossDomain: true,
-		success: function(data){parseOSM(data);}
+		success: function(data){parseOSM(data);},
+		error: function(jqXHR, textStatus, errorThrown){
+			$( "#loading" ).animate({
+				color: "red",
+				backgroundColor: "rgb( 255, 200, 200 )"
+			});
+			$( "#loading" ).fadeOut(1500);
+			loadingcounter--;
+
+			},
+    timeout: 30000 // timeout after 30s
 		//beforeSend: setHeader
-		});			
+		});
 
 		$('#map').addClass("bright");
 		//document.getElementById("map").className = "bright";
 	}
-	
+
 	else
 	{
 		//Zoom zu klein um anzuzeigen
@@ -64,7 +76,7 @@ function parseOSM(daten)
 	MarkerArray = new Array();
 	CoordObj = new Object();
 	Layergroup.clearLayers();
-	
+
 	$(daten).find('node,way').each(function(){
 		EleID = $(this).attr("id");
 
@@ -77,7 +89,7 @@ function parseOSM(daten)
 			EleObj = new Object();
 			EleObj["lat"] = EleLat;
 			EleObj["lon"] = EleLon;
-			CoordObj[EleID] = EleObj;	
+			CoordObj[EleID] = EleObj;
 		}
 
 
@@ -87,7 +99,7 @@ function parseOSM(daten)
 			EleType = "way";
 			EleCoordArrayLat = new Array();
 			EleCoordArrayLon = new Array();
-			
+
 			$(this).find('nd').each(function(){
 				NdRefID = $(this).attr("ref");
 				EleCoordArrayLat.push(CoordObj[NdRefID]["lat"]);
@@ -102,15 +114,15 @@ function parseOSM(daten)
 			EleLonMin = EleCoordArrayLon[0];
 			EleLonArrayLenght = EleCoordArrayLon.length - 1;
 			EleLonMax = EleCoordArrayLon[EleLonArrayLenght];
-			
+
 			EleLat = (EleLatMin - 0) + ((EleLatMax - EleLatMin)/2);
 			EleLon = (EleLonMin - 0) + ((EleLonMax - EleLonMin)/2);
-			
+
 		}
 
 
 
-		
+
 		var EleText = "";
 		var highway = "";
 		var operator = "";
@@ -137,7 +149,7 @@ function parseOSM(daten)
 		var light_source = "lantern";
 		var light_type = "";
 		var xmas = "";
-		
+
 		$(this).find('tag').each(function(){
 			EleKey = $(this).attr("k");
 			EleValue = $(this).attr("v");
@@ -169,15 +181,15 @@ function parseOSM(daten)
 			if ((EleKey=="lamp_height:de" || EleKey=="height"))
 			{
 				lamp_height = EleValue;
-			}		
+			}
 			if ((EleKey=="lamp_width:de" || EleKey=="width"))
 			{
 				lamp_width = EleValue;
-			}									
+			}
 			if ((EleKey=="light:count"))
 			{
 				light_count = EleValue;
-			}									
+			}
 			if ((EleKey=="light:colour"))
 			{
 				light_colour = EleValue;
@@ -210,26 +222,26 @@ function parseOSM(daten)
 			{
 				light_source = "xmas";
 			}
-			
+
 		});
 
 
-		
+
 		if (highway != "" || light_source != ""){
 
 			if(light_source == "lantern")
 			{
-				light_type = i18next.t("lamp_lantern");	
+				light_type = i18next.t("lamp_lantern");
 			}
 			else if(light_source == "floodlight")
 			{
-				light_type = i18next.t("lamp_floodlight");	
+				light_type = i18next.t("lamp_floodlight");
 			}
 			else
 			{
 				light_type = i18next.t("lamp_unknown");
 			}
-			
+
 			if (operator=="") operator = "<i>"+i18next.t("unknown")+"</i>";
 
 			//Dinge die nur angezeigt werden, wenn sie getaggt sind:
@@ -243,11 +255,11 @@ function parseOSM(daten)
 			if (light_mount!="") light_mount_text = "<tr><td><b>" + i18next.t("lamp_mount") + ": </b></td><td>" + get_light_mount(light_mount) + "</td></tr>";
 			if (light_lit!="") light_lit_text = "<tr><td><b>" + i18next.t("lamp_time") + ": </b></td><td>" + get_light_lit(light_lit) + "</td></tr>";
 
-			
-			EleText = 
-				"<b>" + light_type + " " + ref + "</b><br>" + 
-				"<div class='infoblock'><table>" + 
-				"<tr><td><b>" + i18next.t("lamp_operator") + ": </b></td><td>" + operator + "</td></tr>" + 
+
+			EleText =
+				"<b>" + light_type + " " + ref + "</b><br>" +
+				"<div class='infoblock'><table>" +
+				"<tr><td><b>" + i18next.t("lamp_operator") + ": </b></td><td>" + operator + "</td></tr>" +
 				light_method_text +
 				light_mount_text +
 				lamp_start_date +
@@ -256,11 +268,11 @@ function parseOSM(daten)
 				lamp_height_text +
 				lamp_width_text +
 				light_lit_text +
-				"</table></div>" + 
-				"<br><a href='#' onclick='openinJOSM(\""+EleType+"\",\""+EleID+"\")'>edit in JOSM</a> | <a href='https://www.openstreetmap.org/"+EleType+"/"+EleID+"'>show in OSM</a>" 
+				"</table></div>" +
+				"<br><a href='#' onclick='openinJOSM(\""+EleType+"\",\""+EleID+"\")'>edit in JOSM</a> | <a href='https://www.openstreetmap.org/"+EleType+"/"+EleID+"'>show in OSM</a>"
 				;
 
-			
+
 			if($.inArray(EleID, MarkerArray)==-1)
 			{
 				i = light_count;
@@ -296,7 +308,7 @@ function parseOSM(daten)
 							pos_direction[j] = pos_direction[j-1]*1 + 360 / light_count;
 							if ( pos_direction[j] > 360 )
 							{
-								pos_direction[j] = pos_direction[j] - 360;	
+								pos_direction[j] = pos_direction[j] - 360;
 							}
 						}
 						[EleLatNew,EleLonNew] = addLatLngDistanceM(EleLat,EleLon,pos_direction[j],1.5)
@@ -314,13 +326,13 @@ function parseOSM(daten)
 					{
 						ref_array[j] = "";
 					}
-					
+
 					var markerLocation = new L.LatLng(EleLatNew,EleLonNew);
-					
+
 					//light_count = 1; // FIXME: should be removed later
 					var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction_array[j], light_shape, ref_array[j]);
 					var marker = new L.Marker(markerLocation,{icon : Icon});
-					
+
 					if(EleText!="")
 					{
 						marker.bindPopup(EleText);
@@ -328,7 +340,7 @@ function parseOSM(daten)
 					Layergroup.addLayer(marker);
 
 					MarkerArray.push(EleID);
-					
+
 					i = i - 1;
 					j = j + 1;
 				}
@@ -338,7 +350,7 @@ function parseOSM(daten)
 			map.addLayer(Layergroup);
 		}
 
-	
+
 
 	});
 
@@ -354,7 +366,7 @@ function addLatLngDistanceM(EleLat,EleLon,angle,distance)
 	LatRad = EleLat * Math.PI / 180;
 	deg_lat_per_m  = 1 / ( 111132.92 - 559.82 * Math.cos( 2 * LatRad ) + 1.175 * Math.cos( 4 * LatRad ) - 0.0023 * Math.cos( 6 * LatRad ) );
 	deg_lon_per_m = 1 / ( 111412.84 * Math.cos ( LatRad ) - 93.5 * Math.cos ( 3 * LatRad ) + 0.118 * Math.cos ( 5 * LatRad ) );
-	
+
 	angle = angle * Math.PI / 180;
 	// for now only on Northern hemisphere
 	if ( angle >= 0 && angle < 90 )
@@ -380,10 +392,10 @@ function addLatLngDistanceM(EleLat,EleLon,angle,distance)
 
 	EleLat = EleLat*1 + Lat_dist_m * deg_lat_per_m;
 	EleLon = EleLon*1 + Lon_dist_m * deg_lon_per_m;
-	
+
 	return [EleLat , EleLon];
 }
-			
+
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
@@ -479,7 +491,7 @@ function get_light_mount(value){
 function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_shape,ref){
 
 	var symbol_url = "electric";
-	
+
 	if(light_source == "xmas")
 	{
 		symbol_url = "xmastree";
@@ -496,7 +508,7 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 			symbol_url = "electric_directed";
 		}
 	}
-	
+
 	colour_url = "";
 
 	if(light_colour == "white")
@@ -583,28 +595,28 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	{
 		iconClass = "light_19 " + iconClass;
 		iconOffset = 40;
-		iconSize = 80;		
+		iconSize = 80;
 		refclass = "lamp_ref_19";
 	}
 	else if ( map.getZoom() == 18)
 	{
 		iconClass = "light_18 " + iconClass;
-		iconOffset = 34;	
-		iconSize = 68;	
+		iconOffset = 34;
+		iconSize = 68;
 		refclass = "lamp_ref_18";
 	}
 	else if ( map.getZoom() == 17)
 	{
 		iconClass = "light_17 " + iconClass;
-		iconOffset = 28;	
-		iconSize = 56;	
+		iconOffset = 28;
+		iconSize = 56;
 		refclass = "lamp_ref_17";
 	}
 	else if ( map.getZoom() == 16)
 	{
 		iconClass = "light_16 " + iconClass;
-		iconOffset = 22;	
-		iconSize = 44;	
+		iconOffset = 22;
+		iconSize = 44;
 		refclass = "lamp_ref_none";
 	}
 	else if ( map.getZoom() == 15)
@@ -614,10 +626,10 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 		iconSize = 32;
 		refclass = "lamp_ref_none";
 	}
-		
+
 	if(light_direction)
 	{
-		var cardinal = new Object(); 
+		var cardinal = new Object();
 		cardinal['N'] = 0;
 		cardinal['NNE'] = 22.5;
 		cardinal['NE'] = 45;
@@ -634,7 +646,7 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 		cardinal['WNW'] = 292.5;
 		cardinal['NW'] = 315;
 		cardinal['NNW'] = 337.5;
-		
+
 		if (cardinal.hasOwnProperty(light_direction)) {
 			usedDir = cardinal[light_direction];
 	    }
@@ -685,11 +697,3 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 		});
 	return Icon;
 }
-
-
-
-
-
-
-
-
