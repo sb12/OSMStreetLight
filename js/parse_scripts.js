@@ -511,6 +511,38 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 
 	colour_url = "";
 
+        if(light_colour.substr(-1) == "K")
+        {
+            var Kelvin_length = light_colour.indexOf("K");
+            var light_colour_K = Number(light_colour.substr(0,Kelvin_length));
+            if (!light_colour_K.isNaN)
+            {
+                if (light_colour_K < 2000)
+                {
+                    colour_url = "_gas";
+                }
+                else if (light_colour_K < 2600)
+                {
+                    colour_url = "_orange";
+                }
+                else if (light_colour_K < 3000)
+                {
+                    colour_url = "_fluorescent";
+                }
+                else if (light_colour_K < 4000)
+                {
+                    colour_url = "_led";
+                }
+                else if (light_colour_K > 5600)
+                {
+                    colour_url = "_mercury";
+                }
+                else
+                {
+                    colour_url = "_white";
+                }
+            }
+        }    
 	if(light_colour == "white")
 	{
 		colour_url = "_white";
