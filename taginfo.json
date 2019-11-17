@@ -87,6 +87,11 @@
 		       "description": "Shows the time when lights are lit."
 		   },
 		  {
+		       "key": "light:height",
+		       "object_types": ["node"],
+		       "description": "Shows the height of the light, influences the size of symbols."
+		   },
+		  {
 		       "key": "manufacturer",
 		       "object_types": ["node"],
 		       "description": "Shows the manufacturer of light sources."

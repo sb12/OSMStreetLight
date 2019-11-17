@@ -7,6 +7,7 @@
     "lamp_model" : "Model",
 	"lamp_height" : "Height",
 	"lamp_width" : "Width",
+	"lamp_light_height" : "Light Height",
 	"lamp_method" : "Light source",
 	"lamp_method_sodium" : "Sodium lamp",
 	"lamp_method_high_presssure_sodium" : "High-pressure sodium lamp",

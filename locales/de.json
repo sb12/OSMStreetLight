@@ -7,6 +7,7 @@
     "lamp_model" : "Modell",
 	"lamp_height" : "Höhe",
 	"lamp_width" : "Breite",
+	"lamp_light_height" : "Lichtpunkthöhe",
 	"lamp_method" : "Lichtquelle",
 	"lamp_method_sodium" : "Natriumdampflampe",
 	"lamp_method_high_presssure_sodium" : "Natriumdampf-Hochdrucklampe",

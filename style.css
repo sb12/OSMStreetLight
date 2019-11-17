@@ -81,6 +81,18 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 	border-radius: 0px 0px 0px 5px;
 }
 
+.light_21 div{
+	background-size: 80px 80px;
+	width:104px;
+	height:104px;
+}
+
+.light_20 div{
+	background-size: 80px 80px;
+	width:92px;
+	height:92px;
+}
+
 .light_19 div{
 	background-size: 80px 80px;
 	width:80px;
@@ -111,33 +123,72 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 	height:32px;
 }
 
+.light_14 div{
+	background-size: 20px 20px;
+	width:10px;
+	height:20px;
+}
+
+.light_13 div{
+	background-size: 8px 8px;
+	width:4px;
+	height:8px;
+}
+
 .bright .leaflet-tile-pane{
 	filter: brightness(0.15);
 }
 
-.lamp_ref_19, .lamp_ref_18, .lamp_ref_17{
+.lamp_ref_19_text, .lamp_ref_18_text, .lamp_ref_17_text{
 	display: inline-block;
 	color: #DDDDDD;
 	text-align: center;
 	text-shadow: 0 0 5px #000000;
 	font-weight: bold;
 	white-space:nowrap;
+	/*width: 80px;*/
+}
+
+.lamp_ref_21{
+	width: 104px;
+	margin-top: -54px;
+}
+
+.lamp_ref_20{
+	width: 92px;
+	margin-top: -48px;
 }
 
 .lamp_ref_19{
 	width: 80px;
-	margin-top: -80px;
-	font-size: 14px;
+	margin-top: -42px;
 }
 
 .lamp_ref_18{
 	width: 68px;
-	margin-top: -68px;
-	font-size: 12px;
+	margin-top: -36px;
 }
 
 .lamp_ref_17{
 	width: 56px;
-	margin-top: -56px;
+	margin-top: -30px;
+}
+.lamp_ref_16{
+	width: 44px;
+	margin-top: -26px;
+}
+.lamp_ref_15{
+	width: 32px;
+	margin-top: -20px;
+}
+.lamp_ref_19_text{
+	font-size: 12px;
+}
+
+.lamp_ref_18_text{
 	font-size: 10px;
+}
+
+.lamp_ref_17_text{
+	font-size: 8px;
 }

@@ -139,6 +139,8 @@ function parseOSM(daten)
 		var light_colour = "";
 		var light_count = 1;
 		var light_direction = "";
+		var light_height = "";
+		var light_height_text = "";
 		var light_lit = "";
 		var light_lit_text = "";
 		var light_shape = "";
@@ -198,6 +200,10 @@ function parseOSM(daten)
 			{
 				light_direction = EleValue;
 			}
+			if ((EleKey=="light:height"))
+			{
+				light_height = EleValue;
+			}
 			if ((EleKey=="light:method" || EleKey=="lamp_type"))
 			{
 				light_method = EleValue;
@@ -249,7 +255,8 @@ function parseOSM(daten)
 			if (lamp_start_date!="") lamp_start_date = "<tr><td><b>" + i18next.t("lamp_start_date") + ": </b></td><td>" + lamp_start_date + "</td></tr>";
 			if (lamp_manufacturer!="") lamp_manufacturer = "<tr><td><b>" + i18next.t("lamp_manufacturer") + ": </b></td><td>" + lamp_manufacturer + "</td></tr>";
 			if (lamp_model!="") lamp_model_text = "<tr><td><b>" + i18next.t("lamp_model") + ": </b></td><td>" + lamp_model + "</td></tr>";
-			if (lamp_height!="") lamp_height_text = "<tr><td><b>" + i18next.t("lamp_height") + ": </b></td><td>" + lamp_height + "</td></tr>";
+			if (lamp_height!="") lamp_height_text = "<tr><td><b>" + i18next.t("lamp_height") + ": </b></td><td>" + lamp_height + " m</td></tr>";
+			if (light_height!="") light_height_text = "<tr><td><b>" + i18next.t("lamp_light_height") + ": </b></td><td>" + light_height + " m</td></tr>";
 			if (lamp_width!="") lamp_width_text = "<tr><td><b>" + i18next.t("lamp_width") + ": </b></td><td>" + lamp_width + "</td></tr>";
 			if (light_method!="") light_method_text = "<tr><td><b>" + i18next.t("lamp_method") + ": </b></td><td>" + get_light_method(light_method) + "</td></tr>";
 			if (light_mount!="") light_mount_text = "<tr><td><b>" + i18next.t("lamp_mount") + ": </b></td><td>" + get_light_mount(light_mount) + "</td></tr>";
@@ -267,10 +274,16 @@ function parseOSM(daten)
 				lamp_model_text +
 				lamp_height_text +
 				lamp_width_text +
+				light_height_text +
 				light_lit_text +
 				"</table></div>" +
 				"<br><a href='#' onclick='openinJOSM(\""+EleType+"\",\""+EleID+"\")'>edit in JOSM</a> | <a href='https://www.openstreetmap.org/"+EleType+"/"+EleID+"'>show in OSM</a>"
 				;
+                        
+                        if (light_height == "" && lamp_height != "")
+                        {
+                            light_height = lamp_height;
+                        }
 
 
 			if($.inArray(EleID, MarkerArray)==-1)
@@ -330,7 +343,7 @@ function parseOSM(daten)
 					var markerLocation = new L.LatLng(EleLatNew,EleLonNew);
 
 					//light_count = 1; // FIXME: should be removed later
-					var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction_array[j], light_shape, ref_array[j]);
+					var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction_array[j], light_shape, light_height, ref_array[j]);
 					var marker = new L.Marker(markerLocation,{icon : Icon});
 
 					if(EleText!="")
@@ -488,7 +501,7 @@ function get_light_mount(value){
 }
 
 
-function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_shape,ref){
+function getMarkerIcon(L,light_source,light_method, light_colour,light_direction,light_shape,light_height,ref){
 
 	var symbol_url = "electric";
 
@@ -618,45 +631,184 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	}
 	var direction = "";
 	var rotate = "";
-	var usedDir = ""
+	var usedDir = "";
 	var iconOffset = 0;
 	var iconSize = 0;
 	var iconClass = "";
-
+        
+        var zoomClass = 0;
+        
 	if ( map.getZoom() == 19)
 	{
+            //if (light_height > 10)
+                zoomClass = 19;
+		refclass = "lamp_ref_19_text";
+                if (light_height >= 10)
+                {
+                    zoomClass = 21;
+                }
+                else if (light_height >= 7)
+                {
+                    zoomClass = 20;
+                }
+                else if (light_height <= 4)
+                {
+                    zoomClass = 18;
+                }
+                else if (light_height <= 2)
+                {
+                    zoomClass = 17;
+                }
+        }
+	else if ( map.getZoom() == 18)
+	{  
+                zoomClass = 18;
+		refclass = "lamp_ref_18_text";
+                if (light_height >= 10)
+                {
+                    zoomClass = 20;
+                }
+                else if (light_height >= 7)
+                {
+                    zoomClass = 19;
+                }
+                else if (light_height <= 4)
+                {
+                    zoomClass = 17;
+                }
+                else if (light_height <= 2)
+                {
+                    zoomClass = 16;
+                }
+        }
+	else if ( map.getZoom() == 17)
+	{
+                zoomClass = 17;
+		refclass = "lamp_ref_17_text";
+                if (light_height >= 10)
+                {
+                    zoomClass = 19;
+                }
+                else if (light_height >= 7)
+                {
+                    zoomClass = 18;
+                }
+                else if (light_height <= 4)
+                {
+                    zoomClass = 16;
+                }
+                else if (light_height <= 2)
+                {
+                    zoomClass = 15;
+                }
+        }
+	else if ( map.getZoom() == 16)
+	{
+                zoomClass = 16;
+		refclass = "lamp_ref_none";
+                if (light_height >= 10)
+                {
+                    zoomClass = 18;
+                }
+                else if (light_height >= 7)
+                {
+                    zoomClass = 17;
+                }
+                else if (light_height <= 4)
+                {
+                    zoomClass = 15;
+                }
+                else if (light_height <= 2)
+                {
+                    zoomClass = 14;
+                }
+        }
+	else if ( map.getZoom() == 15)
+	{
+		zoomClass = 15;
+		refclass = "lamp_ref_none";
+                if (light_height > 0)
+                {
+                    if (light_height >= 10)
+                    {
+                        zoomClass = 17;
+                    }
+                    else if (light_height >= 7)
+                    {
+                        zoomClass = 16;
+                    }
+                    else if (light_height <= 4)
+                    {
+                        zoomClass = 14;
+                    }
+                    else if (light_height <= 2)
+                    {
+                        zoomClass = 13;
+                    }
+                }
+	}
+        if (zoomClass == 21)
+        {
+		iconClass = "light_21 " + iconClass;
+		iconOffset = 52;
+		iconSize = 104;
+		refclass = "lamp_ref_21 " + refclass;
+	}
+	else if (zoomClass == 20)
+        {
+		iconClass = "light_20 " + iconClass;
+		iconOffset = 46;
+		iconSize = 92;
+		refclass = "lamp_ref_20 " + refclass;
+	}
+	else if (zoomClass == 19)
+        {
 		iconClass = "light_19 " + iconClass;
 		iconOffset = 40;
 		iconSize = 80;
-		refclass = "lamp_ref_19";
+		refclass = "lamp_ref_19 " + refclass;
 	}
-	else if ( map.getZoom() == 18)
+	else if ( zoomClass == 18)
 	{
 		iconClass = "light_18 " + iconClass;
 		iconOffset = 34;
 		iconSize = 68;
-		refclass = "lamp_ref_18";
+		refclass = "lamp_ref_18 " + refclass;
 	}
-	else if ( map.getZoom() == 17)
+	else if ( zoomClass == 17)
 	{
 		iconClass = "light_17 " + iconClass;
 		iconOffset = 28;
 		iconSize = 56;
-		refclass = "lamp_ref_17";
+		refclass = "lamp_ref_17 " + refclass;
 	}
-	else if ( map.getZoom() == 16)
+	else if ( zoomClass == 16)
 	{
 		iconClass = "light_16 " + iconClass;
 		iconOffset = 22;
 		iconSize = 44;
-		refclass = "lamp_ref_none";
+		refclass = "lamp_ref_16 " + refclass;
 	}
-	else if ( map.getZoom() == 15)
+	else if ( zoomClass == 15)
 	{
 		iconClass = "light_15 " + iconClass;
 		iconOffset = 16;
 		iconSize = 32;
-		refclass = "lamp_ref_none";
+		refclass = "lamp_ref_15 " + refclass;
+	}
+	else if ( zoomClass == 14)
+	{
+		iconClass = "light_14 " + iconClass;
+		iconOffset = 10;
+		iconSize = 20;
+		refclass = "lamp_ref_14 " + refclass;
+	}
+	else if ( zoomClass == 13)
+	{
+		iconClass = "light_13 " + iconClass;
+		iconOffset = 4;
+		iconSize = 8;
+		refclass = "lamp_ref_13 " + refclass;
 	}
 
 	if(light_direction)
