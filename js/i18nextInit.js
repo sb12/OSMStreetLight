@@ -20,10 +20,13 @@ i18next
 // just set some content and react to language changes
 // could be optimized using vue-i18next, jquery-i18next, react-i18next, ...
 function updateContent() {
-	document.getElementById("aboutmap").innerHTML = i18next.t('aboutmap');
-	document.getElementById("zoomin").innerHTML = i18next.t('zoomin');
+	$("#aboutmap").html(i18next.t('aboutmap'));
+	$("#zoomin").html(i18next.t('zoomin'));
 	document.title = i18next.t('website_title');
-	document.getElementById("langselect").value = i18next.language;
+	$("#langselect").attr('value', i18next.language);
+        $("#opacity_slider").attr('title', i18next.t("opacity_select"));
+        $("#lang").attr('title', i18next.t("lang_select"));
+        $("#layer_street_lights").html(i18next.t("layer_street_lights"));
 }
 
 function changeLng(lng) {
@@ -33,3 +36,4 @@ function changeLng(lng) {
 i18next.on('languageChanged', () => {
   updateContent();
 });
+$(document).ready(updateContent());

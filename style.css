@@ -1,3 +1,7 @@
+#map {
+	background-color: #000000; 
+
+}
 #zoomwarnung {
 	width: 20em; 
 	margin: -10em; 
@@ -24,7 +28,8 @@
 	left: 50px; 
 	text-align: center; 
 	font-size: 16; 
-	font-family: sans-serif; 
+	font-family: sans-serif;
+        border: 2px solid rgba(0,0,0,0.2); 
 	border-radius: 5px; 
 	padding: 10px; 
 	z-index: 1000
@@ -37,7 +42,8 @@
 	margin-top: 0px; 
 	left: 16px; 
 	text-align: center; 
-	font-family: sans-serif; 
+	font-family: sans-serif;
+        border: 2px solid rgba(0,0,0,0.2);
 	border-radius: 5px; 
 	padding: 10px; 
 	z-index: 1000
@@ -60,25 +66,24 @@ font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif; vertical-align: t
 }
 
 #lang { 
-	background-color: white; 
-	position: absolute; 
-	top: 0px; 
-	margin-top: 0px; 
-	right: 0px; 
+	/*background-color: white;
 	text-align: center; 
-	font-family: sans-serif; 
-	border-radius: 0px 0px 0px 5px; 
-	padding: 0px; 
-	z-index: 1000;
-	width:4em;
+	/*font-family: sans-serif; */
+	/*padding: 0px; 
+	/*z-index: 1000;*/
+	width:44px;
 }
 
 #lang select {
 	background-color: white;
-	padding: 5px;
+	/*padding: 5px;*/
+        margin: 5px 2px;
 	border: none;
 	width: 100%;
-	border-radius: 0px 0px 0px 5px;
+	border-radius: 5px; 
+	width:40px;
+        font-size: 9pt;
+	/*border-radius: 0px 0px 0px 5px;*/
 }
 
 .light_21 div{

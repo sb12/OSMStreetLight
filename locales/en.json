@@ -36,5 +36,8 @@
 	"lamp_lantern" : "Street lantern",
 	"lamp_floodlight" : "Floodlight",
 	"lamp_unknown" : "Unknown light source",
-	"website_title" : "Street Lamps in OSM"
+	"website_title" : "Street Lamps in OSM",
+	"lang_select" : "Change language",
+	"opacity_select" : "Change opacity",
+        "layer_street_lights" : "Street Lights"
 }

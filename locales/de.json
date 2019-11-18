@@ -36,5 +36,8 @@
 	"lamp_lantern" : "Straßenlaterne",
 	"lamp_floodlight" : "Flutlicht",
 	"lamp_unknown" : "Unbekannte Lichtquelle",
-	"website_title" : "Straßenlaternen in OpenStreetMap"
+	"website_title" : "Straßenlaternen in OpenStreetMap",
+	"lang_select" : "Sprache ändern",
+	"opacity_select" : "Helligkeit ändern",
+        "layer_street_lights" : "Straßenlaternen"
 }

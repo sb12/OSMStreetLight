@@ -55,16 +55,18 @@ backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
 		//beforeSend: setHeader
 		});
 
-		$('#map').addClass("bright");
-		//document.getElementById("map").className = "bright";
+		OSM.setOpacity(opacityHigh);
+                showStreetLights = true;
+                $("#opacity_slider").slider("option", "value", opacityHigh*100);
 	}
 
 	else
 	{
 		//Zoom zu klein um anzuzeigen
 		$('#zoomwarnung').show(1);
-		$('#map').removeClass("bright");
-		//document.getElementById("map").className = "";
+                showStreetLights = false;
+		OSM.setOpacity(opacityLow);
+                $("#opacity_slider").slider("option", "value", opacityLow*100);
 		parseOSM(false);
 		loadingcounter = 0;
 	}
@@ -75,7 +77,7 @@ function parseOSM(daten)
 	//console.log(daten);
 	MarkerArray = new Array();
 	CoordObj = new Object();
-	Layergroup.clearLayers();
+	StreetLights.clearLayers();
 
 	$(daten).find('node,way').each(function(){
 		EleID = $(this).attr("id");
@@ -350,7 +352,7 @@ function parseOSM(daten)
 					{
 						marker.bindPopup(EleText);
 					}
-					Layergroup.addLayer(marker);
+					StreetLights.addLayer(marker);
 
 					MarkerArray.push(EleID);
 
@@ -360,10 +362,7 @@ function parseOSM(daten)
 
 			}
 
-			map.addLayer(Layergroup);
 		}
-
-
 
 	});
 
