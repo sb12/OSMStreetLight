@@ -20,7 +20,9 @@ backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
 		loadingcounter++;
 		//CrossoverAPI XML request
 
-		XMLRequestText = '( node ["highway"="street_lamp"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );node ["light_source"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
+		XMLRequestText = '( node ["highway"="street_lamp"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );' +
+				    'node ["light_source"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );' +
+				    'way ["highway"]["lit"="yes"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
 
 		today = new Date();
 		if (today.getMonth() == 11) // show christmas trees only in December
@@ -82,6 +84,8 @@ function parseOSM(daten)
 	$(daten).find('node,way').each(function(){
 		EleID = $(this).attr("id");
 
+		EleCoordArray = new Array();
+
 		//Knoten
 		if ($(this).attr("lat"))
 		{
@@ -99,26 +103,11 @@ function parseOSM(daten)
 		else
 		{
 			EleType = "way";
-			EleCoordArrayLat = new Array();
-			EleCoordArrayLon = new Array();
 
 			$(this).find('nd').each(function(){
 				NdRefID = $(this).attr("ref");
-				EleCoordArrayLat.push(CoordObj[NdRefID]["lat"]);
-				EleCoordArrayLon.push(CoordObj[NdRefID]["lon"]);
+				EleCoordArray.push([CoordObj[NdRefID]["lat"], CoordObj[NdRefID]["lon"]]);
 			});
-			EleCoordArrayLat = EleCoordArrayLat.sort();
-			console.log(EleCoordArrayLat);
-			EleCoordArrayLon = EleCoordArrayLon.sort();
-			EleLatMin = EleCoordArrayLat[0];
-			EleLatArrayLenght = EleCoordArrayLat.length - 1;
-			EleLatMax = EleCoordArrayLat[EleLatArrayLenght];
-			EleLonMin = EleCoordArrayLon[0];
-			EleLonArrayLenght = EleCoordArrayLon.length - 1;
-			EleLonMax = EleCoordArrayLon[EleLonArrayLenght];
-
-			EleLat = (EleLatMin - 0) + ((EleLatMax - EleLatMin)/2);
-			EleLon = (EleLonMin - 0) + ((EleLonMax - EleLonMin)/2);
 
 		}
 
@@ -150,9 +139,10 @@ function parseOSM(daten)
 		var light_method_text = "";
 		var light_mount = "";
 		var light_mount_text = "";
-		var light_source = "lantern";
+		var light_source = "";
 		var light_type = "";
 		var xmas = "";
+		var area = "";
 
 		$(this).find('tag').each(function(){
 			EleKey = $(this).attr("k");
@@ -230,12 +220,17 @@ function parseOSM(daten)
 			{
 				light_source = "xmas";
 			}
+			if ((EleKey=="area")) {
+				area = EleValue
+			}
 
 		});
 
+		if (highway == "street_lamp" && light_source == "") {
+		  light_source="lantern"
+		}
 
-
-		if (highway != "" || light_source != ""){
+		if (light_source != ""){
 
 			if(light_source == "lantern")
 			{
@@ -362,6 +357,23 @@ function parseOSM(daten)
 
 			}
 
+		} else {
+		  // Draw ways, which have no popup
+		  if(area) {
+			var shape = L.polygon(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
+			  color: 'white',
+			  weight: 3,
+			  opacity: 0.25,
+			})
+			StreetLights.addLayer(shape)
+		  } else {
+			var line = L.polyline(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
+			  color: 'white',
+			  weight: 3,
+			  opacity: 0.5,
+			})
+			StreetLights.addLayer(line)
+		  }
 		}
 
 	});
