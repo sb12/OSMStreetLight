@@ -27,6 +27,7 @@ function updateContent() {
   $("#opacity_slider").attr('title', i18next.t("opacity_select"));
   $("#lang").attr('title', i18next.t("lang_select"));
   $("#layer_street_lights").html(i18next.t("layer_street_lights"));
+  $("#layer_lit_streets").html(i18next.t("layer_lit_streets"));
 }
 
 function changeLng(lng) {

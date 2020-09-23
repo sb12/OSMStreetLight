@@ -39,5 +39,6 @@
 	"website_title" : "Street Lamps in OSM",
 	"lang_select" : "Change language",
 	"opacity_select" : "Change opacity",
-	"layer_street_lights" : "Street Lights"
+	"layer_street_lights" : "Street Lights",
+	"layer_lit_streets" : "Lit Streets"
 }

@@ -39,5 +39,6 @@
 	"website_title" : "Straßenlaternen in OpenStreetMap",
 	"lang_select" : "Sprache ändern",
 	"opacity_select" : "Helligkeit ändern",
-	"layer_street_lights" : "Straßenlaternen"
+	"layer_street_lights" : "Straßenlaternen",
+	"layer_lit_streets" : "beleuchtete Straßen"
 }
