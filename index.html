@@ -102,6 +102,9 @@
 			map.setView(ort, 6).addLayer(OSM);
 			map.addLayer(StreetLights);
 			LitStreets.on('add',function(){Moveaufruf();});
+			if(window.location.search.indexOf("lit_streets") != -1) {
+				map.addLayer(LitStreets);
+			}
 
 			//Permalink
 			var hash = new L.Hash(map);
