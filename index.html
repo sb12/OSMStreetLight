@@ -40,6 +40,10 @@
                             maxZoom : 19,
                             minZoom : 15
                         });
+			var LitStreets = new L.LayerGroup([],{
+                            maxZoom : 19,
+                            minZoom : 15
+                        });
 			
 			var OSMUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
                         var OSMAttrib = 'Map data &copy; OpenStreetMap contributors, Data via <a href="http://www.overpass-api.de/">Overpass API</a>';
@@ -52,7 +56,8 @@
                         };
 
                         var overlayMaps = {
-                            "<span id='layer_street_lights'>Street Lights</span>": StreetLights
+                            "<span id='layer_street_lights'>Street Lights</span>": StreetLights,
+                            "<span id='layer_lit_streets'>Lit Streets</span>": LitStreets
                         };                        
                         
                         // add LanguageSelector
@@ -67,7 +72,7 @@
                         opacitySlider.setOpacityLayer(OSM);
                                                     
     		loadingcounter = 0;
-                var showStreetLights = false;            
+                var showStreetLights = false;
                 var opacityHigh = 0.2; // opacity level when showing street lights
                 var opacityLow = 1.0; // opacity level when not showing street lights
             
@@ -95,7 +100,8 @@
     		var ort = new L.LatLng(51, 11);
     		
 	    	map.setView(ort, 6).addLayer(OSM);
-	    	map.addLayer(StreetLights);	
+		map.addLayer(StreetLights);
+		map.addLayer(LitStreets);
     		
     		//Permalink
 			var hash = new L.Hash(map);

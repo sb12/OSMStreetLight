@@ -14,54 +14,11 @@ function XMLLaden(lat1,lon1,lat2,lon2)
 	if (map.getZoom()>=minzoom)
 	{
 		$('#zoomwarnung').hide(0.4);
-		$( "#loading" ).animate({
-color: "black",
-backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
-		loadingcounter++;
-		//CrossoverAPI XML request
-
-		XMLRequestText = '( node ["highway"="street_lamp"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );' +
-				    'node ["light_source"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );' +
-				    'way ["highway"]["lit"="yes"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
-
-		today = new Date();
-		if (today.getMonth() == 11) // show christmas trees only in December
-		{
-			XMLRequestText += 'node ["xmas:feature"="tree"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
-		}
-		XMLRequestText += '>; ); out;';
-		console.log ( XMLRequestText );
-
-		//URL Codieren
-		XMLRequestText = encodeURIComponent(XMLRequestText);
-
-		RequestURL = "http://overpass-api.de/api/interpreter?data=" + XMLRequestText;
-		//AJAX REQUEST
-
-
-		$.ajax({
-		url: RequestURL,
-		type: 'GET',
-		crossDomain: true,
-		success: function(data){parseOSM(data);},
-		error: function(jqXHR, textStatus, errorThrown){
-			$( "#loading" ).animate({
-				color: "red",
-				backgroundColor: "rgb( 255, 200, 200 )"
-			});
-			$( "#loading" ).fadeOut(1500);
-			loadingcounter--;
-
-			},
-    timeout: 30000 // timeout after 30s
-		//beforeSend: setHeader
-		});
-
+		loadData('[bbox:'+lat2+','+lon1+','+lat1+','+lon2+ '];');
 		OSM.setOpacity(opacityHigh);
-                showStreetLights = true;
-                $("#opacity_slider").slider("option", "value", opacityHigh*100);
+		showStreetLights = true;
+		$("#opacity_slider").slider("option", "value", opacityHigh*100);
 	}
-
 	else
 	{
 		//Zoom zu klein um anzuzeigen
@@ -74,12 +31,57 @@ backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
 	}
 }
 
+function loadData(bbox)
+{
+	$( "#loading" ).animate({
+		color: "black",
+		backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
+	loadingcounter++;
+	//CrossoverAPI XML request
+
+	// Street Light query
+	XMLRequestText = bbox+'( node["highway"="street_lamp"]; node["light_source"];'
+
+	today = new Date();
+	if (today.getMonth() == 11) // show christmas trees only in December
+	{
+		XMLRequestText += 'node["xmas:feature"="tree"];'
+	}
+	XMLRequestText += '); out qt; ' +
+		'(way["highway"][!area]["lit"="yes"]; >;); out skel qt; ' +
+	  '(way["highway"][area]["lit"="yes"]; >;); out qt; ';
+	console.log ( XMLRequestText );
+
+	//URL Codieren
+	XMLRequestText = encodeURIComponent(XMLRequestText);
+
+	RequestURL = "http://overpass-api.de/api/interpreter?data=" + XMLRequestText;
+	//AJAX REQUEST
+
+	$.ajax({
+		url: RequestURL,
+		type: 'GET',
+		crossDomain: true,
+		success: parseOSM,
+		error: function(jqXHR, textStatus, errorThrown){
+			$( "#loading" ).animate({
+				color: "red",
+				backgroundColor: "rgb( 255, 200, 200 )"
+			});
+			$( "#loading" ).fadeOut(1500);
+			loadingcounter--;
+		},
+		timeout: 30000 // timeout after 30s
+	});
+}
+
 function parseOSM(daten)
 {
 	//console.log(daten);
 	MarkerArray = new Array();
 	CoordObj = new Object();
 	StreetLights.clearLayers();
+	LitStreets.clearLayers();
 
 	$(daten).find('node,way').each(function(){
 		EleID = $(this).attr("id");
@@ -361,18 +363,16 @@ function parseOSM(daten)
 		  // Draw ways, which have no popup
 		  if(area) {
 			var shape = L.polygon(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
-			  color: 'white',
+				stroke: false, fillColor: 'white', fillOpacity: 0.4,
 			  weight: 3,
-			  opacity: 0.25,
 			})
-			StreetLights.addLayer(shape)
+			LitStreets.addLayer(shape);
 		  } else {
 			var line = L.polyline(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
-			  color: 'white',
+			  color: 'lightgray',
 			  weight: 3,
-			  opacity: 0.5,
 			})
-			StreetLights.addLayer(line)
+			LitStreets.addLayer(line)
 		  }
 		}
 
