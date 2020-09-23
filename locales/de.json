@@ -1,10 +1,10 @@
 {
-    "aboutmap" : "Über diese Karte",
-    "zoomin" : "Zoomen um Daten zu laden",
-    "unknown" : "Unbekannt",
-    "lamp_start_date" : "Aufstelldatum",
-    "lamp_manufacturer" : "Hersteller",
-    "lamp_model" : "Modell",
+	"aboutmap" : "Über diese Karte",
+	"zoomin" : "Zoomen um Daten zu laden",
+	"unknown" : "Unbekannt",
+	"lamp_start_date" : "Aufstelldatum",
+	"lamp_manufacturer" : "Hersteller",
+	"lamp_model" : "Modell",
 	"lamp_height" : "Höhe",
 	"lamp_width" : "Breite",
 	"lamp_light_height" : "Lichtpunkthöhe",
@@ -39,5 +39,5 @@
 	"website_title" : "Straßenlaternen in OpenStreetMap",
 	"lang_select" : "Sprache ändern",
 	"opacity_select" : "Helligkeit ändern",
-        "layer_street_lights" : "Straßenlaternen"
+	"layer_street_lights" : "Straßenlaternen"
 }

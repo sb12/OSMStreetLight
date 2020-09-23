@@ -8,27 +8,27 @@
 		<link rel="stylesheet" href="style.css" />
 
 		<!-- Load jquery -->
-                <script src="js/jquery.js"></script>
-                <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
-		
-                <!-- Load i18next -->
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+
+		<!-- Load i18next -->
 		<script src="js/i18next/i18next.min.js"></script>
 		<script src="js/i18next/i18nextXHRBackend.js"></script>
 		<script src="js/i18next/i18nextBrowserLanguageDetector.min.js"></script>
 		<script src="js/i18nextInit.js"></script>
-                
+
 		<!-- Load leaflet -->
 		<script src="leaflet/leaflet.js"></script>
 		<link rel="stylesheet" href="leaflet/plugins/Control.Opacity/Control.Opacity.css" />
 
 		<script src="js/geo.js" type="text/javascript"></script>
 		<script src="leaflet/plugins/leaflet-hash/leaflet-hash.js"></script>
-                <script src="leaflet/plugins/Control.Opacity/Control.Opacity.js"></script>
-                <script src="leaflet/plugins/LanguageSelector/LanguageSelector.js"></script>
+		<script src="leaflet/plugins/Control.Opacity/Control.Opacity.js"></script>
+		<script src="leaflet/plugins/LanguageSelector/LanguageSelector.js"></script>
 		<script src="js/gears_init.js" type="text/javascript"></script>
-		
-		<script src="js/parse_scripts.js" type="text/javascript"></script>		
-		
+
+		<script src="js/parse_scripts.js" type="text/javascript"></script>
+
 	</head>
 
 	<body style="margin:0px">
@@ -37,89 +37,89 @@
 
 			MarkerArray = new Array();
 			var StreetLights = new L.LayerGroup([],{
-                            maxZoom : 19,
-                            minZoom : 15
-                        });
+				maxZoom : 19,
+				minZoom : 15
+			});
 			var LitStreets = new L.LayerGroup([],{
-                            maxZoom : 19,
-                            minZoom : 15
-                        });
-			
+				maxZoom : 19,
+				minZoom : 15
+			});
+
 			var OSMUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-                        var OSMAttrib = 'Map data &copy; OpenStreetMap contributors, Data via <a href="http://www.overpass-api.de/">Overpass API</a>';
+			var OSMAttrib = 'Map data &copy; OpenStreetMap contributors, Data via <a href="http://www.overpass-api.de/">Overpass API</a>';
 			var OSM = new L.TileLayer(OSMUrl, {maxZoom: 19, attribution: OSMAttrib});
-                       
+
 			var map = new L.Map('map');
-		
-                        var baseMaps = {
-                            "OpenStreetMap Carto": OSM
-                        };
 
-                        var overlayMaps = {
-                            "<span id='layer_street_lights'>Street Lights</span>": StreetLights,
-                            "<span id='layer_lit_streets'>Lit Streets</span>": LitStreets
-                        };                        
-                        
-                        // add LanguageSelector
-                        var LanguageSelector = new L.Control.LanguageSelector();
-                        map.addControl(LanguageSelector);
-                        
-                        L.control.layers(baseMaps, overlayMaps).addTo(map);
+			var baseMaps = {
+				"OpenStreetMap Carto": OSM
+			};
 
-                        // add opacity control
-                        var opacitySlider = new L.Control.opacitySlider();
-                        map.addControl(opacitySlider);
-                        opacitySlider.setOpacityLayer(OSM);
-                                                    
-    		loadingcounter = 0;
-                var showStreetLights = false;
-                var opacityHigh = 0.2; // opacity level when showing street lights
-                var opacityLow = 1.0; // opacity level when not showing street lights
-            
-    		//Testen ob location abgefragt werden muss
-    		if (document.URL.search(/#/)==-1){
-	    		function success_callback(p)
+			var overlayMaps = {
+				"<span id='layer_street_lights'>Street Lights</span>": StreetLights,
+				"<span id='layer_lit_streets'>Lit Streets</span>": LitStreets
+			};
+
+			// add LanguageSelector
+			var LanguageSelector = new L.Control.LanguageSelector();
+			map.addControl(LanguageSelector);
+
+			L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+			// add opacity control
+			var opacitySlider = new L.Control.opacitySlider();
+			map.addControl(opacitySlider);
+			opacitySlider.setOpacityLayer(OSM);
+
+			loadingcounter = 0;
+			var showStreetLights = false;
+			var opacityHigh = 0.2; // opacity level when showing street lights
+			var opacityLow = 1.0; // opacity level when not showing street lights
+
+			//Testen ob location abgefragt werden muss
+			if (document.URL.search(/#/)==-1){
+				function success_callback(p)
 				{
 					//alert('lat='+p.coords.latitude.toFixed(2)+';lon='+p.coords.longitude.toFixed(2));
 					mapInit( p.coords.latitude.toFixed(5) , p.coords.longitude.toFixed(5) );
 				}
-				
+
 				function error_callback(p)
 				{
 					mapInit(-10000,-10000);
 				}
 
-	    		if(geo_position_js.init()){
+				if(geo_position_js.init()){
 					geo_position_js.getCurrentPosition(success_callback,error_callback,{enableHighAccuracy:true,options:5000});
 				}
 				else{
 					mapInit(-10000,-10000);
-				}		    		
-	    	}
+				}
+			}
 
-    		var ort = new L.LatLng(51, 11);
-    		
-	    	map.setView(ort, 6).addLayer(OSM);
-		map.addLayer(StreetLights);
-		map.addLayer(LitStreets);
-    		
-    		//Permalink
+			var ort = new L.LatLng(51, 11);
+
+			map.setView(ort, 6).addLayer(OSM);
+			map.addLayer(StreetLights);
+			map.addLayer(LitStreets);
+
+			//Permalink
 			var hash = new L.Hash(map);
 			map.on('moveend',function(){Moveaufruf();});
-    		
-    		function mapInit(lat,lon)
-    		{
-	    		
-	    		if (lat > -10000)
-	    		{
-	    			var ort = new L.LatLng(lat, lon); // geographical point (longitude and latitude)
-	    			var zoom = 14;
-	    		}
-	    		else
-	    		{
-	    			var ort = new L.LatLng(51, 11); // geographical point (longitude and latitude)
-	    			var zoom = 6;
-	    		}
+
+			function mapInit(lat,lon)
+			{
+
+				if (lat > -10000)
+				{
+					var ort = new L.LatLng(lat, lon); // geographical point (longitude and latitude)
+					var zoom = 14;
+				}
+				else
+				{
+					var ort = new L.LatLng(51, 11); // geographical point (longitude and latitude)
+					var zoom = 6;
+				}
 				map.setView(ort, zoom).addLayer(OSM);
 
 				map.on('moveend',function(){Moveaufruf();});
@@ -131,8 +131,8 @@
 				  url: "http://127.0.0.1:8111/load_and_zoom?left="+lefttop.lng+"&right="+rightbottom.lng+"&top="+lefttop.lat+"&bottom="+rightbottom.lat+"&select="+type+ID
 				});
 			}
-			
-		</script>	
+
+		</script>
 		<div id="zoomwarnung">
 			<p id="zoomin"></p>
 		</div>

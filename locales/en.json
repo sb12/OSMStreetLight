@@ -1,10 +1,10 @@
 {
-    "aboutmap": "About this map",
-    "zoomin" : "Zoom in to load data",
-    "unknown" : "Unknown",
-    "lamp_start_date" : "Start date",
-    "lamp_manufacturer" : "Manufacturer",
-    "lamp_model" : "Model",
+	"aboutmap": "About this map",
+	"zoomin" : "Zoom in to load data",
+	"unknown" : "Unknown",
+	"lamp_start_date" : "Start date",
+	"lamp_manufacturer" : "Manufacturer",
+	"lamp_model" : "Model",
 	"lamp_height" : "Height",
 	"lamp_width" : "Width",
 	"lamp_light_height" : "Light Height",
@@ -39,5 +39,5 @@
 	"website_title" : "Street Lamps in OSM",
 	"lang_select" : "Change language",
 	"opacity_select" : "Change opacity",
-        "layer_street_lights" : "Street Lights"
+	"layer_street_lights" : "Street Lights"
 }
