@@ -101,7 +101,7 @@
 
 			map.setView(ort, 6).addLayer(OSM);
 			map.addLayer(StreetLights);
-			map.addLayer(LitStreets);
+			LitStreets.on('add',function(){Moveaufruf();});
 
 			//Permalink
 			var hash = new L.Hash(map);

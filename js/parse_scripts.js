@@ -47,9 +47,12 @@ function loadData(bbox)
 	{
 		XMLRequestText += 'node["xmas:feature"="tree"];'
 	}
-	XMLRequestText += '); out qt; ' +
-		'(way["highway"][!area]["lit"="yes"]; >;); out skel qt; ' +
-		'(way["highway"][area]["lit"="yes"]; >;); out qt; ';
+	XMLRequestText += '); out qt; '
+
+	if (map.hasLayer(LitStreets)) {
+		XMLRequestText += '(way["highway"][!area]["lit"="yes"]; >;); out skel qt; ' +
+			'(way["highway"][area]["lit"="yes"]; >;); out qt; ';
+	}
 	console.log ( XMLRequestText );
 
 	//URL Codieren
