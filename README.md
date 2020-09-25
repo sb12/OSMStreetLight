@@ -9,9 +9,9 @@ This map shows street lamps and their settings in the data of [OpenStreetMap](ht
 
 ## Unterstützte Tags / Supported Tags
 
-Es werden zur Zeit die folgenden Tags unterstützt:
+Es werden zur Zeit die folgenden Tags für die Straßenlaternen-Ebene unterstützt:
 
-Currently the following tags are supported:
+Currently the following tags are supported for the street light layer:
 
 * `highway = street_lamp` | `light_source=lantern|floodlight|*`
 
@@ -38,7 +38,15 @@ Currently the following tags are supported:
 * `model|lamp_model:de=*`
 
 * `height=*`
+
 * `width=*`
+
+
+Es werden zur Zeit die folgenden Tags für die Beleuchtete-Straßen-Ebene unterstützt:
+
+Currently the following tags are supported for the lit streets layer:
+
+* `highway=*` + `lit=yes`
 
 Es dürfen gerne weitere Keys oder Values über Pull Requests vorgeschlagen werden.
 

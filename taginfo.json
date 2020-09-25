@@ -120,6 +120,11 @@
 		       "key": "width",
 		       "object_types": ["node"],
 		       "description": "Shows the width of light sources."
+		   },
+		  {
+		       "key": "lit",
+		       "object_types": ["way"],
+		       "description": "Shows lit highways."
 		   }
    		]
    }
