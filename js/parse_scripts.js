@@ -14,34 +14,58 @@ function XMLLaden(lat1,lon1,lat2,lon2)
 	if (map.getZoom()>=minzoom)
 	{
 		$('#zoomwarnung').hide(0.4);
-		$( "#loading" ).animate({
-color: "black",
-backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
-		loadingcounter++;
-		//CrossoverAPI XML request
+		loadData('[bbox:'+lat2+','+lon1+','+lat1+','+lon2+ '];');
+		OSM.setOpacity(opacityHigh);
+		showStreetLights = true;
+		$("#opacity_slider").slider("option", "value", opacityHigh*100);
+	}
+	else
+	{
+		//Zoom zu klein um anzuzeigen
+		$('#zoomwarnung').show(1);
+		showStreetLights = false;
+		OSM.setOpacity(opacityLow);
+		$("#opacity_slider").slider("option", "value", opacityLow*100);
+		parseOSM(false);
+		loadingcounter = 0;
+	}
+}
 
-		XMLRequestText = '( node ["highway"="street_lamp"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );node ["light_source"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
+function loadData(bbox)
+{
+	$( "#loading" ).animate({
+		color: "black",
+		backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
+	loadingcounter++;
 
-		today = new Date();
-		if (today.getMonth() == 11) // show christmas trees only in December
-		{
-			XMLRequestText += 'node ["xmas:feature"="tree"] ( '+lat2+','+lon1+','+lat1+','+lon2+ ' );';
-		}
-		XMLRequestText += '>; ); out;';
-		console.log ( XMLRequestText );
+	//CrossoverAPI XML request
+	// Street Light query
+	XMLRequestText = bbox+'( node["highway"="street_lamp"]; node["light_source"];'
 
-		//URL Codieren
-		XMLRequestText = encodeURIComponent(XMLRequestText);
+	today = new Date();
+	if (today.getMonth() == 11) // show christmas trees only in December
+	{
+		XMLRequestText += 'node["xmas:feature"="tree"];'
+	}
+	XMLRequestText += '); out qt; '
 
-		RequestURL = "http://overpass-api.de/api/interpreter?data=" + XMLRequestText;
-		//AJAX REQUEST
+	if (map.hasLayer(LitStreets)) {
+		XMLRequestText += '(way["highway"][!area]["lit"="yes"]; >;); out skel qt; ' +
+			'(way["highway"][area]["lit"="yes"]; >;); out qt; ';
+	}
+	console.log ( XMLRequestText );
 
+	//URL Codieren
+	XMLRequestText = encodeURIComponent(XMLRequestText);
 
-		$.ajax({
+	RequestURL = "http://overpass-api.de/api/interpreter?data=" + XMLRequestText;
+	//AJAX REQUEST
+
+	$.ajax({
 		url: RequestURL,
 		type: 'GET',
 		crossDomain: true,
-		success: function(data){parseOSM(data);},
+		success: parseOSM,
 		error: function(jqXHR, textStatus, errorThrown){
 			$( "#loading" ).animate({
 				color: "red",
@@ -49,27 +73,9 @@ backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
 			});
 			$( "#loading" ).fadeOut(1500);
 			loadingcounter--;
-
-			},
-    timeout: 30000 // timeout after 30s
-		//beforeSend: setHeader
-		});
-
-		OSM.setOpacity(opacityHigh);
-                showStreetLights = true;
-                $("#opacity_slider").slider("option", "value", opacityHigh*100);
-	}
-
-	else
-	{
-		//Zoom zu klein um anzuzeigen
-		$('#zoomwarnung').show(1);
-                showStreetLights = false;
-		OSM.setOpacity(opacityLow);
-                $("#opacity_slider").slider("option", "value", opacityLow*100);
-		parseOSM(false);
-		loadingcounter = 0;
-	}
+		},
+		timeout: 30000 // timeout after 30s
+	});
 }
 
 function parseOSM(daten)
@@ -78,9 +84,12 @@ function parseOSM(daten)
 	MarkerArray = new Array();
 	CoordObj = new Object();
 	StreetLights.clearLayers();
+	LitStreets.clearLayers();
 
 	$(daten).find('node,way').each(function(){
 		EleID = $(this).attr("id");
+
+		EleCoordArray = new Array();
 
 		//Knoten
 		if ($(this).attr("lat"))
@@ -99,26 +108,11 @@ function parseOSM(daten)
 		else
 		{
 			EleType = "way";
-			EleCoordArrayLat = new Array();
-			EleCoordArrayLon = new Array();
 
 			$(this).find('nd').each(function(){
 				NdRefID = $(this).attr("ref");
-				EleCoordArrayLat.push(CoordObj[NdRefID]["lat"]);
-				EleCoordArrayLon.push(CoordObj[NdRefID]["lon"]);
+				EleCoordArray.push([CoordObj[NdRefID]["lat"], CoordObj[NdRefID]["lon"]]);
 			});
-			EleCoordArrayLat = EleCoordArrayLat.sort();
-			console.log(EleCoordArrayLat);
-			EleCoordArrayLon = EleCoordArrayLon.sort();
-			EleLatMin = EleCoordArrayLat[0];
-			EleLatArrayLenght = EleCoordArrayLat.length - 1;
-			EleLatMax = EleCoordArrayLat[EleLatArrayLenght];
-			EleLonMin = EleCoordArrayLon[0];
-			EleLonArrayLenght = EleCoordArrayLon.length - 1;
-			EleLonMax = EleCoordArrayLon[EleLonArrayLenght];
-
-			EleLat = (EleLatMin - 0) + ((EleLatMax - EleLatMin)/2);
-			EleLon = (EleLonMin - 0) + ((EleLonMax - EleLonMin)/2);
 
 		}
 
@@ -150,9 +144,10 @@ function parseOSM(daten)
 		var light_method_text = "";
 		var light_mount = "";
 		var light_mount_text = "";
-		var light_source = "lantern";
+		var light_source = "";
 		var light_type = "";
 		var xmas = "";
+		var area = "";
 
 		$(this).find('tag').each(function(){
 			EleKey = $(this).attr("k");
@@ -230,12 +225,17 @@ function parseOSM(daten)
 			{
 				light_source = "xmas";
 			}
+			if ((EleKey=="area")) {
+				area = EleValue
+			}
 
 		});
 
+		if (highway == "street_lamp" && light_source == "") {
+			light_source="lantern"
+		}
 
-
-		if (highway != "" || light_source != ""){
+		if (light_source != ""){
 
 			if(light_source == "lantern")
 			{
@@ -281,11 +281,11 @@ function parseOSM(daten)
 				"</table></div>" +
 				"<br><a href='#' onclick='openinJOSM(\""+EleType+"\",\""+EleID+"\")'>edit in JOSM</a> | <a href='https://www.openstreetmap.org/"+EleType+"/"+EleID+"'>show in OSM</a>"
 				;
-                        
-                        if (light_height == "" && lamp_height != "")
-                        {
-                            light_height = lamp_height;
-                        }
+			
+			if (light_height == "" && lamp_height != "")
+			{
+				light_height = lamp_height;
+			}
 
 
 			if($.inArray(EleID, MarkerArray)==-1)
@@ -362,6 +362,21 @@ function parseOSM(daten)
 
 			}
 
+		} else {
+			// Draw ways, which have no popup
+			if(area) {
+				var shape = L.polygon(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
+					stroke: false, fillColor: 'white', fillOpacity: 0.4,
+					weight: 3,
+				})
+				LitStreets.addLayer(shape);
+			} else {
+				var line = L.polyline(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
+					color: 'lightgray',
+					weight: 3,
+				})
+				LitStreets.addLayer(line)
+			}
 		}
 
 	});
@@ -409,7 +424,7 @@ function addLatLngDistanceM(EleLat,EleLon,angle,distance)
 }
 
 function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function get_light_lit(value){
@@ -523,38 +538,38 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 
 	colour_url = "";
 
-        if(light_colour.substr(-1) == "K")
-        {
-            var Kelvin_length = light_colour.indexOf("K");
-            var light_colour_K = Number(light_colour.substr(0,Kelvin_length));
-            if (!light_colour_K.isNaN)
-            {
-                if (light_colour_K < 2000)
-                {
-                    colour_url = "_gas";
-                }
-                else if (light_colour_K < 2600)
-                {
-                    colour_url = "_orange";
-                }
-                else if (light_colour_K < 3000)
-                {
-                    colour_url = "_fluorescent";
-                }
-                else if (light_colour_K < 4000)
-                {
-                    colour_url = "_led";
-                }
-                else if (light_colour_K > 5600)
-                {
-                    colour_url = "_mercury";
-                }
-                else
-                {
-                    colour_url = "_white";
-                }
-            }
-        }    
+	if(light_colour.substr(-1) == "K")
+	{
+		var Kelvin_length = light_colour.indexOf("K");
+		var light_colour_K = Number(light_colour.substr(0,Kelvin_length));
+		if (!light_colour_K.isNaN)
+		{
+		if (light_colour_K < 2000)
+		{
+			colour_url = "_gas";
+		}
+		else if (light_colour_K < 2600)
+		{
+			colour_url = "_orange";
+		}
+		else if (light_colour_K < 3000)
+		{
+			colour_url = "_fluorescent";
+		}
+		else if (light_colour_K < 4000)
+		{
+			colour_url = "_led";
+		}
+		else if (light_colour_K > 5600)
+		{
+			colour_url = "_mercury";
+		}
+		else
+		{
+			colour_url = "_white";
+		}
+		}
+	}    
 	if(light_colour == "white")
 	{
 		colour_url = "_white";
@@ -634,134 +649,134 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	var iconOffset = 0;
 	var iconSize = 0;
 	var iconClass = "";
-        
-        var zoomClass = 0;
-        
+	
+	var zoomClass = 0;
+	
 	if ( map.getZoom() == 19)
 	{
-            //if (light_height > 10)
-                zoomClass = 19;
+		//if (light_height > 10)
+		zoomClass = 19;
 		refclass = "lamp_ref_19_text";
-                if (light_height >= 10)
-                {
-                    zoomClass = 21;
-                }
-                else if (light_height >= 7)
-                {
-                    zoomClass = 20;
-                }
-                else if (light_height <= 4)
-                {
-                    zoomClass = 18;
-                }
-                else if (light_height <= 2)
-                {
-                    zoomClass = 17;
-                }
-        }
+		if (light_height >= 10)
+		{
+			zoomClass = 21;
+		}
+		else if (light_height >= 7)
+		{
+			zoomClass = 20;
+		}
+		else if (light_height <= 4)
+		{
+			zoomClass = 18;
+		}
+		else if (light_height <= 2)
+		{
+			zoomClass = 17;
+		}
+	}
 	else if ( map.getZoom() == 18)
 	{  
-                zoomClass = 18;
+		zoomClass = 18;
 		refclass = "lamp_ref_18_text";
-                if (light_height >= 10)
-                {
-                    zoomClass = 20;
-                }
-                else if (light_height >= 7)
-                {
-                    zoomClass = 19;
-                }
-                else if (light_height <= 4)
-                {
-                    zoomClass = 17;
-                }
-                else if (light_height <= 2)
-                {
-                    zoomClass = 16;
-                }
-        }
+		if (light_height >= 10)
+		{
+			zoomClass = 20;
+		}
+		else if (light_height >= 7)
+		{
+			zoomClass = 19;
+		}
+		else if (light_height <= 4)
+		{
+			zoomClass = 17;
+		}
+		else if (light_height <= 2)
+		{
+			zoomClass = 16;
+		}
+	}
 	else if ( map.getZoom() == 17)
 	{
-                zoomClass = 17;
+		zoomClass = 17;
 		refclass = "lamp_ref_17_text";
-                if (light_height >= 10)
-                {
-                    zoomClass = 19;
-                }
-                else if (light_height >= 7)
-                {
-                    zoomClass = 18;
-                }
-                else if (light_height <= 4)
-                {
-                    zoomClass = 16;
-                }
-                else if (light_height <= 2)
-                {
-                    zoomClass = 15;
-                }
-        }
+		if (light_height >= 10)
+		{
+			zoomClass = 19;
+		}
+		else if (light_height >= 7)
+		{
+			zoomClass = 18;
+		}
+		else if (light_height <= 4)
+		{
+			zoomClass = 16;
+		}
+		else if (light_height <= 2)
+		{
+			zoomClass = 15;
+		}
+	}
 	else if ( map.getZoom() == 16)
 	{
-                zoomClass = 16;
+		zoomClass = 16;
 		refclass = "lamp_ref_none";
-                if (light_height >= 10)
-                {
-                    zoomClass = 18;
-                }
-                else if (light_height >= 7)
-                {
-                    zoomClass = 17;
-                }
-                else if (light_height <= 4)
-                {
-                    zoomClass = 15;
-                }
-                else if (light_height <= 2)
-                {
-                    zoomClass = 14;
-                }
-        }
+		if (light_height >= 10)
+		{
+			zoomClass = 18;
+		}
+		else if (light_height >= 7)
+		{
+			zoomClass = 17;
+		}
+		else if (light_height <= 4)
+		{
+			zoomClass = 15;
+		}
+		else if (light_height <= 2)
+		{
+			zoomClass = 14;
+		}
+	}
 	else if ( map.getZoom() == 15)
 	{
 		zoomClass = 15;
 		refclass = "lamp_ref_none";
-                if (light_height > 0)
-                {
-                    if (light_height >= 10)
-                    {
-                        zoomClass = 17;
-                    }
-                    else if (light_height >= 7)
-                    {
-                        zoomClass = 16;
-                    }
-                    else if (light_height <= 4)
-                    {
-                        zoomClass = 14;
-                    }
-                    else if (light_height <= 2)
-                    {
-                        zoomClass = 13;
-                    }
-                }
+		if (light_height > 0)
+		{
+			if (light_height >= 10)
+			{
+				zoomClass = 17;
+			}
+			else if (light_height >= 7)
+			{
+				zoomClass = 16;
+			}
+			else if (light_height <= 4)
+			{
+				zoomClass = 14;
+			}
+			else if (light_height <= 2)
+			{
+				zoomClass = 13;
+			}
+		}
 	}
-        if (zoomClass == 21)
-        {
+	if (zoomClass == 21)
+	{
 		iconClass = "light_21 " + iconClass;
 		iconOffset = 52;
 		iconSize = 104;
 		refclass = "lamp_ref_21 " + refclass;
 	}
 	else if (zoomClass == 20)
-        {
+	{
 		iconClass = "light_20 " + iconClass;
 		iconOffset = 46;
 		iconSize = 92;
 		refclass = "lamp_ref_20 " + refclass;
 	}
 	else if (zoomClass == 19)
-        {
+	{
 		iconClass = "light_19 " + iconClass;
 		iconOffset = 40;
 		iconSize = 80;
@@ -832,18 +847,18 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 
 		if (cardinal.hasOwnProperty(light_direction)) {
 			usedDir = cardinal[light_direction];
-	    }
-	    else
-        {
-            usedDir = light_direction; /* let's hope it's numeric */
-                                        /* ignore to_street  to_crossing */
-        }
-    }
+		}
+		else
+		{
+			usedDir = light_direction; /* let's hope it's numeric */
+			/* ignore to_street  to_crossing */
+		}
+	}
 	if (usedDir && light_source == "floodlight")
 	{
-	    if(usedDir >= 135 && usedDir <=360)
-	    {
-	    	rotate = usedDir - 135;
+			if(usedDir >= 135 && usedDir <=360)
+			{
+				rotate = usedDir - 135;
 		}
 		if(usedDir >= 0 && usedDir < 135)
 		{
@@ -855,9 +870,9 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	}
 	if (usedDir && light_source == "lantern")
 	{
-	    if(usedDir >= 0 && usedDir <=360)
-	    {
-	    	rotate = usedDir - 0;
+			if(usedDir >= 0 && usedDir <=360)
+			{
+				rotate = usedDir - 0;
 		}
 		if(usedDir >= 0 && usedDir < 0)
 		{
@@ -877,6 +892,6 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 		iconSize: [iconSize, iconSize],
 		iconAnchor:   [iconOffset, iconOffset],
 		popupAnchor:  [0, -5]
-		});
+	});
 	return Icon;
 }
