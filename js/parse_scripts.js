@@ -193,7 +193,7 @@ function parseOSM(daten)
 			{
 				light_colour = EleValue;
 			}
-			if ((EleKey=="light:direction"))
+			if ((EleKey=="light:direction" || EleKey=="direction"))
 			{
 				light_direction = EleValue;
 			}
