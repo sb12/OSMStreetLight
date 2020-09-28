@@ -79,7 +79,12 @@
 		  {
 		       "key": "light:direction",
 		       "object_types": ["node"],
-		       "description": "Used to define the direction of flood lights."
+		       "description": "Used to define the direction of light sources."
+		   },
+		  {
+		       "key": "direction",
+		       "object_types": ["node"],
+		       "description": "Used to define the direction of light sources."
 		   },
 		  {
 		       "key": "light:lit",
