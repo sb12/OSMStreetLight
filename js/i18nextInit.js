@@ -6,7 +6,7 @@ i18next
   .init({
     fallbackLng: 'en',
     debug: false,
-    whitelist: ['de','en','nl'],
+    whitelist: ['de','en','nl', 'ru'],
     backend: {
       loadPath: 'locales/{{lng}}.json',
       crossDomain: true
