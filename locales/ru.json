@@ -36,7 +36,7 @@
 	"lamp_lantern" : "Уличный фонарь",
 	"lamp_floodlight" : "Прожектор",
 	"lamp_unknown" : "Источник света не ясен",
-	"website_title" : "Улучное освещенеи по данным OSM",
+	"website_title" : "Уличное освещение по данным OSM",
 	"lang_select" : "Сменить язык",
 	"opacity_select" : "Изменить прозрачность",
 	"layer_street_lights" : "Уличные лампы",
