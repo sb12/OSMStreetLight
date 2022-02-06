@@ -45,29 +45,31 @@
 				minZoom : 15
 			});
 
-			var OSMUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-			var OSMAttrib = 'Map data &copy; OpenStreetMap contributors, Data via <a href="http://www.overpass-api.de/">Overpass API</a>';
-			var OSM = new L.TileLayer(OSMUrl, {maxZoom: 19, attribution: OSMAttrib});
+			var OverpassAttrib = 'Data via <a href="http://www.overpass-api.de/">Overpass API</a>';
 			
-			var OSM_deutsch = L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+			var OSM_carto = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				maxZoom: 19,
+				attribution: 'Map data &copy; OpenStreetMap contributors | ' + OverpassAttrib
+			});
+			var OSM_de = L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
 				maxZoom: 18,
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | ' + OverpassAttrib
 			});			
-			var OSM_français = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+			var OSM_fr = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
 				maxZoom: 20,
-				attribution: '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+				attribution: '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | ' + OverpassAttrib
 			});			
 			var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
 				maxZoom: 17,
-				attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+				attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>) | ' + OverpassAttrib
 			});
 
 			var map = new L.Map('map');
 
 			var baseMaps = {
-				"OpenStreetMap Carto": OSM,
-				"Mapnik deutsch": OSM_deutsch,
-				"Mapnik français": OSM_français,
+				"OpenStreetMap Carto": OSM_carto,
+				"OpenStreetMap DE": OSM_de,
+				"OpenStreetMap FR": OSM_fr,
 				"OpenTopoMap": OpenTopoMap
 			};
 
@@ -83,9 +85,11 @@
 			L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 			// add opacity control
+			var current_layer = OSM_carto
 			var opacitySlider = new L.Control.opacitySlider();
 			map.addControl(opacitySlider);
-			opacitySlider.setOpacityLayer(OSM);
+			opacitySlider.setOpacityLayer(current_layer);
+
 
 			loadingcounter = 0;
 			var showStreetLights = false;
@@ -115,7 +119,7 @@
 
 			var ort = new L.LatLng(51, 11);
 
-			map.setView(ort, 6).addLayer(OSM);
+			map.setView(ort, 6).addLayer(OSM_carto);
 			map.addLayer(StreetLights);
 			LitStreets.on('add',function(){Moveaufruf();});
 			if(window.location.search.indexOf("lit_streets") != -1) {
@@ -139,7 +143,7 @@
 					var ort = new L.LatLng(51, 11); // geographical point (longitude and latitude)
 					var zoom = 6;
 				}
-				map.setView(ort, zoom).addLayer(OSM);
+				map.setView(ort, zoom).addLayer(OSM_carto);
 
 				map.on('moveend',function(){Moveaufruf();});
 				Moveaufruf();
@@ -150,6 +154,13 @@
 				  url: "http://127.0.0.1:8111/load_and_zoom?left="+lefttop.lng+"&right="+rightbottom.lng+"&top="+lefttop.lat+"&bottom="+rightbottom.lat+"&select="+type+ID
 				});
 			}
+
+
+			map.on('baselayerchange', function (e) {
+				current_layer = e.layer;
+				opacitySlider.setOpacityLayer(current_layer);
+				
+			});
 
 		</script>
 		<div id="zoomwarnung">

@@ -8,14 +8,14 @@ function Moveaufruf()
 
 function XMLLaden(lat1,lon1,lat2,lon2)
 {
-	//Maximalen Zoom um karten ausschnitt nicht zu gross zu haben
+	//Maximum zoom to not load too much data
 	minzoom = 15;
 
 	if (map.getZoom()>=minzoom)
 	{
 		$('#zoomwarnung').hide(0.4);
 		loadData('[bbox:'+lat2+','+lon1+','+lat1+','+lon2+ '];');
-		OSM.setOpacity(opacityHigh);
+		current_layer.setOpacity(opacityHigh);
 		showStreetLights = true;
 		$("#opacity_slider").slider("option", "value", opacityHigh*100);
 	}
@@ -24,7 +24,7 @@ function XMLLaden(lat1,lon1,lat2,lon2)
 		//Zoom zu klein um anzuzeigen
 		$('#zoomwarnung').show(1);
 		showStreetLights = false;
-		OSM.setOpacity(opacityLow);
+		current_layer.setOpacity(opacityLow);
 		$("#opacity_slider").slider("option", "value", opacityLow*100);
 		parseOSM(false);
 		loadingcounter = 0;
