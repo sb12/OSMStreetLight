@@ -58,7 +58,14 @@ function loadData(bbox)
 	//URL Codieren
 	XMLRequestText = encodeURIComponent(XMLRequestText);
 
-	RequestURL = "http://overpass-api.de/api/interpreter?data=" + XMLRequestText;
+	if (location.protocol == 'https:') {
+		RequestProtocol = "https://";
+	}
+	else {
+		RequestProtocol = "http://";
+	}
+
+	RequestURL = RequestProtocol + "overpass-api.de/api/interpreter?data=" + XMLRequestText;
 	//AJAX REQUEST
 
 	$.ajax({
