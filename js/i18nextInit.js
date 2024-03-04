@@ -28,6 +28,8 @@ function updateContent() {
   $("#lang").attr('title', i18next.t("lang_select"));
   $("#layer_street_lights").html(i18next.t("layer_street_lights"));
   $("#layer_lit_streets").html(i18next.t("layer_lit_streets"));
+  $("#layer_unlit_streets").html(i18next.t("layer_unlit_streets"));
+  console.log("ContentUpdated");
 }
 
 function changeLng(lng) {
@@ -35,6 +37,7 @@ function changeLng(lng) {
 }
 
 i18next.on('languageChanged', () => {
+  console.log("Language changed");
   updateContent();
 });
 $(document).ready(updateContent());

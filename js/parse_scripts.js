@@ -47,12 +47,12 @@ function loadData(bbox)
 	{
 		XMLRequestText += 'node["xmas:feature"="tree"];'
 	}
-	XMLRequestText += '); out qt; '
 
-	if (map.hasLayer(LitStreets)) {
-		XMLRequestText += '(way["highway"][!area]["lit"="yes"]; >;); out skel qt; ' +
-			'(way["highway"][area]["lit"="yes"]; >;); out qt; ';
+	if (map.hasLayer(LitStreets) || map.hasLayer(UnLitStreets)) {
+		XMLRequestText += '(way["highway"][!area]["lit"]; >;); ' +
+			'(way["highway"][area]["lit"]; >;); ';
 	}
+	XMLRequestText += '); out qt; '
 	console.log ( XMLRequestText );
 
 	//URL Codieren
@@ -92,6 +92,7 @@ function parseOSM(daten)
 	CoordObj = new Object();
 	StreetLights.clearLayers();
 	LitStreets.clearLayers();
+	UnLitStreets.clearLayers();
 
 	$(daten).find('node,way').each(function(){
 		EleID = $(this).attr("id");
@@ -154,6 +155,7 @@ function parseOSM(daten)
 		var light_source = "";
 		var light_type = "";
 		var xmas = "";
+		var lit = "";
 		var area = "";
 
 		$(this).find('tag').each(function(){
@@ -241,6 +243,9 @@ function parseOSM(daten)
 			}
 			if ((EleKey=="area")) {
 				area = EleValue
+			}
+			if ((EleKey=="lit")) {
+				lit = EleValue
 			}
 
 		});
@@ -376,20 +381,62 @@ function parseOSM(daten)
 
 			}
 
-		} else {
+		} else if (lit == "no" || lit == "disused") {
 			// Draw ways, which have no popup
 			if(area) {
 				var shape = L.polygon(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
-					stroke: false, fillColor: 'white', fillOpacity: 0.4,
+					stroke: false, fillColor: '#000000', fillOpacity: 0.4,
+					weight: 3
+				})
+				UnLitStreets.addLayer(shape);
+			} else {
+				var line = L.polyline(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
+					color: '#111111',
+					weight: 3
+				})
+				UnLitStreets.addLayer(line)
+			}
+		} else if (lit == "yes" || lit == "24/7" || lit == "automatic" || lit == "limited" || lit == "sunset-sunrise" || lit == "dusk-dawn" || lit == "interval") {
+			// Draw ways, which have no popup
+			if ((lit == "automatic"))
+			{
+				strokeDashArray = "2 3";
+				strokeColor = "#BBBBBB";
+			}
+			else if ((lit == "limited" || lit == "interval"))
+			{
+				strokeDashArray = "8";
+				strokeColor = "#BBBBBB";
+			}
+			else
+			{
+				strokeDashArray = "0";
+				strokeColor = "#BBBBBB";
+			}
+			if(area) {
+				var shape = L.polygon(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
+					stroke: false, fillColor: strokeColor, fillOpacity: 0.4,
 					weight: 3,
+					dashArray: strokeDashArray
 				})
 				LitStreets.addLayer(shape);
 			} else {
 				var line = L.polyline(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
-					color: 'lightgray',
+					color: strokeColor,
 					weight: 3,
+					dashArray: strokeDashArray
 				})
 				LitStreets.addLayer(line)
+				
+				if ((lit == "24/7")) // dotted outline for 24/7
+				{
+					var line = L.polyline(EleCoordArray.map(p => new L.LatLng(p[0], p[1])), {
+						color: strokeColor,
+						weight: 5,
+						dashArray: "1 6"
+					})
+					LitStreets.addLayer(line)
+				}
 			}
 		}
 

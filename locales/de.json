@@ -40,5 +40,6 @@
 	"lang_select" : "Sprache ändern",
 	"opacity_select" : "Helligkeit ändern",
 	"layer_street_lights" : "Straßenlaternen",
-	"layer_lit_streets" : "Beleuchtete Straßen"
+	"layer_lit_streets" : "Beleuchtete Straßen",
+	"layer_unlit_streets" : "Unbeleuchtete Straßen"
 }

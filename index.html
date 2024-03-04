@@ -44,6 +44,10 @@
 				maxZoom : 19,
 				minZoom : 15
 			});
+			var UnLitStreets = new L.LayerGroup([],{
+				maxZoom : 19,
+				minZoom : 15
+			});
 
 			var OverpassAttrib = 'Data via <a href="http://www.overpass-api.de/">Overpass API</a>';
 			
@@ -75,7 +79,8 @@
 
 			var overlayMaps = {
 				"<span id='layer_street_lights'>Street Lights</span>": StreetLights,
-				"<span id='layer_lit_streets'>Lit Streets</span>": LitStreets
+				"<span id='layer_lit_streets'>Lit Streets</span>": LitStreets,
+				"<span id='layer_unlit_streets'>Unlit Streets</span>": UnLitStreets
 			};
 
 			// add LanguageSelector
@@ -124,6 +129,10 @@
 			LitStreets.on('add',function(){Moveaufruf();});
 			if(window.location.search.indexOf("lit_streets") != -1) {
 				map.addLayer(LitStreets);
+			}
+			UnLitStreets.on('add',function(){Moveaufruf();});
+			if(window.location.search.indexOf("unlit_streets") != -1) {
+				map.addLayer(UnLitStreets);
 			}
 
 			//Permalink

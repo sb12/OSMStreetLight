@@ -40,5 +40,6 @@
 	"lang_select" : "Сменить язык",
 	"opacity_select" : "Изменить прозрачность",
 	"layer_street_lights" : "Уличные лампы",
-	"layer_lit_streets" : "Освещаемые улицы"
+	"layer_lit_streets" : "Освещаемые улицы",
+	"layer_unlit_streets" : "неосвещенные улицы"
 }

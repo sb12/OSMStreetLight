@@ -42,11 +42,17 @@ Currently the following tags are supported for the street light layer:
 * `width=*`
 
 
-Es werden zur Zeit die folgenden Tags für die Beleuchtete-Straßen-Ebene unterstützt:
+Es werden zur Zeit die folgenden Tags für die Beleuchtete-Straßen- und Unbeleuchtete-Straßen-Ebene unterstützt:
 
-Currently the following tags are supported for the lit streets layer:
+Currently the following tags are supported for the lit and unlit streets layer:
 
-* `highway=*` + `lit=yes`
+* `highway=*` 
+* `lit=yes|sunrise-sunset|dusk-dawn`
+* `lit=24/7` _(with dotted outline)_
+* `lit=automatic` _(dotted)_
+* `lit=limited|interval` _(dashed)_
+* `lit=no|disused` _(unlit, black)_
+
 
 Es dürfen gerne weitere Keys oder Values über Pull Requests vorgeschlagen werden.
 

@@ -40,5 +40,6 @@
 	"lang_select" : "Verander taal",
 	"opacity_select" : "Verander doorzichtigheid",
 	"layer_street_lights" : "Straatlantaarns",
-	"layer_lit_streets" : "Verlichte straten"
+	"layer_lit_streets" : "Verlichte straten",
+	"layer_unlit_streets" : "Onverlichte straten"
 }
