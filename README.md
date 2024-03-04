@@ -13,7 +13,7 @@ Es werden zur Zeit die folgenden Tags für die Straßenlaternen-Ebene unterstüt
 
 Currently the following tags are supported for the street light layer:
 
-* `highway = street_lamp` | `light_source=lantern|floodlight|*`
+* `highway = street_lamp` | `light_source=lantern|floodlight|*` | `tower:type=lighting`
 
 * `ref|lamp_ref=*`
 

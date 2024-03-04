@@ -40,7 +40,7 @@ function loadData(bbox)
 
 	//CrossoverAPI XML request
 	// Street Light query
-	XMLRequestText = bbox+'( node["highway"="street_lamp"]; node["light_source"];'
+	XMLRequestText = bbox+'( node["highway"="street_lamp"]; node["light_source"]; node["tower:type"="lighting"];'
 
 	today = new Date();
 	if (today.getMonth() == 11) // show christmas trees only in December
@@ -227,6 +227,13 @@ function parseOSM(daten)
 			if ((EleKey=="light_source"))
 			{
 				light_source = EleValue;
+			}
+			if ((EleKey=="tower:type"))
+			{
+				if ((EleValue=="lighting"))
+				{
+					light_source = "floodlight";
+				}
 			}
 			if ((EleKey=="xmas:feature"))
 			{
