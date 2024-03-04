@@ -587,6 +587,11 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 	else if(light_source == "floodlight")
 	{
 		symbol_url = "floodlight";
+		
+		if(light_direction)
+		{
+			symbol_url = "floodlight_directed";
+		}
 	}
 	else
 	{
