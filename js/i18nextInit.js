@@ -1,19 +1,22 @@
 // import i18next from 'i18next';
 
 i18next
-  .use(i18nextXHRBackend)
   .use(i18nextBrowserLanguageDetector)
+  .use(i18nextHttpBackend)
   .init({
     fallbackLng: 'en',
-    debug: false,
     whitelist: ['de','en','nl', 'ru'],
+    debug: true,
+    detection: {
+      order: ['cookie', 'localStorage'],
+      lookupCookie: 'next-i18next',
+      lookupLocalStorage: 'i18nextLng',
+      caches: ['cookie', 'localStorage']
+    },
     backend: {
       loadPath: 'locales/{{lng}}.json',
       crossDomain: true
     }
-  }, function(err, t) {
-    // init set content
-    updateContent();
   });
 
 
@@ -23,7 +26,7 @@ function updateContent() {
   $("#aboutmap").html(i18next.t('aboutmap'));
   $("#zoomin").html(i18next.t('zoomin'));
   document.title = i18next.t('website_title');
-  $("#langselect").attr('value', i18next.language);
+  $("#langselect").val(i18next.language);
   $("#opacity_slider").attr('title', i18next.t("opacity_select"));
   $("#lang").attr('title', i18next.t("lang_select"));
   $("#layer_street_lights").html(i18next.t("layer_street_lights"));
@@ -32,12 +35,18 @@ function updateContent() {
   console.log("ContentUpdated");
 }
 
-function changeLng(lng) {
+function updateLng() {
+  lng = $("#langselect").val()
   i18next.changeLanguage(lng);
 }
 
 i18next.on('languageChanged', () => {
   console.log("Language changed");
-  updateContent();
+  if(!i18next.isInitialized) {
+    // wait for initalization
+    i18next.on('initialized', updateContent);
+  }
+  else{
+	updateContent();
+  }
 });
-$(document).ready(updateContent());

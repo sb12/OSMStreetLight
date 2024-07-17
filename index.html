@@ -4,17 +4,18 @@
 		<title>Street Lamps in OSM</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
-		<link rel="stylesheet" href="js/jquery-ui-1.10.3.custom.min.css" />
+		<link rel="stylesheet" href="jquery/jquery-ui.min.css" />
 		<link rel="stylesheet" href="style.css" />
 
 		<!-- Load jquery -->
-		<script src="js/jquery.js"></script>
-		<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="jquery/jquery-1.12.4.min.js"></script>
+		<script src="jquery/jquery-ui.min.js"></script>
 
 		<!-- Load i18next -->
-		<script src="js/i18next/i18next.min.js"></script>
-		<script src="js/i18next/i18nextXHRBackend.js"></script>
-		<script src="js/i18next/i18nextBrowserLanguageDetector.min.js"></script>
+		<script src="i18next/i18next.min.js"></script>
+		<!--<script src="js/i18next/jquery-i18next.min.js"></script>-->
+		<script src="i18next/i18nextHttpBackend.min.js"></script>
+		<script src="i18next/i18nextBrowserLanguageDetector.min.js"></script>
 		<script src="js/i18nextInit.js"></script>
 
 		<!-- Load leaflet -->
@@ -173,12 +174,12 @@
 
 		</script>
 		<div id="zoomwarnung">
-			<p id="zoomin"></p>
+			<p id="zoomin">Zoom in to load data</p>
 		</div>
 		<div id="loading" style="display:none"><img src="./img/ajax-loader.gif"></div>
 
 		<div id="options">
-			<small><a target="_new" href="./about.html" id="aboutmap"></a></small>
+			<small><a target="_new" href="./about.html" id="aboutmap">About this map</a></small>
 		</div>
 
 	</body>

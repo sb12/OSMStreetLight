@@ -61,7 +61,7 @@ L.Control.opacitySlider = L.Control.extend({
     onAdd: function (map) {
         var opacity_slider_div = L.DomUtil.create('div', 'opacity_slider_control');
         $(opacity_slider_div).attr('id', "opacity_slider");
-        $("#opacity_slider").attr('title', i18next.t("opacity_select"));
+        $("#opacity_slider").attr('title', "");
         $(opacity_slider_div).slider({
           orientation: "vertical",
           range: "min",
