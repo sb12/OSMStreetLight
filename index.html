@@ -5,6 +5,7 @@
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
 		<link rel="stylesheet" href="leaflet/plugins/Control.Opacity/Control.Opacity.css" />
+		<link rel="stylesheet" href="leaflet/plugins/leaflet-locatecontrol/L.Control.Locate.min.css" />
 		<link rel="stylesheet" href="leaflet/plugins/leaflet-control-geocoder/Control.Geocoder.css" />
 		<link rel="stylesheet" href="jquery/jquery-ui.min.css" />
 		<link rel="stylesheet" href="style.css" />
@@ -21,7 +22,8 @@
 
 		<!-- Load leaflet -->
 		<script src="leaflet/leaflet.js"></script>
-		<script src="js/geo.js" type="text/javascript"></script>
+		<script src="leaflet/plugins/leaflet-geolocation/leaflet-geolocation.js"></script>
+		<script src="leaflet/plugins/leaflet-locatecontrol/L.Control.Locate.min.js"></script>
 		<script src="leaflet/plugins/leaflet-hash/leaflet-hash.js"></script>
 		<script src="leaflet/plugins/Control.Opacity/Control.Opacity.js"></script>
 		<script src="leaflet/plugins/LanguageSelector/LanguageSelector.js"></script>
@@ -35,7 +37,9 @@
 	<body style="margin:0px">
 		<div id="map" style="height: 100%"></div>
 		<script>
+			
 
+		
 			MarkerArray = new Array();
 			var StreetLights = new L.LayerGroup([],{
 				maxZoom : 19,
@@ -84,6 +88,28 @@
 				"<span id='layer_unlit_streets'>Unlit Streets</span>": UnLitStreets
 			};
 
+			// add locate control:				
+			$(document).ready(function(){
+			// load settings:
+				$.getJSON("settings.json", function(data){
+					if (data.show_geolocate_button)
+					{
+						var lc = L.control.locate({
+							setView : "once",
+							initialZoomLevel : 13,
+							showCompass : false,
+							drawCircle : false,
+							drawMarker : false,
+							clickBehavior: {
+								inView : "setView",
+								outOfView : "setView",
+								inViewNotFollowing : "setView"
+							}
+						}).addTo(map);
+					}
+				});
+			});
+
 			// add LanguageSelector
 			var LanguageSelector = new L.Control.LanguageSelector();
 			map.addControl(LanguageSelector);
@@ -111,30 +137,16 @@
 			var opacityHigh = 0.2; // opacity level when showing street lights
 			var opacityLow = 1.0; // opacity level when not showing street lights
 
-			//Testen ob location abgefragt werden muss
+
+			// default starting view of whole world
+			var ort = new L.LatLng(30, 10);
+			map.setView(ort, 3).addLayer(current_layer);
+			// Request rough IP-based location if non is found in URL
 			if (document.URL.search(/#/)==-1){
-				function success_callback(p)
-				{
-					//alert('lat='+p.coords.latitude.toFixed(2)+';lon='+p.coords.longitude.toFixed(2));
-					mapInit( p.coords.latitude.toFixed(5) , p.coords.longitude.toFixed(5) );
-				}
-
-				function error_callback(p)
-				{
-					mapInit(-10000,-10000);
-				}
-
-				if(geo_position_js.init()){
-					geo_position_js.getCurrentPosition(success_callback,error_callback,{enableHighAccuracy:true,options:5000});
-				}
-				else{
-					mapInit(-10000,-10000);
-				}
+				L.GeoLocation.centerMapOnPosition(map, 8)
 			}
 
-			var ort = new L.LatLng(51, 11);
 
-			map.setView(ort, 6).addLayer(OSM_carto);
 			map.addLayer(StreetLights);
 			LitStreets.on('add',function(){Moveaufruf();});
 			if(window.location.search.indexOf("lit_streets") != -1) {
@@ -149,25 +161,6 @@
 			var hash = new L.Hash(map);
 			map.on('moveend',function(){Moveaufruf();});
 
-			function mapInit(lat,lon)
-			{
-
-				if (lat > -10000)
-				{
-					var ort = new L.LatLng(lat, lon); // geographical point (longitude and latitude)
-					var zoom = 14;
-				}
-				else
-				{
-					var ort = new L.LatLng(51, 11); // geographical point (longitude and latitude)
-					var zoom = 6;
-				}
-				map.setView(ort, zoom).addLayer(OSM_carto);
-
-				map.on('moveend',function(){Moveaufruf();});
-				Moveaufruf();
-			}
-
 			function openinJOSM(type, ID){
 				$.ajax({
 				  url: "http://127.0.0.1:8111/load_and_zoom?left="+lefttop.lng+"&right="+rightbottom.lng+"&top="+lefttop.lat+"&bottom="+rightbottom.lat+"&select="+type+ID
@@ -180,6 +173,8 @@
 				opacitySlider.setOpacityLayer(current_layer);
 				
 			});
+			
+
 
 		</script>
 		<div id="zoomwarning_cont">

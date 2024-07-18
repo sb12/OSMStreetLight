@@ -46,6 +46,14 @@ Es dürfen gerne weitere Keys oder Values über Pull Requests vorgeschlagen werd
 
 Feel free to propose more key or values by a Pull Request.
 
+## Einstellungen / Settings
+
+Die folgenden Einstellungen können in `settings.json` geändert werden:
+
+The following settings can be changed in `settings.json`:
+
+* `show_geolocate_button` = `true`|`false` Disable the geolocate button (e.g. if only http is available as most modern browsers will deny geolocation without https)
+
 ## License
 
 The code for this project is based on OSMfahrkartenautomaten *( [Testinstallation](http://osm.lyrk.de/fahrkartenautomaten/) | [Quellcode](https://github.com/ubahnverleih/OSMfahrkartenautomaten) )* by [ubahnverleih](https://github.com/ubahnverleih).
