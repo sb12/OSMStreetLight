@@ -4,7 +4,10 @@ body{
 
 #map {
 	background-color: #000000; 
+}
 
+button.leaflet-control-geocoder-icon {
+	margin: 7px;
 }
 
 #zoomwarning_cont {
@@ -165,6 +168,10 @@ body{
 	border-radius: 5px; 
 	width:40px;
         font-size: 9pt;
+}
+
+#opacity_slider {
+	margin-right: 28px;
 }
 
 .light_21 div{
