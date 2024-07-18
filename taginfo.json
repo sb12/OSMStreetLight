@@ -22,6 +22,24 @@
 		       "description": "Shows position of light sources."
 		   },
 		  {
+		       "key": "light_source",
+		       "value": "lantern"
+		       "object_types": ["node"],
+		       "description": "Shows position of street lamps."
+		   },
+		  {
+		       "key": "light_source",
+		       "value": "floodlight"
+		       "object_types": ["node"],
+		       "description": "Shows position of flood lights."
+		   },
+		  {
+		       "key": "tower:type",
+		       "value": "lighting"
+		       "object_types": ["node"],
+		       "description": "Shows position of flood lights."
+		   },
+		  {
 		       "key": "ref",
 		       "object_types": ["node"],
 		       "description": "Shows ref of light sources."
@@ -127,9 +145,63 @@
 		       "description": "Shows the width of light sources."
 		   },
 		  {
+		       "key": "highway",
+		       "object_types": ["way"],
+		       "description": "Shows lit and unlit highways."
+		   },
+		  {
 		       "key": "lit",
+		       "values": "yes",
 		       "object_types": ["way"],
 		       "description": "Shows lit highways."
+		   },
+		  {
+		       "key": "lit",
+		       "values": "sunrise-sunset",
+		       "object_types": ["way"],
+		       "description": "Shows lit highways."
+		   },
+		  {
+		       "key": "lit",
+		       "values": "dusk-dawn",
+		       "object_types": ["way"],
+		       "description": "Shows lit highways."
+		   },
+		  {
+		       "key": "lit",
+		       "values": "24/7",
+		       "object_types": ["way"],
+		       "description": "Shows permanently lit highways."
+		   },
+		  {
+		       "key": "lit",
+		       "values": "automatic",
+		       "object_types": ["way"],
+		       "description": "Shows automatically lit highways."
+		   },
+		  {
+		       "key": "lit",
+		       "values": "limited",
+		       "object_types": ["way"],
+		       "description": "Shows interval-lit highways."
+		   },
+		  {
+		       "key": "lit",
+		       "values": "interval",
+		       "object_types": ["way"],
+		       "description": "Shows interval-lit highways."
+		   },
+		  {
+		       "key": "lit",
+		       "values": "no",
+		       "object_types": ["way"],
+		       "description": "Shows unlit highways."
+		   },
+		  {
+		       "key": "lit",
+		       "values": "disused",
+		       "object_types": ["way"],
+		       "description": "Shows unlit highways."
 		   }
    		]
    }

@@ -14,32 +14,20 @@ Es werden zur Zeit die folgenden Tags für die Straßenlaternen-Ebene unterstüt
 Currently the following tags are supported for the street light layer:
 
 * `highway = street_lamp` | `light_source=lantern|floodlight|*` | `tower:type=lighting`
-
 * `ref|lamp_ref=*`
-
 * `operator|lamp_operator=*`
-
 * `start_date=*`
-
 * `light:colour=white|orange|yellow|blue|red|green`
-
 * `light:method|lamp_type=high_pressure_sodium|high-pressure_sodium|SON|HPSV|low_pressure_sodium|low-pressure_sodium|SOX|sodium|sodium_vapor|LED|led|metal-halide|metal_halide|fluorescent|incandescent|mercury|electric|electrical|gas|gaslight`
-
 * `light:mount|lamp_mount|support=straight mast|straight_mast|bent mast|bent_mast|cast steel mast|cast_steel_mast|mast|pole|power_pole|wall_mounted|wall|suspended|wire|ceiling|ground`
-
 * `light:count=1|2|3|4`
-
-* `light:direction=*`
-
+* `light:direction|direction=*`
 * `light:lit=dusk-dawn|demand|*`
-
 * `manufacturer=*`
-
 * `model|lamp_model:de=*`
-
-* `height=*`
-
+* `height|light:height=*`
 * `width=*`
+* `support=*`
 
 
 Es werden zur Zeit die folgenden Tags für die Beleuchtete-Straßen- und Unbeleuchtete-Straßen-Ebene unterstützt:
