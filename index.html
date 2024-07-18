@@ -13,7 +13,6 @@
 
 		<!-- Load i18next -->
 		<script src="i18next/i18next.min.js"></script>
-		<!--<script src="js/i18next/jquery-i18next.min.js"></script>-->
 		<script src="i18next/i18nextHttpBackend.min.js"></script>
 		<script src="i18next/i18nextBrowserLanguageDetector.min.js"></script>
 		<script src="js/i18nextInit.js"></script>
@@ -172,13 +171,19 @@
 			});
 
 		</script>
-		<div id="zoomwarnung">
-			<p id="zoomin">Zoom in to load data</p>
+		<div id="zoomwarning_cont">
+			<div id="zoomwarning">
+				<p id="zoomin">Zoom in to load data</p>
+			</div>
 		</div>
-		<div id="loading" style="display:none"><img src="./img/ajax-loader.gif"></div>
-
-		<div id="options">
-			<small><a target="_new" href="./about.html" id="aboutmap">About this map</a></small>
+		<div id="loading_cont" style="display:none">
+			<div id="loading"><span id="loading_icon" class="loading_spinner"></span><span id="loading_text"></span></div>
+		</div>
+		
+		<div id="options_cont">
+			<div id="options">
+				<small><a target="_new" href="./about.html" id="aboutmap">About this map</a></small>
+			</div>
 		</div>
 
 	</body>

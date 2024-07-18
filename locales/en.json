@@ -41,5 +41,10 @@
 	"opacity_select" : "Change opacity",
 	"layer_street_lights" : "Street Lights",
 	"layer_lit_streets" : "Lit Streets",
-	"layer_unlit_streets" : "Unlit Streets"
+	"layer_unlit_streets" : "Unlit Streets",
+	"ajaxerror_timeout" : "Timeout while loading data.",
+	"ajaxerror_error" : "Error while loading data.",
+	"ajaxerror_abort" : "Loading data aborted.",
+	"ajaxerror_parseerror" : "Data parsing failed.",
+	"ajaxerror_unknown" : "Unknown error."
 }

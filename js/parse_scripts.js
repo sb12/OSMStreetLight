@@ -13,7 +13,7 @@ function XMLLaden(lat1,lon1,lat2,lon2)
 
 	if (map.getZoom()>=minzoom)
 	{
-		$('#zoomwarnung').hide(0.4);
+		$( "#zoomwarning_cont" ).fadeOut(500);
 		loadData('[bbox:'+lat2+','+lon1+','+lat1+','+lon2+ '];');
 		current_layer.setOpacity(opacityHigh);
 		showStreetLights = true;
@@ -21,8 +21,9 @@ function XMLLaden(lat1,lon1,lat2,lon2)
 	}
 	else
 	{
-		//Zoom zu klein um anzuzeigen
-		$('#zoomwarnung').show(1);
+		//Zoom too small to load data
+		$( "#loading_cont" ).fadeOut(500);
+		$( "#zoomwarning_cont" ).fadeIn(500);
 		showStreetLights = false;
 		current_layer.setOpacity(opacityLow);
 		$("#opacity_slider").slider("option", "value", opacityLow*100);
@@ -33,9 +34,10 @@ function XMLLaden(lat1,lon1,lat2,lon2)
 
 function loadData(bbox)
 {
-	$( "#loading" ).animate({
-		color: "black",
-		backgroundColor: "rgb( 255, 255, 255 )"},0).show().effect("highlight", {}, 700);
+	$( "#loading_text" ).text("")
+	$( "#loading" ).attr("class", "");
+	$( "#loading_icon" ).attr("class", "loading_spinner")
+	$( "#loading_cont" ).fadeIn(100)
 	loadingcounter++;
 
 	//CrossoverAPI XML request
@@ -72,16 +74,34 @@ function loadData(bbox)
 		url: RequestURL,
 		type: 'GET',
 		crossDomain: true,
-		success: parseOSM,
+		success: function(data){
+			if (loadingcounter==1){
+				$( "#loading_text" ).html("")
+				$( "#loading" ).attr("class", "success");
+				$( "#loading_icon" ).attr("class", "loading_success")
+			}
+			parseOSM(data)
+		},
 		error: function(jqXHR, textStatus, errorThrown){
-			$( "#loading" ).animate({
-				color: "red",
-				backgroundColor: "rgb( 255, 200, 200 )"
-			});
-			$( "#loading" ).fadeOut(1500);
+			
+			if(i18next.isInitialized)
+					
+				if (textStatus == "timeout" || textStatus == "error" || textStatus == "abort" || textStatus == "parseerror"){
+					textStatus_value = i18next.t("ajaxerror_" + textStatus);
+				}
+				else{
+					textStatus_value = i18next.t("ajaxerror_unknown");
+				}
+			else{ // fallback in case i18next is not initalized yet.
+				textStatus_value = "Error while loading data";
+			}
+			
+			$( "#loading" ).attr("class", "error");
+			$( "#loading_icon" ).attr("class", "loading_error")
+			$( "#loading_text" ).html("&nbsp;" + textStatus_value)
 			loadingcounter--;
 		},
-		timeout: 30000 // timeout after 30s
+		timeout: 10000 // timeout after 10s
 	});
 }
 
@@ -445,7 +465,7 @@ function parseOSM(daten)
 	//Loading ausblenden
 	loadingcounter--;
 	if (loadingcounter==0) {
-		$("#loading").hide(0.4);
+		$( "#loading_cont" ).delay(500).fadeOut(100);
 	};
 }
 
@@ -803,7 +823,7 @@ function getMarkerIcon(L,light_source,light_method, light_colour,light_direction
 			zoomClass = 14;
 		}
 	}
-	else if ( map.getZoom() == 15)
+	else if ( map.getZoom() <= 15)
 	{
 		zoomClass = 15;
 		refclass = "lamp_ref_none";

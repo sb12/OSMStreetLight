@@ -41,5 +41,10 @@
 	"opacity_select" : "Helligkeit ändern",
 	"layer_street_lights" : "Straßenlaternen",
 	"layer_lit_streets" : "Beleuchtete Straßen",
-	"layer_unlit_streets" : "Unbeleuchtete Straßen"
+	"layer_unlit_streets" : "Unbeleuchtete Straßen",
+	"ajaxerror_timeout" : "Zeitüberschreitung beim Laden der Daten.",
+	"ajaxerror_error" : "Fehler beim Laden der Daten.",
+	"ajaxerror_abort" : "Laden der Daten abgebrochen.",
+	"ajaxerror_parseerror" : "Fehler bei Interpretation der Daten",
+	"ajaxerror_unknown" : "Unbekannter Fehler beim Laden der Daten."
 }

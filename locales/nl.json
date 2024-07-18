@@ -41,5 +41,10 @@
 	"opacity_select" : "Verander doorzichtigheid",
 	"layer_street_lights" : "Straatlantaarns",
 	"layer_lit_streets" : "Verlichte straten",
-	"layer_unlit_streets" : "Onverlichte straten"
+	"layer_unlit_streets" : "Onverlichte straten",
+	"ajaxerror_timeout" : "Timeout while loading data.",
+	"ajaxerror_error" : "Error while loading data.",
+	"ajaxerror_abort" : "Loading data aborted.",
+	"ajaxerror_parseerror" : "Data parsing failed.",
+	"ajaxerror_unknown" : "Unknown error."
 }
