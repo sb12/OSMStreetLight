@@ -57,6 +57,15 @@ L.Control.opacitySlider = L.Control.extend({
     },
     setOpacityLayer: function (layer) {
             opacity_layer = layer;
+            if (showStreetLights == true)
+            {
+                 slider_value = opacityHigh
+            }
+            else
+            {
+                slider_value = opacityLow
+            }
+            opacity_layer.setOpacity(slider_value)
     },
     onAdd: function (map) {
         var opacity_slider_div = L.DomUtil.create('div', 'opacity_slider_control');
