@@ -42,9 +42,9 @@
 	"layer_street_lights" : "Уличные лампы",
 	"layer_lit_streets" : "Освещаемые улицы",
 	"layer_unlit_streets" : "неосвещенные улицы",
-	"ajaxerror_timeout" : "Timeout while loading data.",
-	"ajaxerror_error" : "Error while loading data.",
-	"ajaxerror_abort" : "Loading data aborted.",
-	"ajaxerror_parseerror" : "Data parsing failed.",
-	"ajaxerror_unknown" : "Unknown error."
+	"ajaxerror_timeout" : "Долго нет ответа на запрос загрузки данных.",
+	"ajaxerror_error" : "Ошибка при загрузке данных.",
+	"ajaxerror_abort" : "Загрузка данных отменена.",
+	"ajaxerror_parseerror" : "Нельзя разобрать полученные данные.",
+	"ajaxerror_unknown" : "Неясная ошибка."
 }
