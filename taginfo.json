@@ -4,8 +4,8 @@
        "project": {
            "name": "Street Lights in OpenStreetMap",
            "description": "Show street lights and their attributes",
-           "project_url": "http://osmstreetlight.bplaced.net/",
-           "doc_url": "http://osmstreetlight.bplaced.net/about.html",
+           "project_url": "https://sb12.github.io/OSMStreetLight",
+           "doc_url": "https://sb12.github.io/OSMStreetLight/about.html",
            "contact_name": "mapper999",
            "contact_email": "osm.mapper999@gmail.com"
        },
