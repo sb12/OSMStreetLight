@@ -1,6 +1,6 @@
 # Straßenlaternen in OSM / Street lamps in OSM
 
-[Testinstallation / Demo page](http://osmstreetlight.bplaced.net/) | [Quellcode / Source code repository](https://github.com/sb12/OSMStreetLight)
+[Testinstallation / Demo page](https://sb12.github.io/OSMStreetLight/) | [Quellcode / Source code repository](https://github.com/sb12/OSMStreetLight)
 
 Diese Karte zeigt Straßenlaternen und ihre Eigenschaften in den Daten der [OpenStreetMap](http://osm.org). Es werden Betreiber, Referenznummern und Details zu den verwendeten Leuchtmitteln angezeigt.
 
@@ -56,7 +56,7 @@ The following settings can be changed in `settings.json`:
 
 ## License
 
-The code for this project is based on OSMfahrkartenautomaten *( [Testinstallation](http://osm.lyrk.de/fahrkartenautomaten/) | [Quellcode](https://github.com/ubahnverleih/OSMfahrkartenautomaten) )* by [ubahnverleih](https://github.com/ubahnverleih).
+The code for this project is based on OSMfahrkartenautomaten *( [Testinstallation](https://ubahnverleih.github.io/OSMfahrkartenautomaten/) | [Quellcode](https://github.com/ubahnverleih/OSMfahrkartenautomaten) )* by [ubahnverleih](https://github.com/ubahnverleih).
 
 
 **MIT-License**
