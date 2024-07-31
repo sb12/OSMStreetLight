@@ -23,19 +23,19 @@
 		   },
 		  {
 		       "key": "light_source",
-		       "value": "lantern"
+		       "value": "lantern",
 		       "object_types": ["node"],
 		       "description": "Shows position of street lamps."
 		   },
 		  {
 		       "key": "light_source",
-		       "value": "floodlight"
+		       "value": "floodlight",
 		       "object_types": ["node"],
 		       "description": "Shows position of flood lights."
 		   },
 		  {
 		       "key": "tower:type",
-		       "value": "lighting"
+		       "value": "lighting",
 		       "object_types": ["node"],
 		       "description": "Shows position of flood lights."
 		   },
