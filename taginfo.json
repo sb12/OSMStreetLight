@@ -34,10 +34,76 @@
 		       "description": "Shows position of flood lights."
 		   },
 		  {
+		       "key": "light_source",
+		       "value": "aviation",
+		       "object_types": ["node"],
+		       "description": "Shows position of aviation lights."
+		   },
+		  {
 		       "key": "tower:type",
 		       "value": "lighting",
 		       "object_types": ["node"],
 		       "description": "Shows position of flood lights."
+		   },
+		  {
+		       "key": "areoway",
+		       "value": "navigationaid",
+		       "object_types": ["node"],
+		       "description": "Shows position of aviation lights."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "als",
+		       "object_types": ["node"],
+		       "description": "Shows position of approach lighting systems."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "papi",
+		       "object_types": ["node"],
+		       "description": "Shows position of PAPI lights."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "vasi",
+		       "object_types": ["node"],
+		       "description": "Shows position of VASI lights."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "twe",
+		       "object_types": ["node"],
+		       "description": "Shows position of taxiway edge lights."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "twc",
+		       "object_types": ["node"],
+		       "description": "Shows position of taxiway centreline lights."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "rwe",
+		       "object_types": ["node"],
+		       "description": "Shows position of runway edge lights."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "rwc",
+		       "object_types": ["node"],
+		       "description": "Shows position of runway centreline lights."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "tdz",
+		       "object_types": ["node"],
+		       "description": "Shows position of touchdown zone lights."
+		   },
+		  {
+		       "key": "navigationaid",
+		       "value": "rgl",
+		       "object_types": ["node"],
+		       "description": "Shows position of runway guard lights."
 		   },
 		  {
 		       "key": "ref",

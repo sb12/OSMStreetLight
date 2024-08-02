@@ -13,7 +13,7 @@ Es werden zur Zeit die folgenden Tags für die Straßenlaternen-Ebene unterstüt
 
 Currently the following tags are supported for the street light layer:
 
-* `highway = street_lamp` | `light_source=lantern|floodlight|*` | `tower:type=lighting`
+* `highway=street_lamp` | `light_source=lantern|floodlight|*` | `tower:type=lighting`
 * `ref|lamp_ref=*`
 * `operator|lamp_operator=*`
 * `start_date=*`
@@ -29,6 +29,13 @@ Currently the following tags are supported for the street light layer:
 * `width=*`
 * `support=*`
 
+Die folgenden zusätzlichen Tags werden für die Flughafenbefeuerung ausgewertet:
+
+The following additional tags are used for aviation lights:
+
+* `light_source=aviation`
+* `aeroway=navigationaid`
+* `navigationaid=als|papi|vasi|txe|txc|rwe|rwc|tdz|rgl`
 
 Es werden zur Zeit die folgenden Tags für die Beleuchtete-Straßen- und Unbeleuchtete-Straßen-Ebene unterstützt:
 

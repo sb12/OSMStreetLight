@@ -41,15 +41,19 @@
 
 		
 			MarkerArray = new Array();
-			var StreetLights = new L.LayerGroup([],{
+			var StreetLightsLayer = new L.LayerGroup([],{
 				maxZoom : 19,
 				minZoom : 15
 			});
-			var LitStreets = new L.LayerGroup([],{
+			var AviationLayer = new L.LayerGroup([],{
 				maxZoom : 19,
 				minZoom : 15
 			});
-			var UnLitStreets = new L.LayerGroup([],{
+			var LitStreetsLayer = new L.LayerGroup([],{
+				maxZoom : 19,
+				minZoom : 15
+			});
+			var UnLitStreetsLayer = new L.LayerGroup([],{
 				maxZoom : 19,
 				minZoom : 15
 			});
@@ -83,9 +87,10 @@
 			};
 
 			var overlayMaps = {
-				"<span id='layer_street_lights'>Street Lights</span>": StreetLights,
-				"<span id='layer_lit_streets'>Lit Streets</span>": LitStreets,
-				"<span id='layer_unlit_streets'>Unlit Streets</span>": UnLitStreets
+				"<span id='layer_street_lights'>Street Lights</span>": StreetLightsLayer,
+				"<span id='layer_aviation_lights'>Aviation Lights</span>": AviationLayer,
+				"<span id='layer_lit_streets'>Lit Streets</span>": LitStreetsLayer,
+				"<span id='layer_unlit_streets'>Unlit Streets</span>": UnLitStreetsLayer
 			};
 
 			// add locate control:				
@@ -141,20 +146,21 @@
 			// default starting view of whole world
 			var ort = new L.LatLng(30, 10);
 			map.setView(ort, 3).addLayer(current_layer);
-			// Request rough IP-based location if non is found in URL
+			// Request rough IP-based location if none is found in URL
 			if (document.URL.search(/#/)==-1){
 				L.GeoLocation.centerMapOnPosition(map, 8)
 			}
 
 
-			map.addLayer(StreetLights);
-			LitStreets.on('add',function(){Moveaufruf();});
+			map.addLayer(StreetLightsLayer);
+			map.addLayer(AviationLayer);
+			LitStreetsLayer.on('add',function(){Moveaufruf();});
 			if(window.location.search.indexOf("lit_streets") != -1) {
-				map.addLayer(LitStreets);
+				map.addLayer(LitStreetsLayer);
 			}
-			UnLitStreets.on('add',function(){Moveaufruf();});
+			UnLitStreetsLayer.on('add',function(){Moveaufruf();});
 			if(window.location.search.indexOf("unlit_streets") != -1) {
-				map.addLayer(UnLitStreets);
+				map.addLayer(UnLitStreetsLayer);
 			}
 
 			//Permalink
@@ -170,12 +176,9 @@
 
 			map.on('baselayerchange', function (e) {
 				current_layer = e.layer;
-				opacitySlider.setOpacityLayer(current_layer);
-				
+				opacitySlider.setOpacityLayer(current_layer);		
 			});
 			
-
-
 		</script>
 		<div id="zoomwarning_cont">
 			<div id="zoomwarning">
