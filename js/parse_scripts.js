@@ -358,63 +358,63 @@ function parseOSM(daten)
 				"<br><a href='#' onclick='openinJOSM(\""+EleType+"\",\""+EleID+"\")'>edit in JOSM</a> | <a href='https://www.openstreetmap.org/"+EleType+"/"+EleID+"'>show in OSM</a>"
 				;
 			
-			if (light_height == "" && lamp_height != "")
-			{
+			if (light_height == "" && lamp_height != "") {
 				light_height = lamp_height;
 			}
 
 
-			if($.inArray(EleID, MarkerArray)==-1)
-			{
-				i = light_count;
-
-				light_direction_array = light_direction.split(";")
+			if($.inArray(EleID, MarkerArray)==-1) {
+				var i = light_count;
+				var light_direction_array = light_direction.split(";")
+				
 				ref_array = ref.split(";")
 				pos_direction = new Array();
 
-				if (light_count > 1)
-				{
-					if (light_direction_array[0] >= 0 && light_direction_array[0] <= 360)
-					{
+				if (light_count > 1) {
+					if (light_direction_array[0] >= 0 && light_direction_array[0] <= 360) {
 						pos_direction[0] = light_direction_array[0];
-					}
-					else
-					{
+					} else {
 						pos_direction[0] = 0;
 					}
 				}
 
-				j = 0;
-				while (i > 0)
+				var j = 0;
+				
+				// Handle lights with only one direction given
+				var one_dir = false;
+				if (light_direction_array.length == 1 && light_count > 1)
 				{
-
-					if (light_count > 1)
-					{
-						if (light_direction_array[j] >= 0 && light_direction_array[j] <= 360)
-						{
+					var one_dir = true;
+					var pos_direction_0 = pos_direction[0] // keep first value in memory
+				}
+				
+				while (i > 0) {
+					if (light_count > 1) {
+						if (one_dir) { //only one direction value given -> assume all lights are parallel:		
+							pos_direction[j] = pos_direction_0 * 1 + 90;
+							pos_distance = 1.5 * j - ( (1.5 * light_count) / 2 );
+							if ( pos_direction[j] > 360 ) {
+								pos_direction[j] = pos_direction[j] - 360;
+							}
+						} else if (light_direction_array[j] >= 0 && light_direction_array[j] <= 360) {
 							pos_direction[j] = light_direction_array[j];
-						}
-						else if (j > 0)
-						{
-							pos_direction[j] = pos_direction[j-1]*1 + 360 / light_count;
-							if ( pos_direction[j] > 360 )
-							{
+							pos_distance = 1.5
+						} else if (j > 0) {
+							pos_direction[j] = pos_direction[0] * 1 + 360 / light_count;
+							pos_distance = 1.5 
+							if ( pos_direction[j] > 360 ) {
 								pos_direction[j] = pos_direction[j] - 360;
 							}
 						}
-						[EleLatNew,EleLonNew] = addLatLngDistanceM(EleLat,EleLon,pos_direction[j],1.5)
-					}
-					else
-					{
+						[EleLatNew,EleLonNew] = addLatLngDistanceM(EleLat,EleLon,(pos_direction[j]),pos_distance)
+					} else {
 						[EleLatNew,EleLonNew] = [EleLat,EleLon]
 					}
 
-					if (!light_direction_array[j])
-					{
+					if (!light_direction_array[j]) {
 						light_direction_array[j] = light_direction_array[j-1];
 					}
-					if (!ref_array[j])
-					{
+					if (!ref_array[j]) {
 						ref_array[j] = "";
 					}
 
@@ -515,26 +515,22 @@ function addLatLngDistanceM(EleLat,EleLon,angle,distance)
 	LatRad = EleLat * Math.PI / 180;
 	deg_lat_per_m  = 1 / ( 111132.92 - 559.82 * Math.cos( 2 * LatRad ) + 1.175 * Math.cos( 4 * LatRad ) - 0.0023 * Math.cos( 6 * LatRad ) );
 	deg_lon_per_m = 1 / ( 111412.84 * Math.cos ( LatRad ) - 93.5 * Math.cos ( 3 * LatRad ) + 0.118 * Math.cos ( 5 * LatRad ) );
+	
+	Lat_dist_m = 0; // Default fallback value
+	Lon_dist_m = 0; // Default fallback value
 
 	angle = angle * Math.PI / 180;
 	// for now only on Northern hemisphere
-	if ( angle >= 0 && angle < 90 )
-	{
+	if ( angle >= 0 && angle < 90 ) {
 		Lat_dist_m = Math.cos ( angle ) * distance;
 		Lon_dist_m = Math.sin ( angle ) * distance;
-	}
-	else if ( angle >= 90 && angle < 180 )
-	{
+	} else if ( angle >= 90 && angle < 180 ) {
 		Lat_dist_m = -Math.sin ( Math.PI - angle ) * distance;
 		Lon_dist_m = Math.cos ( Math.PI - angle ) * distance;
-	}
-	else if ( angle >= 180 && angle < 270 )
-	{
+	} else if ( angle >= 180 && angle < 270 ) {
 		Lat_dist_m = -Math.cos ( Math.PI * 3 / 2 - angle ) * distance;
 		Lon_dist_m = -Math.sin ( Math.PI * 3 / 2 - angle ) * distance;
-	}
-	else if ( angle >= 270 && angle <= 360 )
-	{
+	} else if ( angle >= 270 && angle <= 360 ) {
 		Lat_dist_m = Math.sin ( Math.PI * 2 - angle ) * distance;
 		Lon_dist_m = -Math.cos ( Math.PI * 2 - angle ) * distance;
 	}
