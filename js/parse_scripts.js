@@ -389,51 +389,47 @@ function parseOSM(daten)
 
 
 			if($.inArray(EleID, MarkerArray)==-1) {
-				var i = light_count;
 				var light_direction_array = light_direction.split(";")
+				var ref_array = ref.split(";")
 				
-				ref_array = ref.split(";")
-				pos_direction = new Array();
-
-				if (light_count > 1) {
-					if (light_direction_array[0] >= 0 && light_direction_array[0] <= 360) {
-						pos_direction[0] = light_direction_array[0];
-					} else {
-						pos_direction[0] = 0;
-					}
-				}
-
-				var j = 0;
 				
 				// Handle lights with only one direction given
-				var one_dir = false;
-				if (light_direction_array.length == 1 && light_count > 1)
+				var single_dir = false;
+				if (light_direction_array.length == 1 && light_count > 1 && (light_direction_array[0] > 0 || light_direction_array[0] === 0))
 				{
-					var one_dir = true;
-					var pos_direction_0 = pos_direction[0] // keep first value in memory
+					var single_dir = true;
+					var pos_direction_0 = light_direction_array[0] // keep first value in memory
 				}
 				
+				var i = light_count; 
+				var j = 0;
+				var pos_direction = new Array();
 				while (i > 0) {
+					// Positioning of multiple lights at same spot (light_count > 1)
 					if (light_count > 1) {
-						if (one_dir) { //only one direction value given -> assume all lights are parallel:		
+						if (single_dir) { //only one direction value given -> assume all lights are parallel:		
 							pos_direction[j] = pos_direction_0 * 1 + 90;
 							pos_distance = 1.5 * j - ( (1.5 * light_count) / 2 );
 							if ( pos_direction[j] > 360 ) {
 								pos_direction[j] = pos_direction[j] - 360;
 							}
-						} else if (light_direction_array[j] >= 0 && light_direction_array[j] <= 360) {
+						} else if (light_direction_array[j] === 0 || (light_direction_array[j] > 0 && light_direction_array[j] <= 360 )) {
 							pos_direction[j] = light_direction_array[j];
-							pos_distance = 1.5
+							pos_distance = 1.5;
 						} else if (j > 0) {
-							pos_direction[j] = pos_direction[0] * 1 + 360 / light_count;
-							pos_distance = 1.5 
+							pos_direction[j] = pos_direction[j-1] * 1 + 360 / light_count;
+							pos_distance = 1.5 ;
 							if ( pos_direction[j] > 360 ) {
 								pos_direction[j] = pos_direction[j] - 360;
 							}
+						} else {
+							pos_direction[j] = 0;
+							pos_distance = 1.5;
 						}
-						[EleLatNew,EleLonNew] = addLatLngDistanceM(EleLat,EleLon,(pos_direction[j]),pos_distance)
+						console.log(EleLat + " " + EleLon + " " + pos_direction[j] + " " + pos_distance);
+						[EleLatNew,EleLonNew] = addLatLngDistanceM(EleLat,EleLon,(pos_direction[j]),pos_distance);
 					} else {
-						[EleLatNew,EleLonNew] = [EleLat,EleLon]
+						[EleLatNew,EleLonNew] = [EleLat,EleLon];
 					}
 
 					if (!light_direction_array[j]) {
@@ -944,9 +940,10 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 
 		if (cardinal.hasOwnProperty(light_direction)) {
 			usedDir = cardinal[light_direction];
-		} else {
-			usedDir = light_direction; /* let's hope it's numeric */
-			/* ignore to_street  to_crossing */
+		} else if (light_direction > 0 && light_direction <= 360) { // exclude 0 as it is used as fallback anyway
+			usedDir = light_direction;
+		} else {/* ignore to_street  to_crossing */
+			usedDir = 0
 		}
 	}
 	if (usedDir && light_source == "floodlight") {
