@@ -35,6 +35,12 @@
 		   },
 		  {
 		       "key": "light_source",
+		       "value": "warning",
+		       "object_types": ["node"],
+		       "description": "Shows position of aviation warning lights."
+		   },
+		  {
+		       "key": "light_source",
 		       "value": "aviation",
 		       "object_types": ["node"],
 		       "description": "Shows position of aviation lights."

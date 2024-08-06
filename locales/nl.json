@@ -36,6 +36,7 @@
 	"lamp_operator" : "Exploitant",
 	"lamp_lantern" : "Straatlantaarn",
 	"lamp_floodlight" : "Schijnwerper",
+	"lamp_warning" : "Aviation obstruction lighting",
 	"lamp_aviation" : "Unknown aviation light",
 	"lamp_aviation_als" : "Approach Lighting System (ALS)",
 	"lamp_aviation_papi" : "Precision Approach Path Indicator (PAPI)",

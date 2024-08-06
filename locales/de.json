@@ -36,6 +36,7 @@
 	"lamp_operator" : "Betreiber",
 	"lamp_lantern" : "Straßenlaterne",
 	"lamp_floodlight" : "Flutlicht",
+	"lamp_warning" : "Luftfahrthindernisbefeuerung",
 	"lamp_aviation" : "Sonstige Flughafenbefeuerung",
 	"lamp_aviation_als" : "Anflugbefeuerung (ALS)",
 	"lamp_aviation_papi" : "Präzisions-Anflug Gleitwinkelbefeuerung (PAPI)",

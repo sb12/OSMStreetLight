@@ -298,6 +298,8 @@ function parseOSM(daten)
 				light_type = i18next.t("lamp_lantern");
 			} else if(light_source == "floodlight") {
 				light_type = i18next.t("lamp_floodlight");
+			} else if(light_source == "warning") {
+				light_type = i18next.t("lamp_warning");
 			} else if(light_source == "aviation") {
 				if(navigationaid == "als") { // Approach Lighting System
 					light_type = i18next.t("lamp_aviation_als");
@@ -449,7 +451,7 @@ function parseOSM(daten)
 							marker.bindPopup(EleText);
 						}
 						
-					if(light_source == "aviation") {
+					if(light_source == "aviation" || light_source == "warning") {
 						AviationLayer.addLayer(marker);
 					} else {
 						StreetLightsLayer.addLayer(marker);
@@ -748,6 +750,12 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 			colour_url = "_mercury";
 		}
 	}
+	// default light colour for warning lights if unset:
+	if (light_source == "warning") {
+		if (!colour_url) {
+			colour_url = "_red";
+		}
+	}
 	// default light colours for aviation lights if unset:
 	if(navigationaid == "txe") {
 		if (!colour_url) {
@@ -792,7 +800,7 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 		//if (light_height > 10)
 		zoomClass = 19;
 		refclass = "lamp_ref_19_text";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl") {
+		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 17;
 		} else if (navigationaid) {
 			zoomClass = 16
@@ -808,7 +816,7 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	} else if ( map.getZoom() == 18) {  
 		zoomClass = 18;
 		refclass = "lamp_ref_18_text";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl") {
+		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 16;
 		} else if (navigationaid) {
 			zoomClass = 15
@@ -824,7 +832,7 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	} else if ( map.getZoom() == 17) {
 		zoomClass = 17;
 		refclass = "lamp_ref_17_text";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl") {
+		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 15;
 		} else if (navigationaid) {
 			zoomClass = 14;
@@ -840,7 +848,7 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	} else if ( map.getZoom() == 16) {
 		zoomClass = 16;
 		refclass = "lamp_ref_none";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl") {
+		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 14;
 		} else if (navigationaid) {
 			zoomClass = 13;
@@ -856,7 +864,7 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	} else if ( map.getZoom() <= 15) {
 		zoomClass = 15;
 		refclass = "lamp_ref_none";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl") {
+		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 13;
 		} else if (navigationaid) {
 			zoomClass = 12;

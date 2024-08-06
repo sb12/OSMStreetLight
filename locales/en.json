@@ -36,6 +36,7 @@
 	"lamp_operator" : "Operator",
 	"lamp_lantern" : "Street lantern",
 	"lamp_floodlight" : "Floodlight",
+	"lamp_warning" : "Aviation obstruction lighting",
 	"lamp_aviation" : "Unknown aviation light",
 	"lamp_aviation_als" : "Approach Lighting System (ALS)",
 	"lamp_aviation_papi" : "Precision Approach Path Indicator (PAPI)",

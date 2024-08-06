@@ -33,7 +33,7 @@ Die folgenden zusätzlichen Tags werden für die Flughafenbefeuerung ausgewertet
 
 The following additional tags are used for aviation lights:
 
-* `light_source=aviation`
+* `light_source=aviation|warning`
 * `aeroway=navigationaid`
 * `navigationaid=als|papi|vasi|txe|txc|rwe|rwc|tdz|rgl`
 
