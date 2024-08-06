@@ -10,6 +10,8 @@
 		<link rel="stylesheet" href="jquery/jquery-ui.min.css" />
 		<link rel="stylesheet" href="style.css" />
 
+		<!-- Load settings -->
+		<script src="js/settings.js" type="text/javascript"></script>
 		<!-- Load jquery -->
 		<script src="jquery/jquery-1.12.4.min.js"></script>
 		<script src="jquery/jquery-ui.min.js"></script>
@@ -37,9 +39,6 @@
 	<body style="margin:0px">
 		<div id="map" style="height: 100%"></div>
 		<script>
-			
-
-		
 			MarkerArray = new Array();
 			var StreetLightsLayer = new L.LayerGroup([],{
 				maxZoom : 19,
@@ -93,27 +92,21 @@
 				"<span id='layer_unlit_streets'>Unlit Streets</span>": UnLitStreetsLayer
 			};
 
-			// add locate control:				
-			$(document).ready(function(){
-			// load settings:
-				$.getJSON("settings.json", function(data){
-					if (data.show_geolocate_button)
-					{
-						var lc = L.control.locate({
-							setView : "once",
-							initialZoomLevel : 13,
-							showCompass : false,
-							drawCircle : false,
-							drawMarker : false,
-							clickBehavior: {
-								inView : "setView",
-								outOfView : "setView",
-								inViewNotFollowing : "setView"
-							}
-						}).addTo(map);
+			// add locate control:			
+			if (SHOW_GEOLOCATE_BUTTON) {
+				var lc = L.control.locate({
+					setView : "once",
+					initialZoomLevel : 13,
+					showCompass : false,
+					drawCircle : false,
+					drawMarker : false,
+					clickBehavior: {
+						inView : "setView",
+						outOfView : "setView",
+						inViewNotFollowing : "setView"
 					}
-				});
-			});
+				}).addTo(map);
+			}
 
 			// add LanguageSelector
 			var LanguageSelector = new L.Control.LanguageSelector();

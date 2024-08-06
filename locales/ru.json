@@ -7,6 +7,7 @@
 	"lamp_model" : "Модель",
 	"lamp_height" : "Высота",
 	"lamp_width" : "Ширина",
+	"lamp_count" : "Number of light sources",
 	"lamp_light_height" : "Высота света",
 	"lamp_method" : "Источник света",
 	"lamp_method_sodium" : "Натриевая лампа",

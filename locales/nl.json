@@ -7,6 +7,7 @@
 	"lamp_model" : "Model",
 	"lamp_height" : "Hoogte",
 	"lamp_width" : "Breedte",
+	"lamp_count" : "Number of light sources",
 	"lamp_light_height" : "Lichthoogte",
 	"lamp_method" : "Lichtbron",
 	"lamp_method_sodium" : "Natriumlamp",

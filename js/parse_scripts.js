@@ -330,16 +330,41 @@ function parseOSM(daten)
 
 			//Tags that are only shown when available
 
-			if (lamp_start_date!="") lamp_start_date = "<tr><td><b>" + i18next.t("lamp_start_date") + ": </b></td><td>" + lamp_start_date + "</td></tr>";
-			if (lamp_manufacturer!="") lamp_manufacturer = "<tr><td><b>" + i18next.t("lamp_manufacturer") + ": </b></td><td>" + lamp_manufacturer + "</td></tr>";
-			if (lamp_model!="") lamp_model_text = "<tr><td><b>" + i18next.t("lamp_model") + ": </b></td><td>" + lamp_model + "</td></tr>";
-			if (lamp_height!="") lamp_height_text = "<tr><td><b>" + i18next.t("lamp_height") + ": </b></td><td>" + lamp_height + " m</td></tr>";
-			if (light_height!="") light_height_text = "<tr><td><b>" + i18next.t("lamp_light_height") + ": </b></td><td>" + light_height + " m</td></tr>";
-			if (lamp_width!="") lamp_width_text = "<tr><td><b>" + i18next.t("lamp_width") + ": </b></td><td>" + lamp_width + "</td></tr>";
-			if (light_method!="") light_method_text = "<tr><td><b>" + i18next.t("lamp_method") + ": </b></td><td>" + get_light_method(light_method) + "</td></tr>";
-			if (light_mount!="") light_mount_text = "<tr><td><b>" + i18next.t("lamp_mount") + ": </b></td><td>" + get_light_mount(light_mount) + "</td></tr>";
-			if (light_lit!="") light_lit_text = "<tr><td><b>" + i18next.t("lamp_time") + ": </b></td><td>" + get_light_lit(light_lit) + "</td></tr>";
-
+			if (lamp_start_date!="") {
+				lamp_start_date = "<tr><td><b>" + i18next.t("lamp_start_date") + ": </b></td><td>" + lamp_start_date + "</td></tr>";
+			}
+			if (lamp_manufacturer!="") {
+				lamp_manufacturer = "<tr><td><b>" + i18next.t("lamp_manufacturer") + ": </b></td><td>" + lamp_manufacturer + "</td></tr>";
+			}
+			if (lamp_model!="") {
+				lamp_model_text = "<tr><td><b>" + i18next.t("lamp_model") + ": </b></td><td>" + lamp_model + "</td></tr>";
+			}
+			if (lamp_height!="") {
+				lamp_height_text = "<tr><td><b>" + i18next.t("lamp_height") + ": </b></td><td>" + lamp_height + " m</td></tr>";
+			}
+			if (light_height!="") {
+				light_height_text = "<tr><td><b>" + i18next.t("lamp_light_height") + ": </b></td><td>" + light_height + " m</td></tr>";
+			}
+			if (lamp_width!="") {
+				lamp_width_text = "<tr><td><b>" + i18next.t("lamp_width") + ": </b></td><td>" + lamp_width + "</td></tr>";
+			}
+			if (light_method!="") {
+				light_method_text = "<tr><td><b>" + i18next.t("lamp_method") + ": </b></td><td>" + get_light_method(light_method) + "</td></tr>";
+			}
+			if (light_mount!="") {
+				light_mount_text = "<tr><td><b>" + i18next.t("lamp_mount") + ": </b></td><td>" + get_light_mount(light_mount) + "</td></tr>";
+			}
+			if (light_lit!="") {
+				light_lit_text = "<tr><td><b>" + i18next.t("lamp_time") + ": </b></td><td>" + get_light_lit(light_lit) + "</td></tr>";
+			}
+			if (light_count > 1) {
+				light_lit_text = "<tr><td><b>" + i18next.t("lamp_count") + ": </b></td><td>" + light_count + "</td></tr>";
+			}
+			
+			// Restrict number of shown light sources for single points to reduce clutter
+			if (light_count > 1) {
+				light_count = Math.min(light_count, LIGHT_COUNT_MAX)
+			}
 
 			EleText =
 				"<b>" + light_type + " " + ref + "</b><br>" +
