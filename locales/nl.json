@@ -47,6 +47,7 @@
 	"lamp_aviation_rwc" : "Runway centreline light",
 	"lamp_aviation_tdz" : "Touchdown zone light",
 	"lamp_aviation_rgl" : "Runway guard light",
+	"lamp_aviation_beacon" : "Aerodrome Beacon",
 	"lamp_unknown" : "Onbekende lichtbron",
 	"website_title" : "Straatlantaarns in OSM",
 	"lang_select" : "Verander taal",

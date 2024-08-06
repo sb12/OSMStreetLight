@@ -112,6 +112,12 @@
 		       "description": "Shows position of runway guard lights."
 		   },
 		  {
+		       "key": "navigationaid",
+		       "value": "beacon",
+		       "object_types": ["node"],
+		       "description": "Shows position of aerodrome beacon."
+		   },
+		  {
 		       "key": "ref",
 		       "object_types": ["node"],
 		       "description": "Shows ref of light sources."

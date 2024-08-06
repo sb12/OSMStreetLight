@@ -47,6 +47,7 @@
 	"lamp_aviation_rwc" : "Mittellinienfeuer Start- und Landebahn",
 	"lamp_aviation_tdz" : "Landebahnaufsetzzone",
 	"lamp_aviation_rgl" : "Rollhalt",
+	"lamp_aviation_beacon" : "Flugplatzleuchtfeuer",
 	"lamp_unknown" : "Unbekannte Lichtquelle",
 	"website_title" : "Straßenlaternen in OpenStreetMap",
 	"lang_select" : "Sprache ändern",

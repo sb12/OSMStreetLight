@@ -184,7 +184,6 @@ function parseOSM(daten)
 		$(this).find('tag').each(function(){
 			EleKey = $(this).attr("k");
 			EleValue = $(this).attr("v");
-			//EleText = EleText + "<b>" + EleKey + ": </b>" + EleValue + "<br/>";
 			if ((EleKey=="highway"))
 			{
 				highway = EleValue;
@@ -282,11 +281,11 @@ function parseOSM(daten)
 		});
 
 		if (highway == "street_lamp" && light_source == "") {
-			light_source="lantern"
+			light_source = "lantern";
 		}
 
 		if (aeroway == "navigationaid" && light_source == "") {
-			light_source="aviation"
+			light_source = "aviation";
 			if (!navigationaid){ // unknown navigationaid
 				navigationaid = "unknown"
 			}
@@ -319,6 +318,8 @@ function parseOSM(daten)
 					light_type = i18next.t("lamp_aviation_tdz");
 				} else if(navigationaid == "rgl") { // Runway Guard Light
 					light_type = i18next.t("lamp_aviation_rgl");
+				} else if(navigationaid == "beacon") { // Aerodrome Beacon
+					light_type = i18next.t("lamp_aviation_beacon");
 				} else {
 					light_type = i18next.t("lamp_aviation");
 				}
@@ -331,7 +332,6 @@ function parseOSM(daten)
 			}
 
 			//Tags that are only shown when available
-
 			if (lamp_start_date!="") {
 				lamp_start_date = "<tr><td><b>" + i18next.t("lamp_start_date") + ": </b></td><td>" + lamp_start_date + "</td></tr>";
 			}
@@ -389,12 +389,10 @@ function parseOSM(daten)
 				light_height = lamp_height;
 			}
 
-
 			if($.inArray(EleID, MarkerArray)==-1) {
 				var light_direction_array = light_direction.split(";")
 				var ref_array = ref.split(";")
-				
-				
+ 
 				// Handle lights with only one direction given
 				var single_dir = false;
 				if (light_direction_array.length == 1 && light_count > 1 && (light_direction_array[0] > 0 || light_direction_array[0] === 0))
@@ -660,24 +658,17 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 
 	var symbol_url = "electric";
 
-	if(light_source == "xmas")
-	{
+	if(light_source == "xmas") {
 		symbol_url = "xmastree";
-	}
-	else if(light_source == "floodlight")
-	{
+	} else if(navigationaid == "beacon") {
+		symbol_url = "beacon";
+	} else if(light_source == "floodlight") {
 		symbol_url = "floodlight";
-		
-		if(light_direction)
-		{
+		if(light_direction) {
 			symbol_url = "floodlight_directed";
 		}
-	}
-	else
-	{
-
-		if((light_source == "lantern" || light_source == "aviation") && light_shape == "directed" && light_direction)
-		{
+	} else {
+		if((light_source == "lantern" || light_source == "aviation") && light_shape == "directed" && light_direction) {
 			symbol_url = "electric_directed";
 		}
 	}
@@ -759,32 +750,34 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	// default light colours for aviation lights if unset:
 	if(navigationaid == "txe") {
 		if (!colour_url) {
-			colour_url = "_blue"
+			colour_url = "_blue";
 		}
 	} else if(navigationaid == "txc") {
 		if (!colour_url) {
-			colour_url = "_green"
+			colour_url = "_green";
 		}
 	} else if(navigationaid == "rwe") {
 		if (!colour_url) {
-			colour_url = "_white"
+			colour_url = "_white";
 		}
 	} else if(navigationaid == "rwc") {
 		if (!colour_url) {
-			colour_url = "_white"
+			colour_url = "_white";
 		}
 	} else if(navigationaid == "tdz") {
 		if (!colour_url) {
-			colour_url = "_white"
+			colour_url = "_white";
 		}
 	} else if(navigationaid == "rgl") {
 		if (!colour_url) {
-			colour_url = "_yellow"
+			colour_url = "_yellow";
 		}
 	} else if(navigationaid == "vasi" || navigationaid == "papi") {
 		if (!colour_url) {
-			colour_url = "_redwhite"
+			colour_url = "_redwhite";
 		}
+	} else if(navigationaid == "beacon") {
+		colour_url = "_white";
 	}
 	
 	var direction = "";
@@ -800,7 +793,9 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 		//if (light_height > 10)
 		zoomClass = 19;
 		refclass = "lamp_ref_19_text";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
+		if (navigationaid == "beacon") {
+			zoomClass = 21;
+		} else if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 17;
 		} else if (navigationaid) {
 			zoomClass = 16
@@ -816,7 +811,9 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	} else if ( map.getZoom() == 18) {  
 		zoomClass = 18;
 		refclass = "lamp_ref_18_text";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
+		if (navigationaid == "beacon") {
+			zoomClass = 21;
+		} else if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 16;
 		} else if (navigationaid) {
 			zoomClass = 15
@@ -832,7 +829,9 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	} else if ( map.getZoom() == 17) {
 		zoomClass = 17;
 		refclass = "lamp_ref_17_text";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
+		if (navigationaid == "beacon") {
+			zoomClass = 20;
+		} else if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 15;
 		} else if (navigationaid) {
 			zoomClass = 14;
@@ -848,7 +847,9 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	} else if ( map.getZoom() == 16) {
 		zoomClass = 16;
 		refclass = "lamp_ref_none";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
+		if (navigationaid == "beacon") {
+			zoomClass = 19;
+		} else if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 14;
 		} else if (navigationaid) {
 			zoomClass = 13;
@@ -864,7 +865,9 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 	} else if ( map.getZoom() <= 15) {
 		zoomClass = 15;
 		refclass = "lamp_ref_none";
-		if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
+		if (navigationaid == "beacon") {
+			zoomClass = 18;
+		} else if (navigationaid == "als" || navigationaid == "papi" || navigationaid == "vasi" || navigationaid == "rwe" || navigationaid == "rwc" || navigationaid == "tdz" || navigationaid == "rgl" || light_source == "warning") {
 			zoomClass = 13;
 		} else if (navigationaid) {
 			zoomClass = 12;
