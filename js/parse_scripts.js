@@ -55,7 +55,7 @@ function loadData(bbox)
 			'(way["highway"][area]["lit"]; >;); ';
 	}
 	XMLRequestText += '); out qt; '
-	console.log ( XMLRequestText );
+	//console.log ( XMLRequestText );
 
 	//URL Codieren
 	XMLRequestText = encodeURIComponent(XMLRequestText);
@@ -426,7 +426,6 @@ function parseOSM(daten)
 							pos_direction[j] = 0;
 							pos_distance = 1.5;
 						}
-						console.log(EleLat + " " + EleLon + " " + pos_direction[j] + " " + pos_distance);
 						[EleLatNew,EleLonNew] = addLatLngDistanceM(EleLat,EleLon,(pos_direction[j]),pos_distance);
 					} else {
 						[EleLatNew,EleLonNew] = [EleLat,EleLon];
