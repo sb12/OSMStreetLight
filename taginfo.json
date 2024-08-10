@@ -188,6 +188,16 @@
 		       "description": "Shows the time when lights are lit."
 		   },
 		  {
+		       "key": "light:flash",
+		       "object_types": ["node"],
+		       "description": "Show flashing lights."
+		   },
+		  {
+		       "key": "light:character",
+		       "object_types": ["node"],
+		       "description": "Show flashing lights."
+		   },
+		  {
 		       "key": "light:height",
 		       "object_types": ["node"],
 		       "description": "Shows the height of the light, influences the size of symbols."

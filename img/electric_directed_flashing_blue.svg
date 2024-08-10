@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="16"
+   height="16">
+<radialGradient id="radialGradient882" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.4907117,1.0317216e-7,-1.3412382e-7,1.9379256,-7.9999949,-6.4444465)"
+       cx="10.733127"
+       cy="7.4535599"
+       fx="10.733127"
+       fy="7.4535599"
+       r="3.3541019" >
+    <stop offset="0%" stop-opacity="2" stop-color="#5555FF" id="stop2" > 
+	  <animate attributeName="stop-opacity"
+        values="0;1;0" 
+		dur="1s"
+        repeatCount="indefinite"/>
+	</stop>
+    <stop offset="100%" stop-opacity="0" stop-color="#5555FF" id="stop4" />
+  </radialGradient>
+  <circle
+     cx="8"
+     cy="8"
+     r="0.5"
+     fill="#5555FF"
+     id="circle7" > 
+	<animate attributeName="opacity"
+      values="0;1;0" 
+	  dur="1s"
+      repeatCount="indefinite"/>
+  </circle>
+  <path
+     style="opacity:0.4;vector-effect:none;fill:url(#radialGradient882);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="M 4.5,8.5 C 5,9 7,9.5 8,9.5 9,9.5 11,9 11.5,8.5 12,8 13,6.5 13,6 13,5 9,1.5 8,1.5 7,1.5 3,5 3,6 3,6.5 4,8 4.5,8.5 Z" />
+</svg>

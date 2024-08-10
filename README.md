@@ -18,6 +18,7 @@ Currently the following tags are supported for the street light layer:
 * `operator|lamp_operator=*`
 * `start_date=*`
 * `light:colour=white|orange|yellow|blue|red|green`
+* `light:flash=yes|pattern` | `light:character=*`
 * `light:method|lamp_type=high_pressure_sodium|high-pressure_sodium|SON|HPSV|low_pressure_sodium|low-pressure_sodium|SOX|sodium|sodium_vapor|LED|led|metal-halide|metal_halide|fluorescent|incandescent|mercury|electric|electrical|gas|gaslight`
 * `light:mount|lamp_mount|support=straight mast|straight_mast|bent mast|bent_mast|cast steel mast|cast_steel_mast|mast|pole|power_pole|wall_mounted|wall|suspended|wire|ceiling|ground`
 * `light:count=1|2|3|4`

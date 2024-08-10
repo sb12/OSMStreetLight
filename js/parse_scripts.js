@@ -165,6 +165,7 @@ function parseOSM(daten)
 		var light_colour = "";
 		var light_count = 1;
 		var light_direction = "";
+		var light_flash = "";
 		var light_height = "";
 		var light_height_text = "";
 		var light_lit = "";
@@ -251,6 +252,14 @@ function parseOSM(daten)
 			if ((EleKey=="light:shape"))
 			{
 				light_shape = EleValue;
+			}
+			if ((EleKey=="light:flash"))
+			{
+				light_flash = EleValue;
+			}
+			if ((EleKey=="light:character" && EleValue != "fixed"))
+			{
+				light_flash = "yes";
 			}
 			if ((EleKey=="light_source"))
 			{
@@ -440,7 +449,7 @@ function parseOSM(daten)
 
 					var markerLocation = new L.LatLng(EleLatNew,EleLonNew);
 					
-						var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_direction_array[j], light_shape, light_height, navigationaid, ref_array[j]);
+						var Icon = getMarkerIcon(L,light_source, light_method, light_colour, light_flash, light_direction_array[j], light_shape, light_height, navigationaid, ref_array[j]);
 						var marker = new L.Marker(markerLocation,{icon : Icon});
 
 						if(EleText!="")
@@ -653,7 +662,7 @@ function get_light_mount(value){
 }
 
 
-function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,light_shape,light_height,navigationaid,ref){
+function getMarkerIcon(L,light_source,light_method,light_colour,light_flash,light_direction,light_shape,light_height,navigationaid,ref){
 
 	var symbol_url = "electric";
 
@@ -666,9 +675,14 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_direction,
 		if(light_direction) {
 			symbol_url = "floodlight_directed";
 		}
+	} else if((light_source == "lantern" || light_source == "aviation") && light_shape == "directed" && light_direction) {
+		symbol_url = "electric_directed";
+		if (light_flash && light_flash != "no") {
+			symbol_url = "electric_directed_flashing";
+		}
 	} else {
-		if((light_source == "lantern" || light_source == "aviation") && light_shape == "directed" && light_direction) {
-			symbol_url = "electric_directed";
+		if (light_flash && light_flash != "no") {
+			symbol_url = "electric_flashing";
 		}
 	}
 
