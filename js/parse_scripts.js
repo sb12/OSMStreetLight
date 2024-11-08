@@ -943,7 +943,7 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_flash,ligh
 		refclass = "lamp_ref_13 " + refclass;
 	}
 
-	if(light_direction) {
+	if(light_direction || light_direction === 0) {
 		var cardinal = new Object();
 		cardinal['N'] = 0;
 		cardinal['NNE'] = 22.5;
@@ -970,7 +970,7 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_flash,ligh
 			usedDir = 0
 		}
 	}
-	if (usedDir && light_source == "floodlight") {
+	if (usedDir >= 0 && light_source == "floodlight") {
 		if(usedDir >= 135 && usedDir <=360) {
 			rotate = usedDir - 135;
 		} else if(usedDir >= 0 && usedDir < 135) {
@@ -980,7 +980,7 @@ function getMarkerIcon(L,light_source,light_method,light_colour,light_flash,ligh
 		var translatey = Math.sin( ( 45 + rotate ) * 2 * Math.PI / 360 ) * Math.sqrt( 2 * iconOffset * iconOffset );
 		direction = '-ms-transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); -webkit-transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); transform: translate(' + translatex + 'px,' + translatey + 'px) rotate(' + rotate + 'deg); ';
 	}
-	if (usedDir && (light_source == "lantern" || light_source == "aviation")){
+	if (usedDir >= 0 && (light_source == "lantern" || light_source == "aviation")){
 		if(usedDir >= 0 && usedDir <=360) {
 				rotate = usedDir - 0;
 		}/*
