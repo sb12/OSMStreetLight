@@ -193,11 +193,19 @@ function parseOSM(daten)
 			{
 				aeroway = EleValue;
 			}
-			if ((EleKey=="operator" || EleKey=="lamp_operator"))
+			if ((EleKey=="operator" && operator==""))
 			{
 				operator = EleValue;
 			}
-			if ((EleKey=="ref" || EleKey=="lamp_ref"))
+			if ((EleKey=="lamp_operator"))
+			{
+				operator = EleValue;
+			}
+			if ((EleKey=="ref" && ref==""))
+			{
+				ref = EleValue;
+			}
+			if ((EleKey=="lamp_ref"))
 			{
 				ref = EleValue;
 			}
@@ -229,7 +237,11 @@ function parseOSM(daten)
 			{
 				light_colour = EleValue;
 			}
-			if ((EleKey=="light:direction" || EleKey=="direction"))
+			if ((EleKey=="light:direction"))
+			{
+				light_direction = EleValue;
+			}
+			if ((EleKey=="direction" && light_direction==""))
 			{
 				light_direction = EleValue;
 			}
