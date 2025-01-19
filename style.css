@@ -17,6 +17,7 @@ button.leaflet-control-geocoder-icon {
 	min-height: 47px;
 	top: 10px; 
 	margin-top: 0px; 
+	margin-bottom: 0px;
 	padding: 0px; 
 	left: 50%; 
     border: 2px solid rgba(0,0,0,0.2);  
@@ -25,12 +26,18 @@ button.leaflet-control-geocoder-icon {
 }
 #zoomwarning {
 	margin: 0px;
-	padding: 5px; 
+	padding: 5px;
 	background-color: #FFFF80; 
 	opacity: 0.8; 
 	text-align: center; 
 	font-size: 16; 
 	border-radius: 4px
+}
+
+#zoomwarning a{
+	text-decoration: underline;
+	/*font-weight:bold;*/
+	cursor: pointer
 }
 
 #loading_cont { 

@@ -32,6 +32,8 @@
 		<script src="leaflet/plugins/Control.Opacity/Control.Opacity.js"></script>
 		<script src="leaflet/plugins/LanguageSelector/LanguageSelector.js"></script>
 		<script src="leaflet/plugins/leaflet-control-geocoder/Control.Geocoder.js"></script>	
+		<script src="leaflet/plugins/heatmap.js/build/heatmap.js"></script>
+		<script src="leaflet/plugins/heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>	
 
 
 		<script src="js/parse_scripts.js" type="text/javascript"></script>
@@ -42,21 +44,52 @@
 		<div id="map" style="height: 100%"></div>
 		<script>
 			MarkerArray = new Array();
+			let g_showStreetLightsLowZoomOnce = false
+			
+			var HeatMap_cfg = {
+			  "maxZoom" : 19,
+			  "minZoom" : MIN_ZOOM_LOW_ZOOM,
+			  // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+			  "radius": 1	,
+			  "maxOpacity": .5, 
+			  "minOpacity": .01, 
+			  // scales the radius based on map zoom
+			  "scaleRadius": false, 
+			  "blur": 0.99,
+			  // if set to false the heatmap uses the global maximum for colorization
+			  // if activated: uses the data maximum within the current map boundaries 
+			  //   (there will always be a red spot with useLocalExtremas true)
+			  "useLocalExtrema": true,
+			  // which field name in your data represents the latitude - default "lat"
+			  latField: 'lat',
+			  // which field name in your data represents the longitude - default "lng"
+			  lngField: 'lng',
+			  // which field name in your data represents the data value - default "value"
+			  valueField: 'count',
+			    gradient: {
+		    // enter n keys between 0 and 1 here
+		    // for gradient color customization
+			//	'.1': 'black',
+				'.9': 'white'
+			  }
+			};
+			
+			var StreetLightsLowZoomLayer = new HeatmapOverlay(HeatMap_cfg);
 			var StreetLightsLayer = new L.LayerGroup([],{
 				maxZoom : 19,
-				minZoom : 15
+				minZoom : MIN_ZOOM
 			});
 			var AviationLayer = new L.LayerGroup([],{
 				maxZoom : 19,
-				minZoom : 15
+				minZoom : MIN_ZOOM
 			});
 			var LitStreetsLayer = new L.LayerGroup([],{
 				maxZoom : 19,
-				minZoom : 15
+				minZoom : MIN_ZOOM
 			});
 			var UnLitStreetsLayer = new L.LayerGroup([],{
 				maxZoom : 19,
-				minZoom : 15
+				minZoom : MIN_ZOOM
 			});
 
 			var OverpassAttrib = 'Data via <a href="http://www.overpass-api.de/">Overpass API</a>';
@@ -88,6 +121,7 @@
 			};
 
 			var overlayMaps = {
+				"<span id='layer_street_lights_lowzoom'>Street Lights Low Zoom</span>": StreetLightsLowZoomLayer,
 				"<span id='layer_street_lights'>Street Lights</span>": StreetLightsLayer,
 				"<span id='layer_aviation_lights'>Aviation Lights</span>": AviationLayer,
 				"<span id='layer_lit_streets'>Lit Streets</span>": LitStreetsLayer,
@@ -134,6 +168,7 @@
 			
 			loadingcounter = 0;
 			var showStreetLights = false;
+			var showStreetLightsLowZoom = false;
 			var opacityHigh = 0.2; // opacity level when showing street lights
 			var opacityLow = 1.0; // opacity level when not showing street lights
 
@@ -146,21 +181,33 @@
 				L.GeoLocation.centerMapOnPosition(map, 8)
 			}
 
-
+			// Default layers
 			map.addLayer(StreetLightsLayer);
 			map.addLayer(AviationLayer);
-			LitStreetsLayer.on('add',function(){Moveaufruf();});
-			if(window.location.search.indexOf("lit_streets") != -1) {
+			// Activate layer from the start when URL contains streets_lit or streets_unlit
+			if(window.location.search.indexOf("streets_lit") != -1) {
 				map.addLayer(LitStreetsLayer);
 			}
-			UnLitStreetsLayer.on('add',function(){Moveaufruf();});
-			if(window.location.search.indexOf("unlit_streets") != -1) {
+			if(window.location.search.indexOf("streets_unlit") != -1) {
 				map.addLayer(UnLitStreetsLayer);
 			}
 
+			
+			//Trigger reload when layers are added or removed
+			StreetLightsLowZoomLayer.on('add',function(){MoveCall(2);});
+			StreetLightsLowZoomLayer.on('remove',function(){MoveCall(3);});
+			StreetLightsLayer.on('add',function(){MoveCall(1);});
+			StreetLightsLayer.on('remove',function(){MoveCall(4);});
+			AviationLayer.on('add',function(){MoveCall(1);});
+			AviationLayer.on('remove',function(){MoveCall(3);});
+			LitStreetsLayer.on('add',function(){MoveCall(1);});
+			LitStreetsLayer.on('remove',function(){MoveCall(3);});
+			UnLitStreetsLayer.on('add',function(){MoveCall(1);});
+			UnLitStreetsLayer.on('remove',function(){MoveCall(3);});
+			
 			//Permalink
 			var hash = new L.Hash(map);
-			map.on('moveend',function(){Moveaufruf();});
+			map.on('moveend',function(){MoveCall(0);});
 
 			function openinJOSM(type, ID){
 				$.ajax({
@@ -175,9 +222,10 @@
 			});
 			
 		</script>
-		<div id="zoomwarning_cont">
+		<div id="zoomwarning_cont" style="display:none">
 			<div id="zoomwarning">
-				<p id="zoomin">Zoom in to load data</p>
+				<p id="zoomtext">Zoom in to load data</p>
+				<p><a onclick="loadLowZoomDataOnce()" id="update_lowzoom_data">Update low zoom overview (1x)</a><a onclick="loadLowZoomDataOnce()" id="load_lowzoom_data">Load low zoom overview (1x)</a><a onclick="clearLowZoomData()" id="clear_lowzoom_data">(Clear)</a></p>
 			</div>
 		</div>
 		<div id="loading_cont" style="display:none">

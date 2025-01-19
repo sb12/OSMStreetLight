@@ -1,39 +1,148 @@
-function Moveaufruf()
-{
-	coords = map.getBounds();
-	lefttop = coords.getNorthWest();
-	rightbottom = coords.getSouthEast();
-	XMLLaden(lefttop.lat,lefttop.lng,rightbottom.lat,rightbottom.lng);
+function MoveCall(action) { //action: 0: map moved, 1: high zoom layer added, 2: low zoom layer added, 3: layer removed, 4: streetlights layer removed, 5: language updated
+	const coords = map.getBounds();
+	const lefttop = coords.getNorthWest();
+	const rightbottom = coords.getSouthEast();
+	loadXML(lefttop.lat,lefttop.lng,rightbottom.lat,rightbottom.lng, action);
 }
 
-function XMLLaden(lat1,lon1,lat2,lon2)
-{
-	//Maximum zoom to not load too much data
-	minzoom = 15;
-
-	if (map.getZoom()>=minzoom)
-	{
-		$( "#zoomwarning_cont" ).fadeOut(500);
-		loadData('[bbox:'+lat2+','+lon1+','+lat1+','+lon2+ '];');
-		current_layer.setOpacity(opacityHigh);
-		showStreetLights = true;
-		$("#opacity_slider").slider("option", "value", opacityHigh*100);
+function loadXML(lat1,lon1,lat2,lon2, action) { //action: 0: map moved, 1: high zoom layer added, 2: low zoom layer added, 3: layer removed, 4: streetlights layer removed, 5: language updated
+	
+	let hasHighZoomLayer = false, hasLowZoomLayer = false, zoomWarning = 1;
+	
+	// Special case: Low Zoom data loaded once
+	if (g_showStreetLightsLowZoomOnce && map.getZoom() < MIN_ZOOM_LOW_ZOOM) {
+		hasHighZoomLayer = false;
+		hasLowZoomLayer = false;
+		zoomWarning = 4
+	} else {
+		if (map.getZoom() >= MIN_ZOOM) {
+			zoomWarning = 0
+			
+			if (map.hasLayer(StreetLightsLayer) || map.hasLayer(AviationLayer) || map.hasLayer(LitStreetsLayer) || map.hasLayer(UnLitStreetsLayer)) {
+				if (!map.hasLayer(StreetLightsLayer) && map.hasLayer(StreetLightsLowZoomLayer)) {
+					hasLowZoomLayer = true;
+				} else {
+					hasLowZoomLayer = false;
+				}
+				hasHighZoomLayer = true;
+			} else if (map.hasLayer(StreetLightsLowZoomLayer)) {  
+				hasHighZoomLayer = false;
+				hasLowZoomLayer = true;
+			} else { // no map layers loaded
+				hasHighZoomLayer = false;
+				hasLowZoomLayer = false;
+				zoomWarning = 2
+			}
+		} else {
+			hasLowZoomLayer = false;
+			if (map.hasLayer(StreetLightsLowZoomLayer)) { 
+				if (map.getZoom() >= MIN_ZOOM_LOW_ZOOM) {
+					hasLowZoomLayer = true;
+					zoomWarning = 0;
+				} else {
+					hasLowZoomLayer = false;
+					zoomWarning = 3;
+				}
+			} else {
+				hasHighZoomLayer = false;
+				zoomWarning = 1
+				if (map.getZoom() < MIN_ZOOM_LOW_ZOOM) {
+					zoomWarning = 3;
+				}
+			}
+		}
 	}
-	else
-	{
-		//Zoom too small to load data
-		$( "#loading_cont" ).fadeOut(500);
-		$( "#zoomwarning_cont" ).fadeIn(500);
-		showStreetLights = false;
-		current_layer.setOpacity(opacityLow);
-		$("#opacity_slider").slider("option", "value", opacityLow*100);
+	// load data if map moved or layer added
+	if (hasHighZoomLayer && (action == 0 || action == 1)) {
+		loadData('[bbox:' + lat2 + ',' + lon1 + ',' + lat1 + ',' + lon2 +  '];');
+	}
+	if (hasLowZoomLayer && (action == 0 || action == 2 || action == 4)) {
+		loadDataLowZoom('[bbox:' + lat2 + ',' + lon1 + ',' + lat1 + ',' + lon2 + '];');
+	}
+	
+	//remove data:
+	if (!hasHighZoomLayer) {
 		parseOSM(false);
-		loadingcounter = 0;
 	}
+	if(!hasLowZoomLayer && zoomWarning!=4) {
+		parseOSMlowZoom(false);
+		g_showStreetLightsLowZoomOnce = false;
+	}
+	if(!hasHighZoomLayer && !hasLowZoomLayer && zoomWarning!=4) {
+		// reset loading counter
+		loadingcounter = 0;		
+		//update opacity
+		current_layer.setOpacity(opacityLow);
+		$("#opacity_slider").slider("option", "value", opacityLow * 100);	
+	}
+	
+	//handle zoom warning
+	if (zoomWarning)
+	{
+		//update zoomtext
+		let textZoom_value="Zoom in to load data"
+		if(i18next.isInitialized && zoomWarning < 4){
+			textZoom_value = i18next.t("zoomtext_" + zoomWarning);
+		}
+		$( "#zoomtext" ).text(textZoom_value)
+		
+		//show load update and clear low zoom data buttons
+		if (zoomWarning == 3) {
+			$( "#zoomtext" ).show();
+			$( "#load_lowzoom_data" ).show();
+			$( "#update_lowzoom_data" ).hide();
+			$( "#clear_lowzoom_data" ).hide();
+
+		} else if (zoomWarning == 4) {
+			$( "#zoomtext" ).hide();
+			$( "#load_lowzoom_data" ).hide();
+			$( "#update_lowzoom_data" ).show();
+			$( "#clear_lowzoom_data" ).show();
+			
+		} else {
+			$( "#zoomtext" ).show();
+			$( "#load_lowzoom_data" ).hide();
+			$( "#update_lowzoom_data" ).hide();
+			$( "#clear_lowzoom_data" ).hide();
+			
+		}
+		
+		// fade in zoom warning
+		$( "#zoomwarning_cont" ).fadeIn(500);	
+
+	} else {
+		$( "#zoomwarning_cont" ).fadeOut(500);
+		current_layer.setOpacity(opacityHigh);
+		$("#opacity_slider").slider("option", "value", opacityHigh * 100);
+	}
+	
 }
 
-function loadData(bbox)
-{
+function loadLowZoomDataOnce() {
+	
+	g_showStreetLightsLowZoomOnce = true;
+	let coords = map.getBounds();
+	let lefttop = coords.getNorthWest();
+	let rightbottom = coords.getSouthEast();
+	let lat1 = lefttop.lat;
+	let lon1 = lefttop.lng;
+	let lat2 = rightbottom.lat;
+	let lon2 = rightbottom.lng;
+	
+	map.addLayer(StreetLightsLowZoomLayer);
+	loadDataLowZoom('[bbox:' + lat2 + ',' + lon1 + ',' + lat1 + ',' + lon2 + '];');
+	
+	$( "#zoomwarning_cont" ).fadeOut(500);
+	current_layer.setOpacity(opacityHigh);
+	$("#opacity_slider").slider("option", "value", opacityHigh * 100);
+}	
+
+function clearLowZoomData() {
+	g_showStreetLightsLowZoomOnce = false;
+	map.removeLayer(StreetLightsLowZoomLayer)
+}
+
+function loadData(bbox) {
 	$( "#loading_text" ).text("")
 	$( "#loading" ).attr("class", "");
 	$( "#loading_icon" ).attr("class", "loading_spinner")
@@ -42,11 +151,10 @@ function loadData(bbox)
 
 	//CrossoverAPI XML request
 	// Street Light query
-	XMLRequestText = bbox+'( node["highway"="street_lamp"]; node["light_source"]; node["tower:type"="lighting"]; node["aeroway"="navigationaid"];'
+	XMLRequestText = bbox + '( node["highway"="street_lamp"]; node["light_source"]; node["tower:type"="lighting"]; node["aeroway"="navigationaid"];'
 
 	today = new Date();
-	if (today.getMonth() == 11) // show christmas trees only in December
-	{
+	if (today.getMonth() == 11) { // show christmas trees only in December
 		XMLRequestText += 'node["xmas:feature"="tree"];'
 	}
 
@@ -62,37 +170,89 @@ function loadData(bbox)
 
 	if (location.protocol == 'https:') {
 		RequestProtocol = "https://";
+	} else {
+		RequestProtocol = "http://";
+	}
+
+	RequestURL = RequestProtocol + "overpass-api.de/api/interpreter?data=" + XMLRequestText;
+	
+	//AJAX REQUEST
+	$.ajax({
+		url: RequestURL,
+		type: 'GET',
+		crossDomain: true,
+		success: function(data) {
+			if (loadingcounter==1) {
+				$( "#loading_text" ).html("")
+				$( "#loading" ).attr("class", "success");
+				$( "#loading_icon" ).attr("class", "loading_success")
+			}
+			loadingcounter--;
+			parseOSM(data);
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			
+			if( i18next.isInitialized) {
+				if (textStatus == "timeout" || textStatus == "error" || textStatus == "abort" || textStatus == "parseerror") {
+					textStatus_value = i18next.t("ajaxerror_" + textStatus);
+				} else {
+					textStatus_value = i18next.t("ajaxerror_unknown");
+				}
+			} else { // fallback in case i18next is not initalized yet.
+				textStatus_value = "Error while loading data";
+			}
+			
+			$( "#loading" ).attr("class", "error");
+			$( "#loading_icon" ).attr("class", "loading_error")
+			$( "#loading_text" ).html("&nbsp;" + textStatus_value)
+			loadingcounter--;
+		},
+		timeout: 10000 // timeout after 10s
+	});
+}
+function loadDataLowZoom(bbox)
+{
+	$( "#loading_text" ).text("")
+	$( "#loading" ).attr("class", "");
+	$( "#loading_icon" ).attr("class", "loading_spinner")
+	$( "#loading_cont" ).fadeIn(100)
+	loadingcounter++;
+
+	//CrossoverAPI XML request
+	if (location.protocol == 'https:') {
+		RequestProtocol = "https://";
 	}
 	else {
 		RequestProtocol = "http://";
 	}
 
-	RequestURL = RequestProtocol + "overpass-api.de/api/interpreter?data=" + XMLRequestText;
+	XMLRequestTextLowZoom = bbox + '( node["highway"="street_lamp"]; node["light_source"];); out skel;'
+	RequestURLlowZoom = RequestProtocol + "overpass-api.de/api/interpreter?data=" + XMLRequestTextLowZoom;
+	
 	//AJAX REQUEST
-
 	$.ajax({
-		url: RequestURL,
+		url: RequestURLlowZoom,
 		type: 'GET',
 		crossDomain: true,
 		success: function(data){
-			if (loadingcounter==1){
+			if (loadingcounter==1) {
 				$( "#loading_text" ).html("")
 				$( "#loading" ).attr("class", "success");
 				$( "#loading_icon" ).attr("class", "loading_success")
 			}
-			parseOSM(data)
+			loadingcounter--;
+			parseOSMlowZoom(data);
 		},
-		error: function(jqXHR, textStatus, errorThrown){
+		error: function(jqXHR, textStatus, errorThrown) {
 			
-			if(i18next.isInitialized)
+			if (i18next.isInitialized) {
 					
-				if (textStatus == "timeout" || textStatus == "error" || textStatus == "abort" || textStatus == "parseerror"){
+				if (textStatus == "timeout" || textStatus == "error" || textStatus == "abort" || textStatus == "parseerror") {
 					textStatus_value = i18next.t("ajaxerror_" + textStatus);
-				}
-				else{
+				} else {
 					textStatus_value = i18next.t("ajaxerror_unknown");
 				}
-			else{ // fallback in case i18next is not initalized yet.
+			} else { // fallback in case i18next is not initalized yet.
 				textStatus_value = "Error while loading data";
 			}
 			
@@ -105,9 +265,9 @@ function loadData(bbox)
 	});
 }
 
-function parseOSM(daten)
+function parseOSM(data)
 {
-	//console.log(daten);
+	//console.log(data);
 	MarkerArray = new Array();
 	CoordObj = new Object();
 	StreetLightsLayer.clearLayers();
@@ -115,14 +275,12 @@ function parseOSM(daten)
 	LitStreetsLayer.clearLayers();
 	UnLitStreetsLayer.clearLayers();
 
-	$(daten).find('node,way').each(function(){
+	$(data).find('node,way').each(function() {
 		EleID = $(this).attr("id");
 
 		EleCoordArray = new Array();
 
-		//Knoten
-		if ($(this).attr("lat"))
-		{
+		if ($(this).attr("lat")) { // Node
 			EleLat = $(this).attr("lat");
 			EleLon = $(this).attr("lon");
 			EleType = "node"
@@ -130,19 +288,12 @@ function parseOSM(daten)
 			EleObj["lat"] = EleLat;
 			EleObj["lon"] = EleLon;
 			CoordObj[EleID] = EleObj;
-		}
-
-
-		//Weg
-		else
-		{
+		} else { // Way
 			EleType = "way";
-
-			$(this).find('nd').each(function(){
+			$(this).find('nd').each(function() {
 				NdRefID = $(this).attr("ref");
 				EleCoordArray.push([CoordObj[NdRefID]["lat"], CoordObj[NdRefID]["lon"]]);
 			});
-
 		}
 
 
@@ -532,9 +683,66 @@ function parseOSM(daten)
 
 	});
 
-	//Loading ausblenden
-	loadingcounter--;
-	if (loadingcounter==0) {
+	// fadeout loading icon and reset loading counter
+	if (loadingcounter<=0) {
+		loadingcounter = 0;
+		$( "#loading_cont" ).delay(500).fadeOut(100);
+	};
+}
+
+
+function parseOSMlowZoom(data)
+{
+	StreetLightsLowZoomLayer.setData({max: 8, data:[]});
+	//console.log(data);
+	MarkerArray = new Array();
+	CoordObj = new Object();
+	
+	
+	var iconClass = "light_13";
+	var iconSize = 8;
+	
+	var LightsData = []
+	
+	$(data).find('node').each(function(){
+		EleID = $(this).attr("id");
+
+		EleCoordArray = new Array();
+
+		//Node
+		if ($(this).attr("lat"))
+		{
+			EleLat = $(this).attr("lat");
+			EleLon = $(this).attr("lon");
+			EleType = "node"
+			EleObj = new Object();
+			EleObj["lat"] = EleLat;
+			EleObj["lon"] = EleLon;
+			CoordObj[EleID] = EleObj;
+			var markerLocation = new L.LatLng(EleLat,EleLon);
+			var Icon = L.divIcon({
+				className: iconClass,
+				html: '<div style="background-image: url(\'./img/electric_white.svg\');background-repeat: no-repeat;"> </div>',
+				iconSize: [iconSize, iconSize],
+				iconAnchor:   [0, 0],
+				});
+			var marker = new L.Marker(markerLocation,{icon : Icon});
+			
+		}
+		
+		LightsData.push({"lat" : EleLat, "lng" : EleLon, "count" : 1});
+	});
+
+	console.log(LightsData)
+	var lowZoomData = {
+    max: 8,
+    data: LightsData
+    };
+	StreetLightsLowZoomLayer.setData(lowZoomData)
+
+	// fadeout loading icon and reset loading counter
+	if (loadingcounter<=0) {
+		loadingcounter = 0;
 		$( "#loading_cont" ).delay(500).fadeOut(100);
 	};
 }

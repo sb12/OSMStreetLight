@@ -24,15 +24,16 @@ i18next
 // could be optimized using vue-i18next, jquery-i18next, react-i18next, ...
 function updateContent() {
   $("#aboutmap").html(i18next.t('aboutmap'));
-  $("#zoomin").html(i18next.t('zoomin'));
   document.title = i18next.t('website_title');
   $("#langselect").val(i18next.language);
   $("#opacity_slider").attr('title', i18next.t("opacity_select"));
   $("#lang").attr('title', i18next.t("lang_select"));
+  $("#layer_street_lights_lowzoom").html(i18next.t("layer_street_lights_lowzoom"));
   $("#layer_street_lights").html(i18next.t("layer_street_lights"));
   $("#layer_aviation_lights").html(i18next.t("layer_aviation"));
   $("#layer_lit_streets").html(i18next.t("layer_lit_streets"));
   $("#layer_unlit_streets").html(i18next.t("layer_unlit_streets"));
+  MoveCall(5);
   console.log("ContentUpdated");
 }
 
