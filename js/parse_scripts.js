@@ -275,7 +275,7 @@ function parseOSM(data)
 		let EleID = $(this).attr("id");
 		let EleCoordArray = new Array();
 		let EleType = "";
-		let EleLat, EleLon, EleObj
+		let EleLat, EleLon, EleObj;
 
 		if ($(this).attr("lat")) { // Node
 			EleType = "node"
@@ -495,12 +495,12 @@ function parseOSM(data)
 				
 				let i = tagLightCount; 
 				let j = 0;
+				let posDirection = new Array();
 				while (i > 0) {
 					let EleLatNew, EleLonNew;
 					// Positioning of multiple lights at same spot (tagLightCount > 1)
 					if (tagLightCount > 1) {
 						let posDistance = 0;
-						let posDirection = new Array();
 						if (isSingleDir) { //only one direction value given -> assume all lights are parallel:		
 							posDirection[j] = posDirection0 * 1 + 90;
 							posDistance = 1.5 * j - ( (1.5 * tagLightCount) / 2 );
@@ -658,7 +658,7 @@ function parseOSMlowZoom(data)
 		LightsData.push({"lat" : EleLat, "lng" : EleLon, "count" : 1});
 	});
 
-	console.log(LightsData)
+	//console.log(LightsData)
 	let lowZoomData = {
     max: 8,
     data: LightsData
@@ -676,11 +676,10 @@ function addLatLngDistanceM(EleLat,EleLon,angleDeg,distance) {
 	const latRad = EleLat * Math.PI / 180;
 	const degLatPerM = 1 / ( 111132.92 - 559.82 * Math.cos( 2 * latRad ) + 1.175 * Math.cos( 4 * latRad ) - 0.0023 * Math.cos( 6 * latRad ) );
 	const degLonPerM = 1 / ( 111412.84 * Math.cos ( latRad ) - 93.5 * Math.cos ( 3 * latRad ) + 0.118 * Math.cos ( 5 * latRad ) );
-	
-	let latDistM = 0; // Default fallback value
-	let lonDistM = 0; // Default fallback value
-
 	const angleRad = angleDeg * Math.PI / 180;
+	
+	let latDistM = 0, lonDistM = 0; // Default fallback values
+
 	
 	latDistM = Math.cos ( angleRad ) * distance;
 	lonDistM = Math.sin ( angleRad ) * distance;
