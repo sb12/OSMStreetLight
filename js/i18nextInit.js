@@ -5,7 +5,7 @@ i18next
   .use(i18nextHttpBackend)
   .init({
     fallbackLng: 'en',
-    whitelist: ['de','en','nl', 'ru'],
+    whitelist: ['de','en','ja','nl','ru'],
     debug: true,
     detection: {
       order: ['cookie', 'localStorage'],

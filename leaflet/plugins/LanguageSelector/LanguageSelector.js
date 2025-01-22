@@ -10,6 +10,7 @@ L.Control.LanguageSelector = L.Control.extend({
         language_selector_div.innerHTML = '<select id="langselect" onchange="updateLng()">'+
             '<option value="en">EN</option>'+
             '<option value="de">DE</option>'+
+            '<option value="ja">JA</option>'+
             '<option value="nl">NL</option>'+
             '<option value="ru">RU</option>'+
             '</select>';
