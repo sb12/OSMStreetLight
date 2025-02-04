@@ -7,3 +7,7 @@ const LIGHT_COUNT_MAX = 10;
 // Set minimum zoom levels for rendering street lights and the lowzoom street lights layer			
 const MIN_ZOOM = 15;
 const MIN_ZOOM_LOW_ZOOM = 11;
+
+// set default opacity levels;
+const OPACITY_NO_DATA = 1.0;
+const OPACITY_HAS_DATA = 0.2;

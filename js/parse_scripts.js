@@ -71,9 +71,10 @@ function loadXML(lat1,lon1,lat2,lon2, action) { //action: 0: map moved, 1: high 
 	if(!hasHighZoomLayer && !hasLowZoomLayer && zoomWarning!=4) {
 		// reset loading counter
 		loadingcounter = 0;		
+		g_showData = false;
 		//update opacity
-		current_layer.setOpacity(opacityLow);
-		$("#opacity_slider").slider("option", "value", opacityLow * 100);	
+		current_layer.setOpacity(g_opacityNoData);
+		$("#opacity_slider").slider("option", "value", g_opacityNoData * 100);	
 	}
 	
 	//handle zoom warning
@@ -111,9 +112,10 @@ function loadXML(lat1,lon1,lat2,lon2, action) { //action: 0: map moved, 1: high 
 		$( "#zoomwarning_cont" ).fadeIn(500);	
 
 	} else {
+		g_showData = true;
 		$( "#zoomwarning_cont" ).fadeOut(500);
-		current_layer.setOpacity(opacityHigh);
-		$("#opacity_slider").slider("option", "value", opacityHigh * 100);
+		current_layer.setOpacity(g_opacityHasData);
+		$("#opacity_slider").slider("option", "value", g_opacityHasData * 100);
 	}
 	
 }
@@ -121,6 +123,7 @@ function loadXML(lat1,lon1,lat2,lon2, action) { //action: 0: map moved, 1: high 
 function loadLowZoomDataOnce() {
 	
 	g_showStreetLightsLowZoomOnce = true;
+	g_showData = true;
 	let coords = map.getBounds();
 	let lefttop = coords.getNorthWest(), rightbottom = coords.getSouthEast();
 	let lat1 = lefttop.lat, lon1 = lefttop.lng, lat2 = rightbottom.lat, lon2 = rightbottom.lng;
@@ -129,12 +132,13 @@ function loadLowZoomDataOnce() {
 	loadDataLowZoom('[bbox:' + lat2 + ',' + lon1 + ',' + lat1 + ',' + lon2 + '];');
 	
 	$( "#zoomwarning_cont" ).fadeOut(500);
-	current_layer.setOpacity(opacityHigh);
-	$("#opacity_slider").slider("option", "value", opacityHigh * 100);
+	current_layer.setOpacity(g_opacityHasData);
+	$("#opacity_slider").slider("option", "value", g_opacityHasData * 100);
 }	
 
 function clearLowZoomData() {
 	g_showStreetLightsLowZoomOnce = false;
+	g_showData = false;
 	map.removeLayer(StreetLightsLowZoomLayer)
 }
 

@@ -57,13 +57,13 @@ L.Control.opacitySlider = L.Control.extend({
     },
     setOpacityLayer: function (layer) {
             opacity_layer = layer;
-            if (showStreetLights == true)
+            if (g_showData)
             {
-                 slider_value = opacityHigh
+                 slider_value = g_opacityHasData
             }
             else
             {
-                slider_value = opacityLow
+                slider_value = g_opacityNoData
             }
             opacity_layer.setOpacity(slider_value)
     },
@@ -88,13 +88,13 @@ L.Control.opacitySlider = L.Control.extend({
           slide: function ( event, ui ) {
             var slider_value = ui.value / 100;
             opacity_layer.setOpacity(slider_value);
-            if (showStreetLights == true)
+            if (g_showData)
             {
-                opacityHigh = slider_value;
+                g_opacityHasData = slider_value;
             }
             else
             {
-                opacityLow = slider_value;
+                g_opacityNoData = slider_value;
             }
           }
         });

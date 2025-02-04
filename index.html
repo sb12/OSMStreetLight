@@ -45,6 +45,7 @@
 		<script>
 			MarkerArray = new Array();
 			let g_showStreetLightsLowZoomOnce = false
+			let g_showData = false;
 			
 			var HeatMap_cfg = {
 			  "maxZoom" : 19,
@@ -130,7 +131,7 @@
 
 			// add locate control:			
 			if (SHOW_GEOLOCATE_BUTTON) {
-				var lc = L.control.locate({
+				let lc = L.control.locate({
 					setView : "once",
 					initialZoomLevel : 13,
 					showCompass : false,
@@ -145,15 +146,17 @@
 			}
 
 			// add LanguageSelector
-			var LanguageSelector = new L.Control.LanguageSelector();
+			let LanguageSelector = new L.Control.LanguageSelector();
 			map.addControl(LanguageSelector);
 			
 			// add maps
 			L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 			// add opacity control
-			var current_layer = OSM_carto
-			var opacitySlider = new L.Control.opacitySlider();
+			let g_opacityHasData = OPACITY_HAS_DATA; // opacity level when showing street lights
+			let g_opacityNoData = OPACITY_NO_DATA; // opacity level when not showing street lights
+			let current_layer = OSM_carto
+			let opacitySlider = new L.Control.opacitySlider();
 			map.addControl(opacitySlider);
 			opacitySlider.setOpacityLayer(current_layer);
 
@@ -167,10 +170,6 @@
 			geocoder.addTo(map);
 			
 			loadingcounter = 0;
-			var showStreetLights = false;
-			var showStreetLightsLowZoom = false;
-			var opacityHigh = 0.2; // opacity level when showing street lights
-			var opacityLow = 1.0; // opacity level when not showing street lights
 
 
 			// default starting view of whole world
