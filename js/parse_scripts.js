@@ -794,13 +794,13 @@ function getMarkerIcon(L,lightSource,lightMethod,lightColour,lightFlash,lightDir
 			let KelvinLength = lightColour.indexOf("K");
 			let lightColourK = Number(lightColour.substr(0,KelvinLength));
 			if (!lightColourK.isNaN) {
-				if (lightColourK < 2000) {
+				if (lightColourK <= 2000) {
 					colourURL = "_gas";
-				} else if (lightColourK < 2600) {
+				} else if (lightColourK <= 2600) {
 					colourURL = "_orange";
-				} else if (lightColourK < 3000) {
+				} else if (lightColourK <= 3000) {
 					colourURL = "_fluorescent";
-				} else if (lightColourK < 4000) {
+				} else if (lightColourK <= 4000) {
 					colourURL = "_led";
 				} else if (lightColourK > 5600) {
 					colourURL = "_mercury";
