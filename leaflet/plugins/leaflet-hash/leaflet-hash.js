@@ -85,7 +85,18 @@
 				return false;
 			}
 
+			var center = this.map.getCenter();
+
+			if (center.lng <= -180) {
+				this.map.setView([center.lat, center.lng + 360], this.map.getZoom());
+			}
+
+			if (center.lng > 180) {
+				this.map.setView([center.lat, center.lng - 360], this.map.getZoom());
+			}
+
 			var hash = this.formatHash(this.map);
+
 			if (this.lastHash != hash) {
 				location.replace(hash);
 				this.lastHash = hash;
